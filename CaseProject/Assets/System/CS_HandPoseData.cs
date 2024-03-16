@@ -13,6 +13,22 @@ public class CS_HandPoseData : MonoBehaviour
     //両手のデータ
     private HandLandmarkListAnnotation[] m_HandLandmark = new HandLandmarkListAnnotation[2];
 
+    public PointListAnnotation LeftHandData
+    {
+        get
+        {
+            return m_HandLandmark[0].GetLandmarkList();
+        }
+    }
+
+    public PointListAnnotation RightHand
+    {
+        get
+        {
+            return m_HandLandmark[1].GetLandmarkList();
+        }
+    }
+
     //指のデータ
     public struct Fingerindex
     {
