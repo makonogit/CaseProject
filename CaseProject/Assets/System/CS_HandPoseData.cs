@@ -21,7 +21,7 @@ public class CS_HandPoseData : MonoBehaviour
         }
     }
 
-    public PointListAnnotation RightHand
+    public PointListAnnotation RightHandData
     {
         get
         {
