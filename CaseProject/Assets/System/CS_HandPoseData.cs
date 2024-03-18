@@ -72,12 +72,16 @@ public class CS_HandPoseData : MonoBehaviour
     private float[] m_fSwingTime = new float[2] { 0.0f, 0.0f };  //横振りディレイ計算用
 
     [SerializeField,Header("横振りを検出する闘値")]
-    private float m_fSwingThreshold = 0.1f; //指の横振りを検出する為の闘値
+    private float m_fSwingThreshold = 30.0f; //指の横振りを検出する為の闘値
     [SerializeField,Header("横振りしてからの検出ディレイ(sc)")]
     private float m_fSwingDelay = 1.0f;       
     [SerializeField, Header("風オブジェクト")]
     private GameObject m_objWind;
 
+
+    [SerializeField, Header("座標取得の待機フレーム")]
+    private float m_fWaitFream = 0.2f;
+    private float m_fWaitFreamTime = 0.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -140,14 +144,17 @@ public class CS_HandPoseData : MonoBehaviour
         Vector3 currentpos = point[8].transform.position;
 
         //前のフレームからの移動量を計算
-        Vector3 movement = currentpos - previouspos;
+        Vector3 movementvec = currentpos - previouspos; 
+
+        float movement = Vector3.Distance(currentpos, previouspos);
 
         //横方向の速度を計算
-        float HorizontalSpeed = Mathf.Abs(Vector3.Dot(movement, point[8].transform.right)) / Time.deltaTime;
+        //float HorizontalSpeed = Mathf.Abs(Vector3.Dot(movement, point[8].transform.right)) / Time.deltaTime;
 
-        m_fSwingTime[(int)hand] += Time.deltaTime; //横振りしてからの時間を計算
+        //m_fSwingTime[(int)hand] += Time.deltaTime; //横振りしてからの時間を計算
+        //if(HorizontalSpeed > m_fSwingThreshold && m_fSwingTime[(int)hand] > m_fSwingDelay)
 
-        if (HorizontalSpeed > m_fSwingThreshold && m_fSwingTime[(int)hand] > m_fSwingDelay)
+        if (movement > m_fSwingThreshold)
         {
             //Debug.Log(HorizontalSpeed);
 
@@ -156,12 +163,12 @@ public class CS_HandPoseData : MonoBehaviour
             if (hand == HandLandmarkListAnnotation.Hand.Left)
             {
                // windobj.transform.position = new Vector3(windobj.transform.position.x, point[0].transform.position.y * 0.1f, 0.0f);    //座標を設定
-                windobj.transform.position = new Vector3(0.0f, 0.0f, 0.0f);    //座標を設定
+                windobj.transform.position = new Vector3(0.0f, 0.0f, 0.0f);    //座標を設定(テスト)
             }
             else
             {
-                Debug.Log("右手");
-                windobj.transform.position = new Vector3(windobj.transform.position.x * -1, point[0].transform.position.y * 0.1f, 0.0f);    //座標を設定
+                //Debug.Log("右手");
+                //windobj.transform.position = new Vector3(windobj.transform.position.x * -1, point[0].transform.position.y * 0.1f, 0.0f);    //座標を設定
             }
 
             CS_Wind cs_wind = windobj.GetComponent<CS_Wind>();  //風のスクリプト取得
@@ -171,6 +178,7 @@ public class CS_HandPoseData : MonoBehaviour
             data = FingerData(hand);
             m_sKey = FindKeyByValue(data);
 
+            //--------------風の角度設定--------------------
             float angle = Mathf.Atan2(movement.y, movement.x);
             windobj.transform.eulerAngles = new Vector3(0.0f,0.0f,angle*Mathf.Rad2Deg);
             Debug.Log("風の角度" + angle);
@@ -207,8 +215,15 @@ public class CS_HandPoseData : MonoBehaviour
             }
         }
 
-        //現在の位置を保存
-        previouspos = currentpos;
+        m_fWaitFreamTime += Time.deltaTime; //待機フレーム加算
+        if (m_fWaitFreamTime > m_fWaitFream)
+        {
+            //現在の位置を保存
+            previouspos = currentpos;
+            m_fWaitFreamTime = 0.0f;
+        }
+
+
     }
 
     //指が上がっているかの判定関数
