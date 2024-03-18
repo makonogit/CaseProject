@@ -72,7 +72,7 @@ public class CS_HandPoseData : MonoBehaviour
     private float[] m_fSwingTime = new float[2] { 0.0f, 0.0f };  //横振りディレイ計算用
 
     [SerializeField,Header("横振りを検出する闘値")]
-    private float m_fSwingThreshold = 30.0f; //指の横振りを検出する為の闘値
+    private float m_fSwingThreshold = 100.0f; //指の横振りを検出する為の闘値
     [SerializeField,Header("横振りしてからの検出ディレイ(sc)")]
     private float m_fSwingDelay = 1.0f;       
     [SerializeField, Header("風オブジェクト")]
@@ -151,10 +151,10 @@ public class CS_HandPoseData : MonoBehaviour
         //横方向の速度を計算
         //float HorizontalSpeed = Mathf.Abs(Vector3.Dot(movement, point[8].transform.right)) / Time.deltaTime;
 
-        //m_fSwingTime[(int)hand] += Time.deltaTime; //横振りしてからの時間を計算
+        m_fSwingTime[(int)hand] += Time.deltaTime; //横振りしてからの時間を計算
         //if(HorizontalSpeed > m_fSwingThreshold && m_fSwingTime[(int)hand] > m_fSwingDelay)
 
-        if (movement > m_fSwingThreshold)
+        if (movement > m_fSwingThreshold && m_fSwingTime[(int)hand] > m_fSwingDelay)
         {
             //Debug.Log(HorizontalSpeed);
 
