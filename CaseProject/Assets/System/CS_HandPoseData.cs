@@ -179,7 +179,7 @@ public class CS_HandPoseData : MonoBehaviour
             m_sKey = FindKeyByValue(data);
 
             //--------------•—‚ÌŠp“xİ’è--------------------
-            float angle = Mathf.Atan2(movement.y, movement.x);
+            float angle = Mathf.Atan2(movementvec.y, movementvec.x);
             windobj.transform.eulerAngles = new Vector3(0.0f,0.0f,angle*Mathf.Rad2Deg);
             Debug.Log("•—‚ÌŠp“x" + angle);
 
