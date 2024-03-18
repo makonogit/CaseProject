@@ -137,13 +137,13 @@ public class CS_HandPoseData : MonoBehaviour
         //左手人差し指の先の移動量を計算
         PointListAnnotation point = m_HandLandmark[(int)hand].GetLandmarkList();
 
-        Vector3 currentpos = point[4].transform.position;
+        Vector3 currentpos = point[8].transform.position;
 
         //前のフレームからの移動量を計算
         Vector3 movement = currentpos - previouspos;
 
         //横方向の速度を計算
-        float HorizontalSpeed = Mathf.Abs(Vector3.Dot(movement, point[4].transform.right)) / Time.deltaTime;
+        float HorizontalSpeed = Mathf.Abs(Vector3.Dot(movement, point[8].transform.right)) / Time.deltaTime;
 
         m_fSwingTime[(int)hand] += Time.deltaTime; //横振りしてからの時間を計算
 
@@ -155,7 +155,8 @@ public class CS_HandPoseData : MonoBehaviour
             GameObject windobj = m_objWind;
             if (hand == HandLandmarkListAnnotation.Hand.Left)
             {
-                windobj.transform.position = new Vector3(windobj.transform.position.x, point[0].transform.position.y * 0.1f, 0.0f);    //座標を設定
+               // windobj.transform.position = new Vector3(windobj.transform.position.x, point[0].transform.position.y * 0.1f, 0.0f);    //座標を設定
+                windobj.transform.position = new Vector3(0.0f, 0.0f, 0.0f);    //座標を設定
             }
             else
             {
@@ -169,6 +170,10 @@ public class CS_HandPoseData : MonoBehaviour
             Fingerindex data;
             data = FingerData(hand);
             m_sKey = FindKeyByValue(data);
+
+            float angle = Mathf.Atan2(movement.y, movement.x);
+            windobj.transform.eulerAngles = new Vector3(0.0f,0.0f,angle*Mathf.Rad2Deg);
+            Debug.Log("風の角度" + angle);
 
             //Debug.Log(cs_wind.Movement);
             Debug.Log(m_sKey);
@@ -217,11 +222,11 @@ public class CS_HandPoseData : MonoBehaviour
         Fingerindex fingerdata;
 
         //親指の付け根から30離れていたらあげている判定
-        fingerdata.thumb = Vector3.Distance(LandMarkData[0].transform.position, LandMarkData[4].transform.position) > 30;
-        fingerdata.index = Vector3.Distance(LandMarkData[0].transform.position, LandMarkData[8].transform.position) > 30;
-        fingerdata.middle = Vector3.Distance(LandMarkData[0].transform.position, LandMarkData[12].transform.position) > 30;
-        fingerdata.ring = Vector3.Distance(LandMarkData[0].transform.position, LandMarkData[16].transform.position) > 30;
-        fingerdata.little = Vector3.Distance(LandMarkData[0].transform.position, LandMarkData[20].transform.position) > 30;
+        fingerdata.thumb = Vector3.Distance(LandMarkData[0].transform.position, LandMarkData[4].transform.position) > 20;
+        fingerdata.index = Vector3.Distance(LandMarkData[0].transform.position, LandMarkData[8].transform.position) > 20;
+        fingerdata.middle = Vector3.Distance(LandMarkData[0].transform.position, LandMarkData[12].transform.position) > 20;
+        fingerdata.ring = Vector3.Distance(LandMarkData[0].transform.position, LandMarkData[16].transform.position) > 20;
+        fingerdata.little = Vector3.Distance(LandMarkData[0].transform.position, LandMarkData[20].transform.position) > 20;
 
         return fingerdata;
     }
