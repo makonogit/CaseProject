@@ -92,11 +92,14 @@ public class CS_HandPoseData : MonoBehaviour
         //è‚Ìî•ñ‚ğæ“¾
         if (!m_HandLandmark[0] || !m_HandLandmark[1])
         {
-            HandLandmarkListAnnotation hand = transform.Find("HandLandmarkList Annotation(Clone)").GetComponent<HandLandmarkListAnnotation>();
-
-            if (hand)
+            if (transform.childCount > 0)
             {
-                m_HandLandmark[(int)hand.GetHandedness()] = hand;
+                HandLandmarkListAnnotation hand = transform.Find("HandLandmarkList Annotation(Clone)").GetComponent<HandLandmarkListAnnotation>();
+
+                if (hand)
+                {
+                    m_HandLandmark[(int)hand.GetHandedness()] = hand;
+                }
             }
         }
         
