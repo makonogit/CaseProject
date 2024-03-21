@@ -83,6 +83,18 @@ public class CS_HandPoseData : MonoBehaviour
     private float m_fWaitFream = 0.2f;
     private float m_fWaitFreamTime = 0.0f;
 
+    //===== 雨生成用変数 ========
+    [SerializeField, Header("生成する指の番号")]
+    private int[] m_rCreateFingerNums = { 4, 8, 12, 16, 20 };
+
+    [SerializeField, Header("次に雨粒を生成するまでの時間")]
+    private float m_rIntervalTime = 0.3f;//次に生成するまでの時間
+
+    private float m_rNowTime = 0.0f;//現在の時間
+
+    [SerializeField, Header("雨オブジェクト")]
+    private GameObject m_objRain;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -111,17 +123,27 @@ public class CS_HandPoseData : MonoBehaviour
         //--------------風の処理(簡易実装)-----------------
         if(m_HandLandmark[0] && m_HandLandmark[0].isActive)
         {
-            CreateWind(HandLandmarkListAnnotation.Hand.Left);
+           // CreateWind(HandLandmarkListAnnotation.Hand.Left);
         }
 
         if(m_HandLandmark[1] && m_HandLandmark[1].isActive)
         {
-            CreateWind(HandLandmarkListAnnotation.Hand.Right);
+           // CreateWind(HandLandmarkListAnnotation.Hand.Right);
         }
 
+        //----------------雨の生成処理-----------------------
+        if (m_HandLandmark[0] && m_HandLandmark[0].isActive)
+        {
+            CreateRain(HandLandmarkListAnnotation.Hand.Left);
+        }
+
+        if (m_HandLandmark[1] && m_HandLandmark[1].isActive)
+        {
+            CreateRain(HandLandmarkListAnnotation.Hand.Right);
+        }
 
         //=====デバッグ　ポーズ認識確認==========
-        if(Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             Fingerindex data;
             data = FingerData(HandLandmarkListAnnotation.Hand.Left);
@@ -224,6 +246,37 @@ public class CS_HandPoseData : MonoBehaviour
         }
 
 
+    }
+
+    //雨降らし関数
+    //引数:手の左右
+    private void CreateRain(HandLandmarkListAnnotation.Hand hand)
+    {
+        m_rNowTime += Time.deltaTime;//現在時間加算
+        Fingerindex data;
+        data = FingerData(hand);
+        Debug.Log(FindKeyByValue(data));
+        m_sKey = FindKeyByValue(data);
+        //手のポーズが5?
+        if (m_sKey == "Five" && m_rNowTime > m_rIntervalTime)
+        {
+            m_rNowTime = 0.0f;//現在時間初期化
+            Debug.Log("雨の生成開始");
+            //手のリストを取得
+            PointListAnnotation point = m_HandLandmark[(int)hand].GetLandmarkList();
+
+
+            //生成
+            for (uint i = 0; i<m_rCreateFingerNums.Length; i++)
+            {
+                //指番号に合った位置に生成
+                // pos = 
+                //Debug.Log("雨の生成位置"+pos);
+                m_objRain.transform.position = point[m_rCreateFingerNums[i]].transform.position;//new Vector3(point[(int)m_rCreateFingerNums[i]].transform.position.x, point[(int)m_rCreateFingerNums[i]].transform.position.y, 0.0f); 
+                Instantiate(m_objRain);
+
+            }
+        }
     }
 
     //指が上がっているかの判定関数
