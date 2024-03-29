@@ -16,6 +16,8 @@ public class CS_Wind : MonoBehaviour
     [SerializeField,Header("•—‚Ì‹­‚³")]
     private float m_fWindPower = 1.0f;
 
+    float m_nowTime = 0.0f;
+
     //•—‚Ìgetter,setter
     public float WindPower
     {
@@ -52,5 +54,11 @@ public class CS_Wind : MonoBehaviour
     void Update()
     {
         m_tThisTransform.Translate(m_fMovment,0.0f,0.0f);
+        m_nowTime += Time.deltaTime;
+        const float deleteTime = 3.0f;
+        if (m_nowTime > deleteTime)
+        {
+            Destroy(this.gameObject);
+        }
     }
 }

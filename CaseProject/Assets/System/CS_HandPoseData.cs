@@ -83,6 +83,20 @@ public class CS_HandPoseData : MonoBehaviour
     private float m_fWaitFream = 0.2f;
     private float m_fWaitFreamTime = 0.0f;
 
+    [SerializeField, Header("フレーム保管数")]
+    private int m_recordNum = 10;           //保管数
+    private Vector3[] m_recordPositions;    //保管用配列
+    private int m_recordIndex = 0;
+    private bool m_isRecording = false;    //レコーディングフラグ
+    private bool m_isRecordFinish = false;    //レコーディング完了フラグ
+    //風のステータス
+    public struct WindStatus
+    {
+        public float angle;
+        public float speed;
+        public float distance;
+    }
+    private WindStatus m_windStatus;
     //===== 雨生成用変数 ========
     [SerializeField, Header("生成する指の番号")]
     private int[] m_rCreateFingerNums = { 4, 8, 12, 16, 20 };
@@ -98,8 +112,7 @@ public class CS_HandPoseData : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-     
-        
+        m_recordPositions = new Vector3[m_recordNum];   
     }
 
     // Update is called once per frame
@@ -119,27 +132,28 @@ public class CS_HandPoseData : MonoBehaviour
             }
         }
         
-
         //--------------風の処理(簡易実装)-----------------
         if(m_HandLandmark[0] && m_HandLandmark[0].isActive)
         {
-           // CreateWind(HandLandmarkListAnnotation.Hand.Left);
+            RecordFingerPosition(HandLandmarkListAnnotation.Hand.Left);
+            CreateWind(HandLandmarkListAnnotation.Hand.Left);
         }
 
         if(m_HandLandmark[1] && m_HandLandmark[1].isActive)
         {
-           // CreateWind(HandLandmarkListAnnotation.Hand.Right);
+            RecordFingerPosition(HandLandmarkListAnnotation.Hand.Right);
+            CreateWind(HandLandmarkListAnnotation.Hand.Right);
         }
 
         //----------------雨の生成処理-----------------------
         if (m_HandLandmark[0] && m_HandLandmark[0].isActive)
         {
-            CreateRain(HandLandmarkListAnnotation.Hand.Left);
+           //CreateRain(HandLandmarkListAnnotation.Hand.Left);
         }
 
         if (m_HandLandmark[1] && m_HandLandmark[1].isActive)
         {
-            CreateRain(HandLandmarkListAnnotation.Hand.Right);
+           //CreateRain(HandLandmarkListAnnotation.Hand.Right);
         }
 
         //=====デバッグ　ポーズ認識確認==========
@@ -152,88 +166,79 @@ public class CS_HandPoseData : MonoBehaviour
         }
     }
 
+    public Vector3 GetHandVector(HandLandmarkListAnnotation.Hand hand)
+    {
+        PointListAnnotation point = m_HandLandmark[(int)hand].GetLandmarkList();
+        Vector3 currentpos = point[8].transform.position;
 
-    //風起こし関数
-    //引数:手の左右
-    private void CreateWind(HandLandmarkListAnnotation.Hand hand) 
+        //3つの点を取得し、それらを結ぶベクトルを計算
+        Vector3 posA = point[5].transform.position;
+        Vector3 posB = point[17].transform.position;
+        Vector3 posC = point[0].transform.position;
+        Vector3 vecAB = posB - posA;
+        Vector3 vecAC = posC - posA;
+
+        //2つのベクトルの外積を取得し、面の法線ベクトルを計算
+        Vector3 normal = Vector3.Cross(vecAB, vecAC).normalized;
+
+        //面の法線ベクトルを使って無期ベクトルを計算
+        Vector3 vecDir = Vector3.Cross(normal, vecAB).normalized;
+        return vecDir;
+    }
+
+    //ポジション保管
+    private void RecordFingerPosition(HandLandmarkListAnnotation.Hand hand)
     {
 
-        //Debug.Log(hand);
-        
+        if (m_isRecordFinish) { return; }
         //左手人差し指の先の移動量を計算
         PointListAnnotation point = m_HandLandmark[(int)hand].GetLandmarkList();
 
         Vector3 currentpos = point[8].transform.position;
 
-        //前のフレームからの移動量を計算
-        Vector3 movementvec = currentpos - previouspos; 
+        if(hand == HandLandmarkListAnnotation.Hand.Left)
+        {
+            if(GetHandVector(hand).x < 0.2f)
+            {
+                return;
+            }
+        }
+        else
+        {
+            if (GetHandVector(hand).x > 0.2f)
+            {
+                return;
+            }
+        }
 
-        float movement = Vector3.Distance(currentpos, previouspos);
-
-        //横方向の速度を計算
-        //float HorizontalSpeed = Mathf.Abs(Vector3.Dot(movement, point[8].transform.right)) / Time.deltaTime;
+        float movement = Vector3.Distance(previouspos, currentpos);
 
         m_fSwingTime[(int)hand] += Time.deltaTime; //横振りしてからの時間を計算
-        //if(HorizontalSpeed > m_fSwingThreshold && m_fSwingTime[(int)hand] > m_fSwingDelay)
-
-        if (movement > m_fSwingThreshold && m_fSwingTime[(int)hand] > m_fSwingDelay)
+        //-----------------テスト--------------------
+        //今の指の状態を取得
+        Fingerindex data;
+        data = FingerData(hand);
+        m_sKey = FindKeyByValue(data);
+        //----------------------------------------
+        //距離が一定以上かつレコーディング中じゃない？
+        if (movement > m_fSwingThreshold && m_fSwingTime[(int)hand] > m_fSwingDelay &&!m_isRecording)
         {
-            //Debug.Log(HorizontalSpeed);
-
-            m_fSwingTime[(int)hand] = 0.0f;
-            GameObject windobj = m_objWind;
-            if (hand == HandLandmarkListAnnotation.Hand.Left)
+            m_isRecording = true;//レコード開始
+           // Debug.Log("レコード開始");
+        }
+       
+        //レコーディング開始かつ完了していない？
+        if (m_isRecording && !m_isRecordFinish )
+        {
+            m_recordPositions[m_recordIndex] = currentpos;//現在の指の位置を保存
+            m_recordIndex++;
+            //保管配列のサイズ以上？
+            if(m_recordIndex >= m_recordPositions.Length)
             {
-               // windobj.transform.position = new Vector3(windobj.transform.position.x, point[0].transform.position.y * 0.1f, 0.0f);    //座標を設定
-                windobj.transform.position = new Vector3(0.0f, 0.0f, 0.0f);    //座標を設定(テスト)
-            }
-            else
-            {
-                //Debug.Log("右手");
-                //windobj.transform.position = new Vector3(windobj.transform.position.x * -1, point[0].transform.position.y * 0.1f, 0.0f);    //座標を設定
-            }
-
-            CS_Wind cs_wind = windobj.GetComponent<CS_Wind>();  //風のスクリプト取得
-
-            //今の指の状態を取得
-            Fingerindex data;
-            data = FingerData(hand);
-            m_sKey = FindKeyByValue(data);
-
-            //--------------風の角度設定--------------------
-            float angle = Mathf.Atan2(movementvec.y, movementvec.x);
-            windobj.transform.eulerAngles = new Vector3(0.0f,0.0f,angle*Mathf.Rad2Deg);
-            Debug.Log("風の角度" + angle);
-
-            //Debug.Log(cs_wind.Movement);
-            Debug.Log(m_sKey);
-
-            //風の生成 指の状態によって風の強さを変更
-            switch (m_sKey)
-            {
-                case "One":
-                    windobj.GetComponent<SpriteRenderer>().color = Color.blue;
-                    cs_wind.WindPower = 0.2f;
-                    Instantiate(windobj);
-                    break;
-                case "Two":
-                    windobj.GetComponent<SpriteRenderer>().color = Color.green;
-                    cs_wind.WindPower = 0.4f;
-                    Instantiate(windobj);
-                    break;
-                case "Three":
-                    windobj.GetComponent<SpriteRenderer>().color = Color.yellow;
-                    cs_wind.WindPower = 0.6f;
-                    Instantiate(windobj);
-                    break;
-                case "For":
-                    windobj.GetComponent<SpriteRenderer>().color = Color.red;
-                    cs_wind.WindPower = 0.8f;
-                    Instantiate(windobj);
-                    break;
-                default:
-                    //Debug.Log("風を起こせない");
-                    break;
+                m_isRecordFinish = true;//レコード完了
+                SetWindStatus();//風のステータスを設定
+                m_fSwingTime[(int)hand] = 0.0f;
+                //Debug.Log("レコード完了");
             }
         }
 
@@ -244,8 +249,156 @@ public class CS_HandPoseData : MonoBehaviour
             previouspos = currentpos;
             m_fWaitFreamTime = 0.0f;
         }
+    }
+    //風のステータスの設定関数
+    private void SetWindStatus()
+    {
+        Vector3 firstPos = m_recordPositions[0];
+        Vector3 finalPos = m_recordPositions[m_recordPositions.Length -1];
+        m_windStatus.distance = Vector3.Distance(firstPos, finalPos);//距離
+
+        float recordTotalTime = Time.deltaTime * m_recordPositions.Length;//レコード時間
+        //最初に位置から最後の位置までの速度設定
+        m_windStatus.speed = m_windStatus.distance / recordTotalTime;
+
+        //最初のフレームと最後のフレームのベクトル
+        Vector3 movevec = finalPos - firstPos;
+       
+        //角度設定
+        m_windStatus.angle = Mathf.Atan2(movevec.y, movevec.x);
+    }
+    //風起こし関数
+    //引数:手の左右
+    private void CreateWind(HandLandmarkListAnnotation.Hand hand) 
+    {
+        if (!m_isRecordFinish) { return; }
+
+        GameObject windobj = m_objWind;
+        if (hand == HandLandmarkListAnnotation.Hand.Left)
+        {
+            // windobj.transform.position = new Vector3(windobj.transform.position.x, point[0].transform.position.y * 0.1f, 0.0f);    //座標を設定
+
+            windobj.transform.position = new Vector3(m_recordPositions[0].x, m_recordPositions[0].y, 0.0f);    //座標を保管したポジション配列の最初に設定
+        }
+        else
+        {
+            //Debug.Log("右手");
+            //windobj.transform.position = new Vector3(windobj.transform.position.x * -1, point[0].transform.position.y * 0.1f, 0.0f);    //座標を設定
+        }
+
+        CS_Wind cs_wind = windobj.GetComponent<CS_Wind>();  //風のスクリプト取得
+
+        //--------------風の角度設定--------------------
+        windobj.transform.eulerAngles = new Vector3(0.0f, 0.0f, m_windStatus.angle* Mathf.Rad2Deg);
+        //Debug.Log("風の角度" + m_windStatus.angle);
+        //風のスピード
+        cs_wind.Movement = m_windStatus.speed * 0.01f;
+
+        //Debug.Log(cs_wind.Movement);
+        //Debug.Log(m_sKey);
+
+        windobj.GetComponent<SpriteRenderer>().color = Color.green;
+        cs_wind.WindPower = 0.2f* m_windStatus.speed;
+        Instantiate(windobj);//風を生成するます
+       
+        InitRecord();//レコード関連の変数を初期化
+        return;
+        //Debug.Log(hand);
+
+        //左手人差し指の先の移動量を計算
+        //PointListAnnotation point = m_HandLandmark[(int)hand].GetLandmarkList();
+
+        //Vector3 currentpos = point[8].transform.position;
+
+        ////前のフレームからの移動量を計算
+        //Vector3 movementvec = currentpos - previouspos; 
+
+        //float movement = Vector3.Distance(currentpos, previouspos);
+
+        ////横方向の速度を計算
+        ////float HorizontalSpeed = Mathf.Abs(Vector3.Dot(movement, point[8].transform.right)) / Time.deltaTime;
+
+        //m_fSwingTime[(int)hand] += Time.deltaTime; //横振りしてからの時間を計算
+        ////if(HorizontalSpeed > m_fSwingThreshold && m_fSwingTime[(int)hand] > m_fSwingDelay)
+
+        //if (movement > m_fSwingThreshold && m_fSwingTime[(int)hand] > m_fSwingDelay)
+        //{
+        //    //Debug.Log(HorizontalSpeed);
+
+        //    m_fSwingTime[(int)hand] = 0.0f;
+        //    GameObject windobj = m_objWind;
+        //    if (hand == HandLandmarkListAnnotation.Hand.Left)
+        //    {
+        //       // windobj.transform.position = new Vector3(windobj.transform.position.x, point[0].transform.position.y * 0.1f, 0.0f);    //座標を設定
+        //        windobj.transform.position = new Vector3(0.0f, 0.0f, 0.0f);    //座標を設定(テスト)
+        //    }
+        //    else
+        //    {
+        //        //Debug.Log("右手");
+        //        //windobj.transform.position = new Vector3(windobj.transform.position.x * -1, point[0].transform.position.y * 0.1f, 0.0f);    //座標を設定
+        //    }
+
+        //    CS_Wind cs_wind = windobj.GetComponent<CS_Wind>();  //風のスクリプト取得
+
+        //    //今の指の状態を取得
+        //    Fingerindex data;
+        //    data = FingerData(hand);
+        //    m_sKey = FindKeyByValue(data);
+
+        //    //--------------風の角度設定--------------------
+        //    float angle = Mathf.Atan2(movementvec.y, movementvec.x);
+        //    windobj.transform.eulerAngles = new Vector3(0.0f,0.0f,angle*Mathf.Rad2Deg);
+        //    Debug.Log("風の角度" + angle);
+
+        //    //Debug.Log(cs_wind.Movement);
+        //    Debug.Log(m_sKey);
+
+        //    //風の生成 指の状態によって風の強さを変更
+        //    switch (m_sKey)
+        //    {
+        //        case "One":
+        //            windobj.GetComponent<SpriteRenderer>().color = Color.blue;
+        //            cs_wind.WindPower = 0.2f;
+        //            Instantiate(windobj);
+        //            break;
+        //        case "Two":
+        //            windobj.GetComponent<SpriteRenderer>().color = Color.green;
+        //            cs_wind.WindPower = 0.4f;
+        //            Instantiate(windobj);
+        //            break;
+        //        case "Three":
+        //            windobj.GetComponent<SpriteRenderer>().color = Color.yellow;
+        //            cs_wind.WindPower = 0.6f;
+        //            Instantiate(windobj);
+        //            break;
+        //        case "For":
+        //            windobj.GetComponent<SpriteRenderer>().color = Color.red;
+        //            cs_wind.WindPower = 0.8f;
+        //            Instantiate(windobj);
+        //            break;
+        //        default:
+        //            //Debug.Log("風を起こせない");
+        //            break;
+        //    }
+        //}
+
+        //m_fWaitFreamTime += Time.deltaTime; //待機フレーム加算
+        //if (m_fWaitFreamTime > m_fWaitFream)
+        //{
+        //    //現在の位置を保存
+        //    previouspos = currentpos;
+        //    m_fWaitFreamTime = 0.0f;
+        //}
 
 
+    }
+
+    private void InitRecord()
+    {
+        m_isRecordFinish = false;
+        m_isRecording = false;
+        m_recordIndex = 0;
+        //Debug.Log("レコード初期化");
     }
 
     //雨降らし関数
