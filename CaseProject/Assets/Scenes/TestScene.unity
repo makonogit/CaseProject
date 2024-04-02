@@ -252,7 +252,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_fFloatHight: 10
   m_fFloatSpeed: 1
-  m_fMove: 0
+  m_fMove: 0.01
 --- !u!212 &103451214
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -252,7 +252,7 @@ public class CS_HandPoseData : MonoBehaviour
         //左手人差し指の先の移動量を計算
         PointListAnnotation point = m_HandLandmark[(int)hand].GetLandmarkList();
 
-        Vector3 Oldpos = point[8].transform.position;
+        Vector3 Oldpos = point[5].transform.position;
         Vector3 OldVector = GetHandVector(hand);
         
         //ベクトルから手の向きを取得
@@ -267,7 +267,7 @@ public class CS_HandPoseData : MonoBehaviour
             MoveDirection = (Oldpos - m_v3Currentpos).normalized;
         }
 
-        Debug.Log(MoveDirection);
+        //Debug.Log(MoveDirection);
 
         //左向きで左に振った時
         if (handrirection == HandDirection.LEFT &&
@@ -304,6 +304,7 @@ public class CS_HandPoseData : MonoBehaviour
         Fingerindex data;
         data = FingerData(hand);
         m_sKey = FindKeyByValue(data);
+        
         //----------------------------------------
         //距離が一定以上かつレコーディング中じゃない？
         if (movement > m_fSwingThreshold && m_fSwingTime[(int)hand] > m_fSwingDelay &&!m_isRecording)
@@ -330,7 +331,7 @@ public class CS_HandPoseData : MonoBehaviour
         {
             //現在の位置を保存
             CurrentVector = GetHandVector(hand);
-            m_v3Currentpos = point[8].transform.position;
+            m_v3Currentpos = point[5].transform.position;
             m_fWaitFreamTime = 0.0f;
         }
 
@@ -359,6 +360,12 @@ public class CS_HandPoseData : MonoBehaviour
     //引数:手の左右
     private void CreateWind(HandLandmarkListAnnotation.Hand hand) 
     {
+        Fingerindex data;
+        data = FingerData(hand);
+        m_sKey = FindKeyByValue(data);
+        //手がパーか
+        bool isFive = (string.Compare(m_sKey, ("Five")) == 0);
+        if (!isFive) { return; }
         if (!m_isRecordFinish) { return; }
 
         GameObject windobj = m_objWind;
@@ -375,8 +382,8 @@ public class CS_HandPoseData : MonoBehaviour
         //Debug.Log(cs_wind.Movement);
         //Debug.Log(m_sKey);
 
-        windobj.GetComponent<SpriteRenderer>().color = Color.green;
-        cs_wind.WindPower = 0.2f* m_windStatus.speed;
+        //windobj.GetComponent<SpriteRenderer>().color = Color.green;
+        cs_wind.WindPower = 1.0f* m_windStatus.speed;
         Instantiate(windobj);//風を生成するます
        
         InitRecord();//レコード関連の変数を初期化

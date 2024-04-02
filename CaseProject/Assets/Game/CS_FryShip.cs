@@ -22,10 +22,14 @@ public class CS_FryShip : MonoBehaviour
     private float m_fWindPower;         //•—‚Ì‰e‹¿—Í
     private Quaternion m_qTargetAngle;  //‰e‹¿‚É‚æ‚Á‚ÄŒX‚­Šp“x
     private Vector2 m_v2TargetVelocity; //‰e‹¿‚É‚æ‚Á‚Äi‚Ş•ûŒü
+    private float m_fSpeed = 0;
 
     [SerializeField,Header("Å‘åHP")]
     private const float m_MaxHP = 100.0f;
     private float m_HP;                   //HP
+
+
+
 
     public float HP
     {
@@ -57,17 +61,20 @@ public class CS_FryShip : MonoBehaviour
         m_tThisTransform.position = new Vector3(m_tThisTransform.position.x + m_fMove, newY, m_tThisTransform.position.z);
 
         //====•—‚É‰e‹¿‚³‚ê‚éˆ—===
-        if(m_isWindMove)
+        if(!m_isWindMove)
         {
-            m_tThisTransform.rotation = Quaternion.Lerp(m_tThisTransform.rotation, m_qTargetAngle,Time.deltaTime * m_fWindPower);
+            //m_tThisTransform.rotation = Quaternion.Lerp(m_tThisTransform.rotation, m_qTargetAngle,Time.deltaTime * m_fWindPower);
 
-            Vector2 currentpos = (Vector2)transform.position;
-
-            Vector2 targetpos = currentpos + m_v2TargetVelocity * Time.deltaTime;
-
-            transform.position = Vector2.Lerp(currentpos, targetpos, Time.deltaTime * (m_fWindPower * 100.0f));
+            m_fSpeed += 2.5f *Time.deltaTime;
+            
         }
+        Vector2 currentpos = (Vector2)transform.position;
 
+        Vector2 targetpos = currentpos + m_v2TargetVelocity * m_fSpeed * Time.deltaTime;
+
+        transform.position = Vector2.Lerp(currentpos, targetpos, Time.deltaTime * (m_fWindPower * 100.0f));
+
+        m_fSpeed = Mathf.Min(0, m_fSpeed);
     }
 
     //•—‚ª‚·‚è”²‚¯‚éuŠÔ
@@ -89,8 +96,8 @@ public class CS_FryShip : MonoBehaviour
             // m_qTargetAngle = Quaternion.Euler(0, 0, angle);
 
             //is•ûŒü‚Ìæ“¾
-            m_v2TargetVelocity = direction * -10.0f;
-
+            m_v2TargetVelocity = direction;
+            m_fSpeed = (m_fWindPower * -1);
             //•—‚Ì‰e‹¿‚ğó‚¯‚é
             m_isWindMove = true;
         }
