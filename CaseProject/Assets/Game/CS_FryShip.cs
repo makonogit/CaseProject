@@ -13,6 +13,8 @@ public class CS_FryShip : MonoBehaviour
     private float m_fFloatHight = 0.1f;
     [SerializeField, Header("浮いている速度")]
     private float m_fFloatSpeed = 1.0f;
+    [SerializeField, Header("移動量")]
+    private float m_fMove = 0.1f;
 
     private Vector3 m_v3StartPos;       //開始位置
 
@@ -21,13 +23,30 @@ public class CS_FryShip : MonoBehaviour
     private Quaternion m_qTargetAngle;  //影響によって傾く角度
     private Vector2 m_v2TargetVelocity; //影響によって進む方向
 
+    [SerializeField,Header("最大HP")]
+    private const float m_MaxHP = 100.0f;
+    private float m_HP;                   //HP
 
+    public float HP
+    {
+        set
+        {
+            m_HP = value;
+        }
+        get
+        {
+            return m_HP;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
     {
         m_tThisTransform = this.transform;
         m_v3StartPos = m_tThisTransform.position;
+
+        m_HP = m_MaxHP; //HPを設定
+
     }
 
     // Update is called once per frame
@@ -35,7 +54,7 @@ public class CS_FryShip : MonoBehaviour
     {
         //船のふわふわ浮いている表現
         float newY = m_v3StartPos.y + Mathf.Sin(Time.time * m_fFloatSpeed) * m_fFloatHight;
-        m_tThisTransform.position = new Vector3(m_tThisTransform.position.x, newY, m_tThisTransform.position.z);
+        m_tThisTransform.position = new Vector3(m_tThisTransform.position.x + m_fMove, newY, m_tThisTransform.position.z);
 
         //====風に影響される処理===
         if(m_isWindMove)
@@ -65,9 +84,9 @@ public class CS_FryShip : MonoBehaviour
             direction.Normalize();
 
             //ベクトルから角度を計算
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            angle -= 90.0f; //オブジェクトが回転済みなので調整
-            m_qTargetAngle = Quaternion.Euler(0, 0, angle);
+            //float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            //angle -= 90.0f; //オブジェクトが回転済みなので調整
+            // m_qTargetAngle = Quaternion.Euler(0, 0, angle);
 
             //進行方向の取得
             m_v2TargetVelocity = direction * -10.0f;
