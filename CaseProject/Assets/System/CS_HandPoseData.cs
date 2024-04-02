@@ -66,9 +66,20 @@ public class CS_HandPoseData : MonoBehaviour
     private string m_sKey;  //キーの名前
 
 
+    //手の向き
+    private enum HandDirection
+    {
+        NONE,
+        LEFT,
+        RIGHT,
+        UP,
+        DOWN
+    }
+
+
     //===== 風生成用変数 ========
     
-    private Vector3 previouspos;
+    private Vector3 m_v3Currentpos;
     private float[] m_fSwingTime = new float[2] { 0.0f, 0.0f };  //横振りディレイ計算用
 
     [SerializeField,Header("横振りを検出する闘値")]
@@ -119,21 +130,24 @@ public class CS_HandPoseData : MonoBehaviour
     void Update()
     {
         //手の情報を取得
-        if (!m_HandLandmark[0] || !m_HandLandmark[1])
+        if (transform.childCount > 0 && (!m_HandLandmark[0] || !m_HandLandmark[1]))
         {
-            if (transform.childCount > 0)
-            {
-                HandLandmarkListAnnotation hand = transform.Find("HandLandmarkList Annotation(Clone)").GetComponent<HandLandmarkListAnnotation>();
+            HandLandmarkListAnnotation hand = transform.Find("HandLandmarkList Annotation(Clone)").GetComponent<HandLandmarkListAnnotation>();
 
-                if (hand)
-                {
-                    m_HandLandmark[(int)hand.GetHandedness()] = hand;
-                }
+            if (!m_HandLandmark[0] && (hand[20].transform.position.x < 0.0f))
+            {
+                m_HandLandmark[0] = hand;
             }
+
+            if (!m_HandLandmark[1] && (hand[20].transform.position.x > 0.0f))
+            {
+                m_HandLandmark[1] = hand;
+            }
+
         }
-        
+
         //--------------風の処理(簡易実装)-----------------
-        if(m_HandLandmark[0] && m_HandLandmark[0].isActive)
+        if (m_HandLandmark[0] && m_HandLandmark[0].isActive)
         {
             RecordFingerPosition(HandLandmarkListAnnotation.Hand.Left);
             CreateWind(HandLandmarkListAnnotation.Hand.Left);
@@ -143,6 +157,7 @@ public class CS_HandPoseData : MonoBehaviour
         {
             RecordFingerPosition(HandLandmarkListAnnotation.Hand.Right);
             CreateWind(HandLandmarkListAnnotation.Hand.Right);
+
         }
 
         //----------------雨の生成処理-----------------------
@@ -162,7 +177,6 @@ public class CS_HandPoseData : MonoBehaviour
             Fingerindex data;
             data = FingerData(HandLandmarkListAnnotation.Hand.Left);
             Debug.Log(FindKeyByValue(data));
-            
         }
     }
 
@@ -171,20 +185,64 @@ public class CS_HandPoseData : MonoBehaviour
         PointListAnnotation point = m_HandLandmark[(int)hand].GetLandmarkList();
         Vector3 currentpos = point[8].transform.position;
 
+        //中指の付け根を手の中心座標とする
+        Vector3 HandPos =point[9].transform.position;
+
         //3つの点を取得し、それらを結ぶベクトルを計算
         Vector3 posA = point[5].transform.position;
         Vector3 posB = point[17].transform.position;
         Vector3 posC = point[0].transform.position;
-        Vector3 vecAB = posB - posA;
-        Vector3 vecAC = posC - posA;
+        Vector2 vecAB = new Vector2(posB.x - posA.x, posB.y - posA.y);
+        Vector2 vecAC = new Vector2(posC.x - posA.x, posC.y - posA.y);
+        float cross = vecAB.x * vecAC.y - vecAB.y * vecAC.x;
 
         //2つのベクトルの外積を取得し、面の法線ベクトルを計算
-        Vector3 normal = Vector3.Cross(vecAB, vecAC).normalized;
+        Vector3 normal = new Vector3(0,0,cross).normalized;
 
+        //手の位置から平面へのベクトルを計算
+        Vector3 toHand = new Vector2(HandPos.x - posA.x, HandPos.y - posA.y);
+
+        //平面上への射影を求める
+        Vector3 projectedHand = Vector2.Dot(toHand, new Vector2(normal.x,normal.y)) * new Vector2(normal.x,normal.y);
+
+        //平面から手の方向ベクトルを求める
+        Vector3 direction = (projectedHand - toHand).normalized;
+
+        //Debug.Log(direction);
+        
         //面の法線ベクトルを使って無期ベクトルを計算
-        Vector3 vecDir = Vector3.Cross(normal, vecAB).normalized;
-        return vecDir;
+     //   Vector3 vecDir = Vector3.Cross(normal, vecAB).normalized;
+        return direction;
     }
+
+
+    private HandDirection GetHandDirection(Vector3 Handvector)
+    {
+        if(Handvector.x > -0.3f && Handvector.y > 0.8f)
+        {
+            return HandDirection.LEFT;
+        }
+
+        if(Handvector.x < 0.3f && Handvector.y < -0.8f)
+        {
+            return HandDirection.RIGHT;
+        }
+
+        if(Handvector.y > 0.3f && Handvector.y < -0.8f)
+        {
+            return HandDirection.DOWN;
+        }
+
+        if(Handvector.y < -0.3f && Handvector.y > 0.8f)
+        {
+            return HandDirection.UP;
+        }
+
+        return HandDirection.NONE;
+
+    }
+
+    private Vector3 CurrentVector;
 
     //ポジション保管
     private void RecordFingerPosition(HandLandmarkListAnnotation.Hand hand)
@@ -194,24 +252,51 @@ public class CS_HandPoseData : MonoBehaviour
         //左手人差し指の先の移動量を計算
         PointListAnnotation point = m_HandLandmark[(int)hand].GetLandmarkList();
 
-        Vector3 currentpos = point[8].transform.position;
+        Vector3 Oldpos = point[8].transform.position;
+        Vector3 OldVector = GetHandVector(hand);
+        
+        //ベクトルから手の向きを取得
+        HandDirection handrirection = GetHandDirection(OldVector);
 
-        if(hand == HandLandmarkListAnnotation.Hand.Left)
+        m_fWaitFreamTime += Time.deltaTime; //待機フレーム加算
+
+        Vector3 MoveDirection = Vector3.zero;
+
+        if (Oldpos != m_v3Currentpos)
         {
-            if(GetHandVector(hand).x < 0.2f)
-            {
-                return;
-            }
-        }
-        else
-        {
-            if (GetHandVector(hand).x > 0.2f)
-            {
-                return;
-            }
+            MoveDirection = (Oldpos - m_v3Currentpos).normalized;
         }
 
-        float movement = Vector3.Distance(previouspos, currentpos);
+        Debug.Log(MoveDirection);
+
+        //左向きで左に振った時
+        if (handrirection == HandDirection.LEFT &&
+            OldVector != CurrentVector && MoveDirection.x > 0.0f)
+        {
+            return;
+        }
+        ////右向きで右に振った時
+        //if(handrirection == HandDirection.RIGHT &&
+        //    OldVector != CurrentVector && HorizontalDistance < 0.0f)
+        //{
+        //    return;
+        //}
+        //下向きで上に振った時
+        //if (handrirection == HandDirection.DOWN &&
+        //    OldVector != CurrentVector && OldVector.y > CurrentVector.y)
+        //{
+        //    return;
+        //}
+        ////上向きで下に振った時
+        //if (handrirection == HandDirection.UP &&
+        //    OldVector != CurrentVector && OldVector.y < CurrentVector.y)
+        //{
+        //    return;
+        //}
+
+        //if(handrirection == HandDirection.NONE) { return; }
+
+        float movement = Vector3.Distance(m_v3Currentpos, Oldpos);
 
         m_fSwingTime[(int)hand] += Time.deltaTime; //横振りしてからの時間を計算
         //-----------------テスト--------------------
@@ -226,11 +311,11 @@ public class CS_HandPoseData : MonoBehaviour
             m_isRecording = true;//レコード開始
            // Debug.Log("レコード開始");
         }
-       
+
         //レコーディング開始かつ完了していない？
         if (m_isRecording && !m_isRecordFinish )
         {
-            m_recordPositions[m_recordIndex] = currentpos;//現在の指の位置を保存
+            m_recordPositions[m_recordIndex] = Oldpos;//現在の指の位置を保存
             m_recordIndex++;
             //保管配列のサイズ以上？
             if(m_recordIndex >= m_recordPositions.Length)
@@ -241,15 +326,18 @@ public class CS_HandPoseData : MonoBehaviour
                 //Debug.Log("レコード完了");
             }
         }
-
-        m_fWaitFreamTime += Time.deltaTime; //待機フレーム加算
         if (m_fWaitFreamTime > m_fWaitFream)
         {
             //現在の位置を保存
-            previouspos = currentpos;
+            CurrentVector = GetHandVector(hand);
+            m_v3Currentpos = point[8].transform.position;
             m_fWaitFreamTime = 0.0f;
         }
+
     }
+
+
+
     //風のステータスの設定関数
     private void SetWindStatus()
     {
@@ -274,18 +362,8 @@ public class CS_HandPoseData : MonoBehaviour
         if (!m_isRecordFinish) { return; }
 
         GameObject windobj = m_objWind;
-        if (hand == HandLandmarkListAnnotation.Hand.Left)
-        {
-            // windobj.transform.position = new Vector3(windobj.transform.position.x, point[0].transform.position.y * 0.1f, 0.0f);    //座標を設定
-
-            windobj.transform.position = new Vector3(m_recordPositions[0].x, m_recordPositions[0].y, 0.0f);    //座標を保管したポジション配列の最初に設定
-        }
-        else
-        {
-            //Debug.Log("右手");
-            //windobj.transform.position = new Vector3(windobj.transform.position.x * -1, point[0].transform.position.y * 0.1f, 0.0f);    //座標を設定
-        }
-
+        windobj.transform.position = new Vector3(m_recordPositions[0].x, m_recordPositions[0].y, 0.0f);    //座標を保管したポジション配列の最初に設定
+        Debug.Log(m_recordPositions[0]);
         CS_Wind cs_wind = windobj.GetComponent<CS_Wind>();  //風のスクリプト取得
 
         //--------------風の角度設定--------------------
