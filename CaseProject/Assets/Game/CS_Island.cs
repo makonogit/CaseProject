@@ -25,6 +25,9 @@ public class CS_Island : MonoBehaviour
     {
         if(collision.gameObject.tag == "Player")
         {
+            //追記：中島2024.04.03
+            //ゲームオーバーフラグをfalseに設定
+            CS_ResultController.GaneOverFlag = false;
             SceneManager.LoadScene("Result");
         }
     }

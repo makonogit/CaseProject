@@ -4,6 +4,7 @@
 //-----------------------------------------------
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class CS_EnemyController : MonoBehaviour
@@ -54,16 +55,21 @@ public class CS_EnemyController : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         ////プレイヤーと衝突したら消滅
-        //if (collision.gameObject.tag == "Player")
-        //{
-        //    //プレイヤーのHPを削る
-        //    CS_FryShip ship = collision.gameObject.transform.GetComponent<CS_FryShip>();
-        //    ship.HP -= m_fAtack;
-        //    Destroy(this.gameObject);
-        //}
+        if (collision.gameObject.tag == "Player")
+        {
+            //プレイヤーのHPを削る
+            //CS_FryShip ship = collision.gameObject.transform.GetComponent<CS_FryShip>();
+            //ship.HP -= m_fAtack;
+            //Destroy(this.gameObject);
+            //追記：中島2024.04.03
+            //ゲームオーバーフラグをtrue
+            CS_ResultController.GaneOverFlag = true;
+            //SceneManager.LoadScene("Result");
+            
+        }
 
         //雨と接触したら
-        if(collision.gameObject.tag == "Rain")
+        if (collision.gameObject.tag == "Rain")
         {
 
         }
