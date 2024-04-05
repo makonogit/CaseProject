@@ -1933,7 +1933,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1919337814}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b626ba35b4d54cc4aa3c9a364270d25b, type: 3}
   m_Name: 
@@ -1957,6 +1957,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ba3c50c2cb46dc9e916dd3a33c8a488, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1919337819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919337814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0444e06a8e140142afbe967b36eb13d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_vec3RightMoveDistanceList: []
+  m_vec3LeftMoveDistanceList: []
+  m_nListMaxNum: 8
+  m_fMinSpeed: 5
+  m_fMaxSpeed: 100
+--- !u!114 &1919337820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919337814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c43992c4d064db45aca6a39d8930101, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_objWind: {fileID: 1735707200725290556, guid: 67519852e96c5a34ab8ba0aa24b0685e, type: 3}
+  m_fCreateDelayOfWind: 0.5
+  m_fWindMoveSpeed: 0.125
+  m_fWindPower: 1
 --- !u!114 &1949627053 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1620015869145370098, guid: 8fcc7ea504479f06a9334ee2faa42b57, type: 3}
