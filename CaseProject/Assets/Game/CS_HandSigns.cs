@@ -11,6 +11,7 @@ using UnityEngine;
 public class CS_HandSigns : MonoBehaviour
 {
     //両手のデータ
+    [SerializeField]
     private HandLandmarkListAnnotation[] m_HandLandmark = new HandLandmarkListAnnotation[2];
 
     // 手の移動距離
@@ -44,7 +45,13 @@ public class CS_HandSigns : MonoBehaviour
     public delegate void EHHandSigns(Vector3 position,Vector3 direction);
 
     // 風生成イベント
-    public static event EHHandSigns OnCreatWinds;
+    public static event EHHandSigns OnCreateWinds;
+
+    // 雷生成イベント
+    public static event EHHandSigns OnCreateThunders;
+
+    // 雨生成イベント
+    public static event EHHandSigns OnCreateRains;
 
     //--------------------------
 
@@ -68,10 +75,6 @@ public class CS_HandSigns : MonoBehaviour
     {
         get
         {
-            // 手の情報がどちらも入っているならfalse
-            bool isHandsNull = !m_HandLandmark[0] || !m_HandLandmark[1];
-            if (!isHandsNull) return false;
-
             // 子オブジェを持っていない時false
             bool isHaveChild = transform.childCount > 0;
             if (!isHaveChild)return false;
@@ -82,21 +85,25 @@ public class CS_HandSigns : MonoBehaviour
    
     // 手の情報を取得する関数
     // 引数：なし
-    // 戻り値：取得した True 取得できなかった False
-    private bool TakeHandsStates() 
+    // 戻り値：なし
+    private void TakeHandsStates() 
     {
-        // 子オブジェから手の情報を探す
-        HandLandmarkListAnnotation hand = transform.Find("HandLandmarkList Annotation(Clone)").GetComponent<HandLandmarkListAnnotation>();
-        if (!hand) return false;// 取得できなかった
+        Transform parentTransform = transform;
+        int i = 0;
+        foreach(Transform child in parentTransform) 
+        {
+            // 子オブジェから手の情報を探す
+            HandLandmarkListAnnotation hand = child.GetComponent<HandLandmarkListAnnotation>();
+            if (!hand) continue;// 取得できなかった
 
-        int handNum = (int)hand.GetHandedness();
-        
-        // 手の情報を設定する
-        m_HandLandmark[handNum] = hand;
-        // リストに追加
-        AddHandPointList( m_HandLandmark[handNum] .GetLandmarkList(),handNum);
-        
-        return true;
+            // 手の情報を設定する
+            m_HandLandmark[i] = hand;
+            // リストに追加
+            AddHandPointList(m_HandLandmark[i].GetLandmarkList(), i);
+            i++;
+        }
+
+        return;
     }
 
     // 手のポイントリストに追加する
@@ -123,13 +130,30 @@ public class CS_HandSigns : MonoBehaviour
     // 戻り値：なし
     private void HandsMotionIdentify() 
     {
-        // 風の生成
-        // 風の向き
-        Vector3 windVector = new Vector3(0, 0, 0);
-        if (IsCreatWind(0, ref windVector)) CreateWind(0, windVector);
-        if (IsCreatWind(1, ref windVector)) CreateWind(1, windVector);
-
-
+        for (int i = 0;i< m_HandLandmark.Length;i++)
+        {
+            // 手の情報が登録されていないなら次に進む
+            if (!m_HandLandmark[i]) continue;
+            // 手の動いた距離
+            Vector3 vec = GetHandMovement(i);
+            // 風の生成
+            if (IsCreateWind(i, vec)) CreateWind(i, vec);
+            // 雷の生成
+            if (IsCreateThunder(i, vec)) CreateThunder(i, vec);
+            // 雨の生成
+            if (IsCreateRain(i, vec)) CreateRain(i,vec);
+        }
+    }
+    // 手の動きを取得
+    // 引数：右手か左手か
+    // 戻り値：動いた距離
+    private Vector3 GetHandMovement(int handNum) 
+    {
+        Vector3 move = new Vector3(0, 0, 0);
+        List<Vector3> moveVecList = GetMoveVecList(handNum);
+        // 移動距離の合計
+        for (int i = 0; i < moveVecList.Count - 1; i++) move += moveVecList[i] - moveVecList[i + 1];
+        return move;
     }
 
     // 手のひらの方向を取得―※出来なかったので親指の付け根の方向を取得
@@ -146,25 +170,17 @@ public class CS_HandSigns : MonoBehaviour
 
         return toIndexVec;
     }
-
+    
     // 風を生成する条件の関数
     // 引数：右手か左手か
-    // 引数：移動距離の情報を返す
+    // 引数：移動距離
     // 戻り値：生成する true しない false
-    private bool IsCreatWind(int handNum,ref Vector3 move)
+    private bool IsCreateWind(int handNum,Vector3 move)
     {
-        // 手の情報が登録されていないなら_false
-        if(!m_HandLandmark[handNum]) return false;
         List<Vector3> moveVecList = GetMoveVecList(handNum);
         // リストが少ないなら_false
         bool isListUnder = moveVecList.Count < m_nListMaxNum;
         if (isListUnder)return false;
-
-        // 移動距離初期化
-        move = new Vector3(0, 0, 0);
-
-        // 移動距離の合計
-        for (int i = 0; i < moveVecList.Count - 1; i++) move += moveVecList[i] - moveVecList[i + 1];
 
         // 最低移動距離を越えたら_false
         bool isOverMoveDistance = move.magnitude > m_fMaxSpeed;
@@ -184,7 +200,7 @@ public class CS_HandSigns : MonoBehaviour
 
         // 手がパーか
         bool isPaperSign = GetHandPose(handNum)==(byte)HandPose.PaperSign;
-        Debug.Log("手のポーズ%b"+GetHandPose(handNum));
+
         // 手がパーでないなら_false
         if (!isPaperSign) return false;
 
@@ -193,6 +209,105 @@ public class CS_HandSigns : MonoBehaviour
 
         return true;
     }
+
+    // 風の生成イベントの発行関数
+    // 引数：右手か左手か
+    // 引数：風の向きと速度
+    // 戻り値：なし
+    private void CreateWind(int handNum, Vector3 windVec)
+    {
+        // 風生成位置
+        Vector3 position = m_HandLandmark[handNum][5].transform.position;
+        // 風生成イベントの発行
+        OnCreateWinds(position, windVec);
+    }
+
+    // 雷を生成する条件の関数
+    // 引数：右手か左手か
+    // 引数：移動距離
+    // 戻り値：生成する true しない false
+    private bool IsCreateThunder(int handNum,Vector3 move)
+    {
+        List<Vector3> moveVecList = GetMoveVecList(handNum);
+        // リストが少ないなら_false
+        bool isListUnder = moveVecList.Count < m_nListMaxNum;
+        if (isListUnder) return false;
+
+        // 最低移動距離を越えたら_false
+        bool isOverMoveDistance = move.magnitude > m_fMaxSpeed;
+        if (isOverMoveDistance) return false;
+
+        // 最大移動距離を越えなかったら_false
+        bool isUnderMoveDistance = move.magnitude < m_fMinSpeed;
+        if (isUnderMoveDistance) return false;
+
+        // 動いた方向
+        Vector3 moveN = Vector3.Normalize(move);
+        bool isSwingDown = moveN.y < 0;
+        // 振り落としてないなら_false
+        if (!isSwingDown) return false;
+
+        // 手がグーか
+        bool isRockSign = GetHandPose(handNum) == (byte)HandPose.RockSign;
+
+        // 手がグーでないなら_false
+        if (!isRockSign) return false;
+
+        // 移動距離リストのリセット
+        moveVecList.Clear();
+
+        return true;
+    }
+
+    // 雷生成イベントを発行する関数
+    // 引数：右手か左手か
+    // 引数：方向
+    // 戻り値：なし
+    private void CreateThunder(int  handNum,Vector3 vec) 
+    {
+        // 手の位置
+        Vector3 pos = m_HandLandmark[handNum][9].transform.position;
+        OnCreateThunders(pos,vec);
+    }
+
+    // 雨を生成する条件関数
+    // 引数：右手か左手か
+    // 引数：動いた距離
+    // 戻り値：生成する true しない false
+    private bool IsCreateRain(int handNum, Vector3 move)
+    {
+        List<Vector3> moveVecList = GetMoveVecList(handNum);
+        // リストが少ないなら_false
+        bool isListUnder = moveVecList.Count < m_nListMaxNum;
+        if (isListUnder) return false;
+
+        // 最低移動距離を越えたら_false
+        bool isOverMoveDistance = move.magnitude < m_fMinSpeed;
+        if (!isOverMoveDistance) return false;
+
+        // 手がパーか
+        bool isPaperSign = GetHandPose(handNum) == (byte)HandPose.PaperSign;
+
+        // 手がパーでないなら_false
+        if (!isPaperSign) return false;
+
+        return true;
+    }
+    // 雨生成イベントを発行する関数
+    // 引数：右手か左手か
+    // 引数：方向
+    // 戻り値：なし
+    private void CreateRain(int handNum, Vector3 vec)
+    {
+        // 手のひらで真ん中の位置
+        Vector3 pos = m_HandLandmark[handNum][9].transform.position;
+        pos += m_HandLandmark[handNum][0].transform.position;
+        pos *= 0.5f;
+
+        OnCreateRains(pos, vec);
+    }
+
+
 
     // 手のポーズの取得
     // 引数：右手か左手か
@@ -245,18 +360,6 @@ public class CS_HandSigns : MonoBehaviour
         float MaxDist = 20;
         // 指先と手首の距離が近いか
          return  length > MaxDist;
-    }
-
-    // 風の生成イベントの発行関数
-    // 引数：右手か左手か
-    // 引数：風の向きと速度
-    // 戻り値：なし
-    private void CreateWind(int handNum,Vector3 windVec) 
-    {
-        // 風生成位置
-        Vector3 position = m_HandLandmark[0][5].transform.position;
-        // 風生成イベントの発行
-        OnCreatWinds(position, windVec);
     }
 
     // 移動距離リストを取得する関数
