@@ -114,16 +114,15 @@ namespace Mediapipe.Unity
       if (handedness == Hand.Left)
       {
         _landmarkListAnnotation.SetColor(_leftLandmarkColor);
-        //’Ç‰Á@›
-        m_Hand = handedness;
+                
       }
       else if (handedness == Hand.Right)
       {
         _landmarkListAnnotation.SetColor(_rightLandmarkColor);
-        //’Ç‰Á@›
-        m_Hand = handedness;
       }
-     
+      
+      //’Ç‰Á@›
+      m_Hand = handedness;
     }
 
     public void SetHandedness(IReadOnlyList<Classification> handedness)
@@ -136,7 +135,7 @@ namespace Mediapipe.Unity
       {
         SetHandedness(Hand.Right);
       }
-            // ignore unknown label
+      // ignore unknown label
     }
 
     public void SetHandedness(ClassificationList handedness)
