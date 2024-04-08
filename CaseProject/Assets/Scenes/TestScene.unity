@@ -634,6 +634,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2826624497333046171, guid: 46d7266394a9f684994fef1767af4388, type: 3}
+      propertyPath: m_fMove
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2826624497333046171, guid: 46d7266394a9f684994fef1767af4388, type: 3}
+      propertyPath: m_ShotPrefab
+      value: 
+      objectReference: {fileID: 7424587325056705266, guid: 152a71e08b1dad04897b8568db265f99, type: 3}
     - target: {fileID: 7384023763466430252, guid: 46d7266394a9f684994fef1767af4388, type: 3}
       propertyPath: m_Name
       value: Enemy (2)
@@ -1216,6 +1224,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2826624497333046171, guid: 46d7266394a9f684994fef1767af4388, type: 3}
+      propertyPath: m_fMove
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2826624497333046171, guid: 46d7266394a9f684994fef1767af4388, type: 3}
+      propertyPath: m_ShotPrefab
+      value: 
+      objectReference: {fileID: 7424587325056705266, guid: 152a71e08b1dad04897b8568db265f99, type: 3}
     - target: {fileID: 7384023763466430252, guid: 46d7266394a9f684994fef1767af4388, type: 3}
       propertyPath: m_Name
       value: Enemy
@@ -1915,6 +1931,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2826624497333046171, guid: 46d7266394a9f684994fef1767af4388, type: 3}
+      propertyPath: m_fMove
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2826624497333046171, guid: 46d7266394a9f684994fef1767af4388, type: 3}
+      propertyPath: m_ShotPrefab
+      value: 
+      objectReference: {fileID: 7424587325056705266, guid: 152a71e08b1dad04897b8568db265f99, type: 3}
     - target: {fileID: 7384023763466430252, guid: 46d7266394a9f684994fef1767af4388, type: 3}
       propertyPath: m_Name
       value: Enemy (1)
