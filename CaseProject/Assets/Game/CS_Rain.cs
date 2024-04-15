@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CS_Rain : MonoBehaviour
 {
-    float m_nowTime = 0.0f;
+    //float m_nowTime = 0.0f;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,11 +14,16 @@ public class CS_Rain : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        m_nowTime += Time.deltaTime;
-        const float deleteTime = 3.0f;
-        if(m_nowTime > deleteTime)
-        {
-            Destroy(this.gameObject);
-        }
+        //m_nowTime += Time.deltaTime;
+        //const float deleteTime = 3.0f;
+        //if(m_nowTime > deleteTime)
+        //{
+        //    Destroy(this.gameObject);
+        //}
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Destroy(this.gameObject);
     }
 }

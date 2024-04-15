@@ -101,6 +101,12 @@ public class CS_FryShip : MonoBehaviour
             //•—‚Ì‰e‹¿‚ðŽó‚¯‚é
             m_isWindMove = true;
         }
+
+        if(collision.gameObject.tag == "Cloud")
+        {
+            Debug.Log("aaaaaaaaaaaaaaaaaaa");
+        }
+
     }
 
     //‚·‚è”²‚¯”»’è

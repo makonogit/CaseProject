@@ -120,6 +120,24 @@ public class CS_HandPoseData : MonoBehaviour
     [SerializeField, Header("雨オブジェクト")]
     private GameObject m_objRain;
 
+    [SerializeField, Header("雲オブジェクト")]
+    private GameObject m_CloudObj;
+
+    //===========押し引きアクション用================
+    private float[] m_HandDepth = new float[10];
+    private int m_nPushData = -1;           //押したか引いたか　0:引き　1:押し
+    private int m_nPushFream = 0;           //現在の保存フレーム
+    private const int m_nMaxPushFream = 10; //何フレーム保存するか
+
+    //押し引きデータのゲッター
+    public int PUSHDATA
+    {
+        get
+        {
+            return m_nPushData;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -146,29 +164,31 @@ public class CS_HandPoseData : MonoBehaviour
 
         }
 
-        //--------------風の処理(簡易実装)-----------------
-        if (m_HandLandmark[0] && m_HandLandmark[0].isActive)
-        {
-            RecordFingerPosition(HandLandmarkListAnnotation.Hand.Left);
-            CreateWind(HandLandmarkListAnnotation.Hand.Left);
-        }
+        ////--------------風の処理(簡易実装)-----------------
+        //if (m_HandLandmark[0] && m_HandLandmark[0].isActive)
+        //{
+        //    RecordFingerPosition(HandLandmarkListAnnotation.Hand.Left);
+        //    CreateWind(HandLandmarkListAnnotation.Hand.Left);
+        //}
 
-        if(m_HandLandmark[1] && m_HandLandmark[1].isActive)
-        {
-            RecordFingerPosition(HandLandmarkListAnnotation.Hand.Right);
-            CreateWind(HandLandmarkListAnnotation.Hand.Right);
+        //if(m_HandLandmark[1] && m_HandLandmark[1].isActive)
+        //{
+        //    RecordFingerPosition(HandLandmarkListAnnotation.Hand.Right);
+        //    CreateWind(HandLandmarkListAnnotation.Hand.Right);
 
-        }
+        //}
 
         //----------------雨の生成処理-----------------------
         if (m_HandLandmark[0] && m_HandLandmark[0].isActive)
         {
-           //CreateRain(HandLandmarkListAnnotation.Hand.Left);
+           CreateRain(HandLandmarkListAnnotation.Hand.Left);
+            PushHand(HandLandmarkListAnnotation.Hand.Left);
+            Debug.Log(m_nPushData);
         }
 
         if (m_HandLandmark[1] && m_HandLandmark[1].isActive)
         {
-           //CreateRain(HandLandmarkListAnnotation.Hand.Right);
+           CreateRain(HandLandmarkListAnnotation.Hand.Right);
         }
 
         //=====デバッグ　ポーズ認識確認==========
@@ -183,7 +203,7 @@ public class CS_HandPoseData : MonoBehaviour
     public Vector3 GetHandVector(HandLandmarkListAnnotation.Hand hand)
     {
         PointListAnnotation point = m_HandLandmark[(int)hand].GetLandmarkList();
-        Vector3 currentpos = point[8].transform.position;
+        //Vector3 currentpos = point[12].transform.position;
 
         //中指の付け根を手の中心座標とする
         Vector3 HandPos =point[9].transform.position;
@@ -218,22 +238,22 @@ public class CS_HandPoseData : MonoBehaviour
 
     private HandDirection GetHandDirection(Vector3 Handvector)
     {
-        if(Handvector.x > -0.3f && Handvector.y > 0.8f)
+        if(Handvector.x > 0.5f && Handvector.y < -0.5f)
         {
             return HandDirection.LEFT;
         }
 
-        if(Handvector.x < 0.3f && Handvector.y < -0.8f)
+        if (Handvector.x > 0.2f && Handvector.y > 0.8f)
         {
             return HandDirection.RIGHT;
         }
 
-        if(Handvector.y > 0.3f && Handvector.y < -0.8f)
+        if (Handvector.x > 0.9f && Handvector.y > -0.2f)
         {
             return HandDirection.DOWN;
         }
 
-        if(Handvector.y < -0.3f && Handvector.y > 0.8f)
+        if(Handvector.x < -0.8f && Handvector.y > 0.2f)
         {
             return HandDirection.UP;
         }
@@ -478,6 +498,65 @@ public class CS_HandPoseData : MonoBehaviour
 
     }
 
+
+    //押し引き関数
+    //引数：手の左右
+    //戻り値：-1 判定不可　0:引いた　1:押した
+    private int PushHand(HandLandmarkListAnnotation.Hand hand)
+    {
+        Fingerindex data;
+        data = FingerData(hand);
+        m_sKey = FindKeyByValue(data);
+
+        //手を広げていなかったら計算しない
+        if(m_sKey != "Five")
+        {
+            m_nPushFream = 0;
+            return -1;
+        }
+
+        PointListAnnotation point = m_HandLandmark[(int)hand].GetLandmarkList();
+        //中指の付け根を手の中心としてスケールを保存
+        m_HandDepth[m_nPushFream] = point[9].transform.position.z;
+
+        m_nPushFream++;
+        
+        //配列の終端まで保存したら押したか引いたかを返す
+        if (m_nPushFream == m_nMaxPushFream - 1)
+        {
+            for (int i = 0; i < m_nMaxPushFream - 1; i++)
+            {
+                if (m_HandDepth[i] < m_HandDepth[i + 1])
+                {
+                    if (m_nPushData != -1 && m_nPushData == 0) 
+                    {
+                        m_nPushFream = 0;
+                        m_nPushData = -1;
+                        return m_nPushData; 
+                    }
+                    m_nPushData = 1;    //押している
+                }
+                if (m_HandDepth[i] > m_HandDepth[i + 1])
+                {
+                    if (m_nPushData != -1 && m_nPushData == 1)
+                    {
+                        m_nPushFream = 0;
+                        m_nPushData = -1;
+                        return m_nPushData;
+                    }
+                    m_nPushData = 0;    //引いている
+                }
+            }
+
+            //フレームのリセット
+            m_nPushFream = 0;
+
+            return m_nPushData;
+        }
+
+        return -1;
+    }
+
     private void InitRecord()
     {
         m_isRecordFinish = false;
@@ -490,30 +569,31 @@ public class CS_HandPoseData : MonoBehaviour
     //引数:手の左右
     private void CreateRain(HandLandmarkListAnnotation.Hand hand)
     {
+        //手が下を向いているか
+        HandDirection handdirection = GetHandDirection(GetHandVector(hand));
+        //Debug.Log(handdirection);
+        if (handdirection != HandDirection.DOWN) { return; }
+
         m_rNowTime += Time.deltaTime;//現在時間加算
         Fingerindex data;
         data = FingerData(hand);
-        Debug.Log(FindKeyByValue(data));
+        //Debug.Log(FindKeyByValue(data));
         m_sKey = FindKeyByValue(data);
         //手のポーズが5?
         if (m_sKey == "Five" && m_rNowTime > m_rIntervalTime)
         {
             m_rNowTime = 0.0f;//現在時間初期化
-            Debug.Log("雨の生成開始");
+           // Debug.Log("雨の生成開始");
             //手のリストを取得
             PointListAnnotation point = m_HandLandmark[(int)hand].GetLandmarkList();
 
 
             //生成
-            for (uint i = 0; i<m_rCreateFingerNums.Length; i++)
-            {
-                //指番号に合った位置に生成
-                // pos = 
-                //Debug.Log("雨の生成位置"+pos);
-                m_objRain.transform.position = point[m_rCreateFingerNums[i]].transform.position;//new Vector3(point[(int)m_rCreateFingerNums[i]].transform.position.x, point[(int)m_rCreateFingerNums[i]].transform.position.y, 0.0f); 
-                Instantiate(m_objRain);
-
-            }
+            float XMinpos = m_CloudObj.transform.position.x - m_CloudObj.transform.localScale.x * 10;
+            float XMaxpos = m_CloudObj.transform.position.x + m_CloudObj.transform.localScale.x * 10;
+            float RandomXpos = Random.Range(XMinpos, XMaxpos);
+            m_objRain.transform.position = new Vector3(RandomXpos, m_CloudObj.transform.position.y + m_CloudObj.transform.localScale.y, 0.0f);
+            Instantiate(m_objRain);
         }
     }
 
@@ -556,5 +636,7 @@ public class CS_HandPoseData : MonoBehaviour
         return null;
 
     }
+
+
 
 }
