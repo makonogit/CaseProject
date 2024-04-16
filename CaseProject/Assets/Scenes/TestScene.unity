@@ -8232,6 +8232,7 @@ MonoBehaviour:
   m_rIntervalTime: 0.3
   m_objRain: {fileID: 1735707200725290556, guid: 8f65d357473e2614b91c830b197e395c, type: 3}
   m_CloudObj: {fileID: 320883232}
+  m_fPushThreshold: 0.1
 --- !u!114 &1919337817 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: -8837774153085666347, guid: 87a9be2a7620991a78342ef9a56fa62c, type: 3}

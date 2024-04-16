@@ -95,7 +95,7 @@ public class CS_HandPoseData : MonoBehaviour
     private float m_fWaitFreamTime = 0.0f;
 
     [SerializeField, Header("フレーム保管数")]
-    private int m_recordNum = 10;           //保管数
+    private int m_recordNum = 50;           //保管数
     private Vector3[] m_recordPositions;    //保管用配列
     private int m_recordIndex = 0;
     private bool m_isRecording = false;    //レコーディングフラグ
@@ -124,10 +124,13 @@ public class CS_HandPoseData : MonoBehaviour
     private GameObject m_CloudObj;
 
     //===========押し引きアクション用================
-    private float[] m_HandDepth = new float[10];
+    private float[] m_HandDepth = new float[40];
     private int m_nPushData = -1;           //押したか引いたか　0:引き　1:押し
     private int m_nPushFream = 0;           //現在の保存フレーム
-    private const int m_nMaxPushFream = 10; //何フレーム保存するか
+    private const int m_nMaxPushFream = 40; //何フレーム保存するか
+    [SerializeField, Header("手の押し引きの闘値")]
+    private float m_fPushThreshold = 1.0f;
+    private bool m_IsSavePush = false;       //保存し終わったか
 
     //押し引きデータのゲッター
     public int PUSHDATA
@@ -141,6 +144,11 @@ public class CS_HandPoseData : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        for(int i = 0;i<m_nMaxPushFream;i++)
+        {
+            m_HandDepth[i] = 0.0f;
+        }
+
         m_recordPositions = new Vector3[m_recordNum];   
     }
 
@@ -183,7 +191,6 @@ public class CS_HandPoseData : MonoBehaviour
         {
            CreateRain(HandLandmarkListAnnotation.Hand.Left);
             PushHand(HandLandmarkListAnnotation.Hand.Left);
-            Debug.Log(m_nPushData);
         }
 
         if (m_HandLandmark[1] && m_HandLandmark[1].isActive)
@@ -516,45 +523,94 @@ public class CS_HandPoseData : MonoBehaviour
         }
 
         PointListAnnotation point = m_HandLandmark[(int)hand].GetLandmarkList();
-        //中指の付け根を手の中心としてスケールを保存
-        m_HandDepth[m_nPushFream] = point[9].transform.position.z;
+        //中指の付け根を手の中心としてZ座標を保存
+        float HandPos = point[9].transform.position.z;
 
-        m_nPushFream++;
-        
-        //配列の終端まで保存したら押したか引いたかを返す
-        if (m_nPushFream == m_nMaxPushFream - 1)
+        //手の位置の差分を計算して、配列に保存
+        float HandPosDelta = 0.0f;
+        for(int i = 0;i<m_nMaxPushFream;i++)
         {
-            for (int i = 0; i < m_nMaxPushFream - 1; i++)
+            int PrevFream = (m_nPushFream - i - 1 + m_nMaxPushFream) % m_nMaxPushFream;
+            HandPosDelta += HandPos - m_HandDepth[PrevFream];
+        }
+        m_HandDepth[m_nPushFream] = HandPos;
+        m_nPushFream = (m_nPushFream + 1) % m_nMaxPushFream;
+
+        //保存し終わったら手の動きを検出
+        if (!m_IsSavePush && m_nPushFream == 0)
+        {
+            m_IsSavePush = true;
+
+            //手の位置が闘値を超えたかを確認
+            bool IsLeave = HandPosDelta / m_nMaxPushFream > m_fPushThreshold;
+            bool IsPush = HandPosDelta / m_nMaxPushFream < -m_fPushThreshold;
+            
+
+            Debug.Log(m_fPushThreshold);
+            if (IsPush)
             {
-                if (m_HandDepth[i] < m_HandDepth[i + 1])
-                {
-                    if (m_nPushData != -1 && m_nPushData == 0) 
-                    {
-                        m_nPushFream = 0;
-                        m_nPushData = -1;
-                        return m_nPushData; 
-                    }
-                    m_nPushData = 1;    //押している
-                }
-                if (m_HandDepth[i] > m_HandDepth[i + 1])
-                {
-                    if (m_nPushData != -1 && m_nPushData == 1)
-                    {
-                        m_nPushFream = 0;
-                        m_nPushData = -1;
-                        return m_nPushData;
-                    }
-                    m_nPushData = 0;    //引いている
-                }
+                Debug.Log("おした");
+                return m_nPushData = 1;
+            }
+            if (IsLeave)
+            {
+                Debug.Log("引いた");
+                return m_nPushData = 0;
             }
 
-            //フレームのリセット
-            m_nPushFream = 0;
-
-            return m_nPushData;
+        }
+        else
+        {
+            m_IsSavePush = false;
+            for(int i = 0; i< m_nMaxPushFream;i++)
+            {
+                m_HandDepth[i] = 0;
+            }
         }
 
-        return -1;
+        
+        return m_nPushData = -1;
+
+        {
+            m_HandDepth[m_nPushFream] = point[9].transform.position.z;
+
+            m_nPushFream++;
+
+            //指定フレーム数記録して終端まで保存したら押したか引いたかを返す
+            if (m_nPushFream == m_nMaxPushFream - 1)
+            {
+                for (int i = 0; i < m_nMaxPushFream - 1; i++)
+                {
+                    if (m_HandDepth[i] < m_HandDepth[i + 1])
+                    {
+                        if (m_nPushData != -1 && m_nPushData == 0)
+                        {
+                            m_nPushFream = 0;
+                            m_nPushData = -1;
+                            return m_nPushData;
+                        }
+                        m_nPushData = 1;    //押している
+                    }
+                    if (m_HandDepth[i] > m_HandDepth[i + 1])
+                    {
+                        if (m_nPushData != -1 && m_nPushData == 1)
+                        {
+                            m_nPushFream = 0;
+                            m_nPushData = -1;
+                            return m_nPushData;
+                        }
+                        m_nPushData = 0;    //引いている
+                    }
+                }
+
+                //フレームのリセット
+                m_nPushFream = 0;
+
+                return m_nPushData;
+            }
+
+            return -1;
+        }
     }
 
     private void InitRecord()

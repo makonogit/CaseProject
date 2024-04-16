@@ -82,7 +82,7 @@ public class CS_ChangeLayer : MonoBehaviour
 
                 if (m_nNowLayer == 1)
                 {
-                    m_Layer[m_nNowLayer + 1].LayerObj.SetActive(true);
+                    m_Layer[m_nNowLayer - 1].LayerObj.SetActive(true);
                 }
 
                 m_Layer[m_nOldLayer].LayerObj.transform.localScale =
@@ -97,12 +97,6 @@ public class CS_ChangeLayer : MonoBehaviour
                 if (m_nNowLayer == 0)
                 {
                     m_Layer[m_nOldLayer + 1].LayerObj.SetActive(false);
-
-                    m_Layer[m_nOldLayer + 1].LayerObj.transform.localScale =
-                    Vector3.Lerp(m_Layer[m_nOldLayer + 1].LayerObj.transform.localScale, m_Layer[m_nOldLayer].Scale, Time.deltaTime);
-
-                    m_Layer[m_nOldLayer + 1].LayerObj.transform.position =
-                        Vector3.Lerp(m_Layer[m_nOldLayer + 1].LayerObj.transform.position, m_Layer[m_nOldLayer].Pos, Time.deltaTime);
                 }
 
                 if (m_nNowLayer == 1)

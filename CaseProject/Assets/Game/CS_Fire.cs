@@ -12,6 +12,7 @@ public class CS_Fire : MonoBehaviour
     [SerializeField, Header("火のHP")]
     private float m_FireHP = 100.0f;
 
+    //火の最大HP
     private float m_MaxHP = 0.0f;
 
     float FIREHP
@@ -52,7 +53,7 @@ public class CS_Fire : MonoBehaviour
         if (collision.gameObject.tag == "Rain")
         {
             m_FireHP -= 10.0f;
-            //スプライトの縮小
+            //スプライトの縮小(最大HPに合わせて)
             Vector3 DecreaseRate = new Vector3((m_Scale.x / m_MaxHP) * 5.0f,(m_Scale.y / m_MaxHP) * 5.0f, 0.0f);
             this.transform.localScale -= DecreaseRate;
         }
