@@ -14,6 +14,14 @@ public class CS_HandSigns : MonoBehaviour
     [SerializeField]
     private HandLandmarkListAnnotation[] m_HandLandmark = new HandLandmarkListAnnotation[2];
 
+    public HandLandmarkListAnnotation[] HandMark
+    {
+        get
+        {
+            return m_HandLandmark;
+        }
+    }
+    
     // 手の移動距離
     [Header("動きリスト")]
     [SerializeField] private List<Vector3> m_vec3RightMoveDistanceList = new List<Vector3>();
@@ -147,7 +155,7 @@ public class CS_HandSigns : MonoBehaviour
     // 手の動きを取得
     // 引数：右手か左手か
     // 戻り値：動いた距離
-    private Vector3 GetHandMovement(int handNum) 
+    public Vector3 GetHandMovement(int handNum) 
     {
         Vector3 move = new Vector3(0, 0, 0);
         List<Vector3> moveVecList = GetMoveVecList(handNum);
@@ -159,7 +167,7 @@ public class CS_HandSigns : MonoBehaviour
     // 手のひらの方向を取得―※出来なかったので親指の付け根の方向を取得
     // 引数：左手か右手か
     // 戻り値：手のひらの方向ベクトル
-    private Vector3 GetHandDirection(int handNum) 
+    public Vector3 GetHandDirection(int handNum) 
     {
         PointListAnnotation point = m_HandLandmark[handNum].GetLandmarkList();
         //手首の位置情報
@@ -312,7 +320,7 @@ public class CS_HandSigns : MonoBehaviour
     // 手のポーズの取得
     // 引数：右手か左手か
     // 戻り値：一ビットずつ指が立っているとtrue
-    private byte GetHandPose(int handNum) 
+    public byte GetHandPose(int handNum) 
     {
         byte sign = 0;
         //データを取得
