@@ -4,6 +4,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Mediapipe.Unity;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -60,6 +61,9 @@ public class CS_HandSigns : MonoBehaviour
 
     // 雨生成イベント
     public static event EHHandSigns OnCreateRains;
+
+    // Tポーズイベント
+    public static event EHHandSigns OnTPose;
 
     //--------------------------
 
@@ -145,13 +149,16 @@ public class CS_HandSigns : MonoBehaviour
             // 手の動いた距離
             Vector3 vec = GetHandMovement(i);
             // 風の生成
-            if (IsCreateWind(i, vec)) CreateWind(i, vec);
+            //if (IsCreateWind(i, vec)) CreateWind(i, vec);
             // 雷の生成
-            if (IsCreateThunder(i, vec)) CreateThunder(i, vec);
+            //if (IsCreateThunder(i, vec)) CreateThunder(i, vec);
             // 雨の生成
-            if (IsCreateRain(i, vec)) CreateRain(i,vec);
+            //if (IsCreateRain(i, vec)) CreateRain(i,vec);
         }
+        // 両手でTポーズ
+        if (IsTPose()) OnTPose(Vector3.zero, Vector3.zero);
     }
+
     // 手の動きを取得
     // 引数：右手か左手か
     // 戻り値：動いた距離
@@ -301,6 +308,7 @@ public class CS_HandSigns : MonoBehaviour
 
         return true;
     }
+    
     // 雨生成イベントを発行する関数
     // 引数：右手か左手か
     // 引数：方向
@@ -315,7 +323,65 @@ public class CS_HandSigns : MonoBehaviour
         OnCreateRains(pos, vec);
     }
 
+    // 両手でTポーズをしているか条件関数
+    // 引数：なし
+    // 戻り値：ポーズをとっている true
+    private bool IsTPose() 
+    {
+        // 両手の情報があるか,ないなら終わる
+        bool isNullOfHandsInfo = !m_HandLandmark[0] || !m_HandLandmark[1];
+        if (isNullOfHandsInfo) return false;
+        
+        // 両手がパーではないなら
+        bool isPaperSign = GetHandPose(0) == (byte)HandPose.PaperSign;
+        if (!isPaperSign) return false;
+        
+        // もう片方も
+        isPaperSign = GetHandPose(1) == (byte)HandPose.PaperSign;
+        if (!isPaperSign) return false;
+        
 
+        // 指先が第一関節に近いか
+        float length = 30;
+        
+
+        // 中指の先ともう片方の手の中指の第一関節との距離
+        Vector3 dis = m_HandLandmark[0][12].transform.position;
+        dis -= m_HandLandmark[1][9].transform.position;
+
+        // 中指の先ともう片方の手の中指の第一関節との距離
+        Vector3 dis1 = m_HandLandmark[1][12].transform.position;
+        dis1 -= m_HandLandmark[0][9].transform.position;
+
+        bool isNaerHandToFinger = dis.magnitude <= length;
+        bool isNaerHandToFinger1 = dis1.magnitude <= length;
+
+        if (!isNaerHandToFinger && !isNaerHandToFinger1) return false;
+
+        // 手の方向が垂直関係か
+
+        // 許容範囲
+        float tolerance = 0.5f;
+        
+        // 手の方向（正規化）
+        Vector3 handvec = m_HandLandmark[0][12].transform.position;
+        handvec -= m_HandLandmark[0][9].transform.position;
+        handvec.Normalize();
+        
+        // 手の方向（正規化）
+        Vector3 handvec1 = m_HandLandmark[1][12].transform.position;
+        handvec1 -= m_HandLandmark[1][9].transform.position;
+        handvec1.Normalize();
+        
+        // 内積で０に近ければ垂直
+        float dot = Vector3.Dot(handvec, handvec1);
+
+        // 手と手の重なった角度が許容範囲ないか
+        bool isVertical = dot < tolerance && dot > -tolerance;
+        if (!isVertical) return false;
+        
+        return true;
+    }
 
     // 手のポーズの取得
     // 引数：右手か左手か
