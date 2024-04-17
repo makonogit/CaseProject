@@ -46,9 +46,9 @@ public class CS_Fire : MonoBehaviour
         }
     }
 
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
+
         //‰J‚É“–‚½‚Á‚½‚ç
         if (collision.gameObject.tag == "Rain")
         {

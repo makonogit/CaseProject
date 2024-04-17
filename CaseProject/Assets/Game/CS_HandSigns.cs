@@ -7,6 +7,7 @@ using Mediapipe.Unity;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 
 public class CS_HandSigns : MonoBehaviour
@@ -70,6 +71,7 @@ public class CS_HandSigns : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        OnTPose += NullEvent;
     }
 
     // Update is called once per frame
@@ -146,14 +148,19 @@ public class CS_HandSigns : MonoBehaviour
         {
             // 手の情報が登録されていないなら次に進む
             if (!m_HandLandmark[i]) continue;
+            
+            // リストが少ないなら次に進む
+            bool isListUnder = GetMoveVecList(i).Count < m_nListMaxNum;
+            if (isListUnder) continue;
+
             // 手の動いた距離
             Vector3 vec = GetHandMovement(i);
             // 風の生成
-            //if (IsCreateWind(i, vec)) CreateWind(i, vec);
+            if (IsCreateWind(i, vec)) CreateWind(i, vec);
             // 雷の生成
             //if (IsCreateThunder(i, vec)) CreateThunder(i, vec);
             // 雨の生成
-            //if (IsCreateRain(i, vec)) CreateRain(i,vec);
+            if (IsCreateRain(i, vec)) CreateRain(i,vec);
         }
         // 両手でTポーズ
         if (IsTPose()) OnTPose(Vector3.zero, Vector3.zero);
@@ -193,10 +200,7 @@ public class CS_HandSigns : MonoBehaviour
     private bool IsCreateWind(int handNum,Vector3 move)
     {
         List<Vector3> moveVecList = GetMoveVecList(handNum);
-        // リストが少ないなら_false
-        bool isListUnder = moveVecList.Count < m_nListMaxNum;
-        if (isListUnder)return false;
-
+        
         // 最低移動距離を越えたら_false
         bool isOverMoveDistance = move.magnitude > m_fMaxSpeed;
         if (isOverMoveDistance) return false;
@@ -244,10 +248,7 @@ public class CS_HandSigns : MonoBehaviour
     private bool IsCreateThunder(int handNum,Vector3 move)
     {
         List<Vector3> moveVecList = GetMoveVecList(handNum);
-        // リストが少ないなら_false
-        bool isListUnder = moveVecList.Count < m_nListMaxNum;
-        if (isListUnder) return false;
-
+        
         // 最低移動距離を越えたら_false
         bool isOverMoveDistance = move.magnitude > m_fMaxSpeed;
         if (isOverMoveDistance) return false;
@@ -292,10 +293,7 @@ public class CS_HandSigns : MonoBehaviour
     private bool IsCreateRain(int handNum, Vector3 move)
     {
         List<Vector3> moveVecList = GetMoveVecList(handNum);
-        // リストが少ないなら_false
-        bool isListUnder = moveVecList.Count < m_nListMaxNum;
-        if (isListUnder) return false;
-
+        
         // 最低移動距離を越えたら_false
         bool isOverMoveDistance = move.magnitude < m_fMinSpeed;
         if (!isOverMoveDistance) return false;
@@ -445,4 +443,7 @@ public class CS_HandSigns : MonoBehaviour
         else return m_vec3RightMoveDistanceList;
     }
 
+    private void NullEvent(Vector3 pos , Vector3 dir)
+    {/*Nothing*/}
+    
 }

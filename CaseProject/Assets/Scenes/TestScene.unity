@@ -228,8 +228,8 @@ GameObject:
   m_Component:
   - component: {fileID: 103451215}
   - component: {fileID: 103451214}
-  - component: {fileID: 103451213}
   - component: {fileID: 103451217}
+  - component: {fileID: 103451213}
   - component: {fileID: 103451218}
   m_Layer: 0
   m_Name: FryShip
@@ -250,9 +250,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 699ca2ef9208646478992c616be4c76c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_fFloatHight: 3
+  m_fFloatHight: 0.03125
   m_fFloatSpeed: 1
-  m_fMove: 0.01
+  m_fMove: 4
 --- !u!212 &103451214
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -574,6 +574,9 @@ GameObject:
   m_Component:
   - component: {fileID: 320883234}
   - component: {fileID: 320883233}
+  - component: {fileID: 320883235}
+  - component: {fileID: 320883237}
+  - component: {fileID: 320883238}
   m_Layer: 0
   m_Name: Cloud
   m_TagString: Cloud
@@ -648,6 +651,64 @@ Transform:
   m_Father: {fileID: 103451215}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!70 &320883235
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 320883232}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.0000038146973, y: 0}
+  m_Size: {x: 4, y: 2}
+  m_Direction: 1
+--- !u!50 &320883237
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 320883232}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 7
+--- !u!114 &320883238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 320883232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f343f7b432fd034d8b5052fd2be835a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_objCloudParticle: {fileID: 1819059414}
+  m_fMaxSize: 2
+  m_fGrowingValue: 0.1
+  m_fResetSizeValue: 0.1
+  m_vec3StartSize: {x: 0.5, y: 0.5, z: 0}
+  m_objRain: {fileID: 1735707200725290556, guid: 8f65d357473e2614b91c830b197e395c, type: 3}
+  m_fRainCreatePerSecond: 5
+  m_fRainCreateRange: 5
+  m_fDecrease: 0.01
 --- !u!1 &338714310
 GameObject:
   m_ObjectHideFlags: 0
@@ -2066,6 +2127,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 275348535}
     m_Modifications:
+    - target: {fileID: 3453531265690235438, guid: 9dffa23299f794740a812a56753c5968, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4316915034455539861, guid: 9dffa23299f794740a812a56753c5968, type: 3}
       propertyPath: m_Name
       value: Fire (1)
@@ -3020,7 +3085,7 @@ SpriteRenderer:
   m_Size: {x: 3.6, y: 3.6}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &1653417679
@@ -7186,11 +7251,11 @@ ParticleSystem:
     radiusScale: 1
     collidesWith:
       serializedVersion: 2
-      m_Bits: 4294967295
+      m_Bits: 55
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 0.5
-    collisionMessages: 0
+    collisionMessages: 1
     collidesWithDynamic: 1
     interiorCollisions: 0
   TriggerModule:
@@ -8256,6 +8321,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0444e06a8e140142afbe967b36eb13d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_HandLandmark:
+  - {fileID: 0}
+  - {fileID: 0}
+  m_vec3RightMoveDistanceList: []
+  m_vec3LeftMoveDistanceList: []
+  m_nListMaxNum: 8
+  m_fMinSpeed: 5
+  m_fMaxSpeed: 100
 --- !u!114 &1919337820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8263,11 +8336,22 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1919337814}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3c43992c4d064db45aca6a39d8930101, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_objWind: {fileID: 0}
+  m_fCreateDelayOfWind: 0.5
+  m_fWindMoveSpeed: 0.125
+  m_fWindPower: 1
+  m_objThunder: {fileID: 0}
+  m_fCreateDelayOfThunder: 0.125
+  m_fThunderMoveSpeed: 10
+  m_fThunderPower: 1
+  m_objRain: {fileID: 0}
+  m_fRainCreatePerSecond: 10
+  m_fRainCreateRange: 25
 --- !u!114 &1949627053 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1620015869145370098, guid: 8fcc7ea504479f06a9334ee2faa42b57, type: 3}
@@ -8363,27 +8447,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8fcc7ea504479f06a9334ee2faa42b57, type: 3}
---- !u!1 &2053511336 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4316915034455539861, guid: 9dffa23299f794740a812a56753c5968, type: 3}
-  m_PrefabInstance: {fileID: 1072245699}
-  m_PrefabAsset: {fileID: 0}
---- !u!58 &2053511337
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2053511336}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 3.835
 --- !u!4 &2053511338 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5975126865466860021, guid: 9dffa23299f794740a812a56753c5968, type: 3}
@@ -8634,27 +8697,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9dffa23299f794740a812a56753c5968, type: 3}
---- !u!1 &4925579688700043263 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4316915034455539861, guid: 9dffa23299f794740a812a56753c5968, type: 3}
-  m_PrefabInstance: {fileID: 4925579688700043262}
-  m_PrefabAsset: {fileID: 0}
---- !u!58 &4925579688700043264
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4925579688700043263}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 3.835
 --- !u!4 &4925579688700043265 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5975126865466860021, guid: 9dffa23299f794740a812a56753c5968, type: 3}

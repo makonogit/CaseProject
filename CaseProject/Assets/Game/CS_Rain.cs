@@ -24,6 +24,9 @@ public class CS_Rain : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (collision.transform.name == "Cloud") return;
+        if (collision.transform.name == "Rain(Clone)") return;
+        if (collision.transform.name == "Rain") return;
         Destroy(this.gameObject);
     }
 }
