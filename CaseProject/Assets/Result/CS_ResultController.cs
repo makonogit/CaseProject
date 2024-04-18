@@ -42,10 +42,8 @@ public class CS_ResultController : MonoBehaviour
         }
     }
 
-    public void GoGameScene()
+    public void GoNextScene(string _name)
     {
-        Debug.Log("ƒNƒŠƒbƒN‚³‚ê‚½");
-        SceneManager.LoadScene("TestScene");
-
+        SceneManager.LoadScene(_name);
     }
 }
