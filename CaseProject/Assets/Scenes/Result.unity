@@ -714,8 +714,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 68024699}
         m_TargetAssemblyTypeName: CS_ResultController, Assembly-CSharp
-        m_MethodName: GoNextScene
-        m_Mode: 5
+        m_MethodName: Continue
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1008,7 +1008,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 68024699}
         m_TargetAssemblyTypeName: CS_ResultController, Assembly-CSharp
-        m_MethodName: GoNextScene
+        m_MethodName: OtherScene
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

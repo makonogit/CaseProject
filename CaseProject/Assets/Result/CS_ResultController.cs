@@ -11,6 +11,8 @@ public class CS_ResultController : MonoBehaviour
     [Header("0:GAMEOVER 1:CLEAR")]
     private GameObject[] m_texts;
 
+    static private string m_sceneName;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,7 +32,7 @@ public class CS_ResultController : MonoBehaviour
 
     }
 
-    static public bool GaneOverFlag
+    static public bool GameOverFlag
     {
         set
         {
@@ -42,8 +44,21 @@ public class CS_ResultController : MonoBehaviour
         }
     }
 
-    public void GoNextScene(string _name)
+    //リザルトに行く関数
+    //引数：ゲームオーバーか、現在シーンの名前
+    static public void GoResult(bool _gameOver, string _sceneName)
     {
-        SceneManager.LoadScene(_name);
+        m_gameOverFg = _gameOver;
+        m_sceneName = _sceneName;
+    }
+
+    public void OtherScene(string _sceneName)
+    {
+        SceneManager.LoadScene(_sceneName);
+    }
+
+    public void Continue()
+    {
+        SceneManager.LoadScene(m_sceneName);
     }
 }
