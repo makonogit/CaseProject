@@ -19,6 +19,14 @@ public class CS_Cloud : MonoBehaviour
     [SerializeField] private float m_fGrowingValue = 0.1f;
     [SerializeField] private float m_fResetSizeValue = 0.01f;
     [SerializeField] private Vector3 m_vec3StartSize;
+
+    [Header("雷の設定")]
+    [SerializeField] private GameObject m_objThunder;                   // 生成物
+    [SerializeField] private float m_fCreateDelayOfThunder = 0.125f;    // 生成ディレイ
+    [SerializeField] private float m_fThunderMoveSpeed = 10;        // 動く速さの倍率
+    [SerializeField] private float m_fThunderPower = 1;                 // 強さの倍率
+    private float m_fCreatedThunderTime = 0;                            // 生成経過時間
+    
     [Header("雨")]
     [SerializeField] private GameObject m_objRain;              // 生成物
     [SerializeField] private int m_fRainCreatePerSecond = 10;    // 雨の毎秒生成数
@@ -30,11 +38,13 @@ public class CS_Cloud : MonoBehaviour
     private void Start()
     {
         CS_HandSigns.OnCreateRains += EventRain;
+        CS_HandSigns.OnCreateThunders += CreateThunder;
     }
 
     // Update is called once per frame
     private void Update()
     {
+        m_fCreatedThunderTime += Time.deltaTime;
     }
     private void OnParticleCollision(GameObject other)
     {
@@ -106,6 +116,29 @@ public class CS_Cloud : MonoBehaviour
             transform.localScale = m_vec3StartSize * m_fCloudSize;
         }
     }
-    
+
+    // 雷を生成する関数
+    // 引数：生成位置
+    // 引数：動いた距離
+    // 戻り値：なし
+    private void CreateThunder(Vector3 position, Vector3 direction)
+    {
+        Debug.Log("サンダー");
+        if (m_fCreatedThunderTime >= m_fCreateDelayOfThunder)
+        {
+            
+            // 方向の設定
+            Quaternion rotation = Quaternion.EulerAngles(0, 0, -180 * Mathf.Deg2Rad);
+            // 雷の生成
+            GameObject obj = GameObject.Instantiate(m_objThunder, transform.position, rotation);
+            CS_Thunder cs_thunder = obj.GetComponent<CS_Thunder>();  //雷のスクリプト取得
+
+            cs_thunder.Movement = direction.magnitude * m_fThunderMoveSpeed;
+            //cs_wind.WindPower = direction.magnitude * m_fWindPower;
+
+            // 時間のリセット
+            m_fCreateDelayOfThunder = 0;
+        }
+    }
 
 }
