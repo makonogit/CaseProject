@@ -50,6 +50,7 @@ public class CS_ResultController : MonoBehaviour
     {
         m_gameOverFg = _gameOver;
         m_sceneName = _sceneName;
+        SceneManager.LoadScene("ResultScene");
     }
 
     public void OtherScene(string _sceneName)
