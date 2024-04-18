@@ -158,7 +158,7 @@ public class CS_HandSigns : MonoBehaviour
             // 風の生成
             if (IsCreateWind(i, vec)) CreateWind(i, vec);
             // 雷の生成
-            //if (IsCreateThunder(i, vec)) CreateThunder(i, vec);
+            if (IsCreateThunder(i, vec)) CreateThunder(i, vec);
             // 雨の生成
             if (IsCreateRain(i, vec)) CreateRain(i,vec);
         }

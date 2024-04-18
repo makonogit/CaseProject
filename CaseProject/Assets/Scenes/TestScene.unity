@@ -970,6 +970,10 @@ MonoBehaviour:
   m_fGrowingValue: 0.1
   m_fResetSizeValue: 0.1
   m_vec3StartSize: {x: 0.5, y: 0.5, z: 0}
+  m_objThunder: {fileID: 1667269055459490153, guid: e7704449911af8340867d560e6c6d67e, type: 3}
+  m_fCreateDelayOfThunder: 0.125
+  m_fThunderMoveSpeed: 10
+  m_fThunderPower: 1
   m_objRain: {fileID: 1735707200725290556, guid: 8f65d357473e2614b91c830b197e395c, type: 3}
   m_fRainCreatePerSecond: 5
   m_fRainCreateRange: 5
@@ -1352,7 +1356,7 @@ MonoBehaviour:
   - Scale: {x: 0.8, y: 0.8, z: 1}
     Pos: {x: 0, y: 13, z: 0}
     LayerObj: {fileID: 1395656799}
-  m_handposedata: {fileID: 1919337816}
+  m_handsigns: {fileID: 0}
 --- !u!1 &428392550
 GameObject:
   m_ObjectHideFlags: 0
