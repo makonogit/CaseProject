@@ -37,19 +37,25 @@ public class CS_StageData : MonoBehaviour
         
     }
 
+    //イベント数取得関数
+    //戻り値:イベント数
+    public int GetAllEventNum()
+    {
+        return m_nStageEventNum;
+    }
 
     //残りイベント数取得関数
     //戻り値:イベント数
     public int GetEventNum()
     {
-        m_nStageEventNum = 0;
+        int StageEventNum = 0;
 
         for(int i = 0; i<m_EventObj.Count;i++)
         {
-            if (m_EventObj[i]) { m_nStageEventNum++; }
+            if (m_EventObj[i]) { StageEventNum++; }
         }
 
-        return m_nStageEventNum;
+        return StageEventNum;
 
     }
 }
