@@ -443,6 +443,32 @@ public class CS_HandSigns : MonoBehaviour
         else return m_vec3RightMoveDistanceList;
     }
 
+
+    //押し引き関数
+    //引数：手の左右
+    //戻り値：-1 判定不可　0:引いた　1:押した
+    public int PushHand()
+    {
+        // 両手の情報があるか,ないなら終わる
+        bool isNullOfHandsInfo = !m_HandLandmark[0] || !m_HandLandmark[1];
+        if (isNullOfHandsInfo) return -1;
+
+        // 両手がパーではないなら
+        bool isPaperSign = GetHandPose(0) == (byte)HandPose.PaperSign;
+        if (!isPaperSign) return -1;
+
+        //両手の移動量を取得
+        Vector3 Lefthandmove = GetHandMovement(0).normalized;
+        Vector3 Righthandmove = GetHandMovement(1).normalized;
+
+        //前に押し出した
+        if(Lefthandmove.z > 0.8f && Righthandmove.z > 0.8f) { return 1; }
+        //後ろに引いた
+        if (Lefthandmove.z < 0 && Righthandmove.z < 0) { return 0; }
+
+        return -1;
+    }
+
     private void NullEvent(Vector3 pos , Vector3 dir)
     {/*Nothing*/}
     
