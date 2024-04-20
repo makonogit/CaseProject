@@ -29,6 +29,7 @@ public class CS_PauseController : MonoBehaviour
 
     private void Update()
     {
+        if(m_handSigns == null) { return; }
         if (isPause()){ return; }
 
         //è‚ªT‚Ìƒ|[ƒY‚È‚çPause()‚ğŒÄ‚Ô

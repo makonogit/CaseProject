@@ -10,18 +10,17 @@ public class CS_StageData : MonoBehaviour
     [SerializeField,Header("レイヤーオブジェクト")]
     private GameObject[] GameLayer = new GameObject[3];
 
-    List<GameObject> m_EventObj;        //イベントオブジェクトリスト
+    List<GameObject> m_EventObj = new List<GameObject>();//イベントオブジェクトリスト
 
     private int m_nStageEventNum = 0;   //ステージイベント数
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         //全てのイベントを取得
         for (int i = 0; i < 3; i++)
         {
-            for (int j = 0;j<GameLayer[i].transform.childCount;j++)
-            {   
+            for (int j = 0; j < GameLayer[i].transform.childCount; j++)
+            {
                 GameObject obj = GameLayer[i].transform.GetChild(j).gameObject;
                 if (obj.tag == "Event") { m_EventObj.Add(obj); }
             }
@@ -29,6 +28,11 @@ public class CS_StageData : MonoBehaviour
 
         //ステージイベント数保存
         m_nStageEventNum = m_EventObj.Count;
+    }
+    // Start is called before the first frame update
+    void Start()
+    {
+        
     }
 
     // Update is called once per frame

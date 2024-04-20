@@ -123,6 +123,7 @@ GameObject:
   - component: {fileID: 2665491565386871616}
   - component: {fileID: 2665491565386871619}
   - component: {fileID: 7670882553352201836}
+  - component: {fileID: 2462263865037583255}
   m_Layer: 5
   m_Name: ImGuage
   m_TagString: Untagged
@@ -201,3 +202,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_animTest: {fileID: 6699332073197585799}
+--- !u!114 &2462263865037583255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2665491565386871628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fd9b32b15b2703438135db225f97783, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GameLayer:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}

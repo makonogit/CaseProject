@@ -13,7 +13,7 @@ public class CS_TitleHandler : MonoBehaviour
     [SerializeField, Header("ハンドサイン")]
     private CS_HandSigns m_handSigns;
 
-    private HandLandmarkListAnnotation[] m_HandLandmark = new HandLandmarkListAnnotation[2];
+    private HandLandmarkListAnnotation[] m_handLandmark = new HandLandmarkListAnnotation[2];
 
     [SerializeField, Header("GAME,ENDロゴ")]
     [Header("0GAME")]
@@ -57,7 +57,7 @@ public class CS_TitleHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_HandLandmark = m_handSigns.HandMark;
+        m_handLandmark = m_handSigns.HandMark;
     }
 
     // Update is called once per frame
@@ -72,9 +72,9 @@ public class CS_TitleHandler : MonoBehaviour
         if (TitleState == TITLE_STATE.GO_GAME_SCENE) { SceneManager.LoadScene(m_nextSceneName); }
 
         //ハンドマークを取得
-        m_HandLandmark = m_handSigns.HandMark;
+        m_handLandmark = m_handSigns.HandMark;
         
-        if (m_HandLandmark[0] != null) 
+        if (m_handLandmark[0] != null) 
         {
             bool rockSign = m_handSigns.GetHandPose(0) == (byte)CS_HandSigns.HandPose.RockSign;
             if (m_handSigns.GetHandPose(0)==(byte)CS_HandSigns.HandPose.RockSign)
@@ -86,7 +86,7 @@ public class CS_TitleHandler : MonoBehaviour
                 m_isChangeSceneInpossible = false; //シーン遷移不可能にする
             }
         }
-        else if (m_HandLandmark[1] != null)
+        else if (m_handLandmark[1] != null)
         {
             //GetHandPose(handNum)==(byte)HandPose.PaperSign
             if (m_handSigns.GetHandPose(1) == (byte)CS_HandSigns.HandPose.RockSign)
