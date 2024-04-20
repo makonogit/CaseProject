@@ -110,17 +110,17 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 61.8
+        width: 75.666664
         height: 199
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 22a8dc9c103475942865c916cbcbe0b1
-      internalID: 1168378213
+      spriteID: df79c1b9ad277d44499b5be3ebba60e9
+      internalID: 364472617
       vertices: []
       indices: 
       edges: []
@@ -129,19 +129,19 @@ TextureImporter:
       name: macho_1
       rect:
         serializedVersion: 2
-        x: 90
+        x: 75
         y: 0
-        width: 61.8
+        width: 75.666664
         height: 199
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c9007aa2ed846e5468331b041e507a28
-      internalID: 665950845
+      spriteID: 7a37a0413fd425c4c83a5674c57658fe
+      internalID: -691232824
       vertices: []
       indices: 
       edges: []
@@ -150,19 +150,19 @@ TextureImporter:
       name: macho_2
       rect:
         serializedVersion: 2
-        x: 180
+        x: 150
         y: 0
-        width: 61.8
+        width: 75.666664
         height: 199
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 99e9ba5506727b84ca4f317ddbaef50b
-      internalID: -485173164
+      spriteID: ed366671ffc15044b873d6a406aaa947
+      internalID: 69148406
       vertices: []
       indices: 
       edges: []
@@ -171,19 +171,19 @@ TextureImporter:
       name: macho_3
       rect:
         serializedVersion: 2
-        x: 270
+        x: 225
         y: 0
-        width: 61.8
+        width: 75.666664
         height: 199
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 42b0ead5b8822ce4fab7a7e4e09126cd
-      internalID: 1864149442
+      spriteID: 274c53786c64c8f4ba5986ffb3d69232
+      internalID: 885225328
       vertices: []
       indices: 
       edges: []
@@ -192,19 +192,40 @@ TextureImporter:
       name: macho_4
       rect:
         serializedVersion: 2
-        x: 360
+        x: 300
         y: 0
-        width: 61.8
+        width: 75.666664
         height: 199
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: de5310a1dc2ad334caaab859aec55f70
-      internalID: -344015086
+      spriteID: 91fccee94121e6c44b436b7e1e7dce65
+      internalID: -661797132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: macho_5
+      rect:
+        serializedVersion: 2
+        x: 375
+        y: 0
+        width: 75.666664
+        height: 199
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6cb7d3f1b09c1664f9dbba503a3d0661
+      internalID: -584334491
       vertices: []
       indices: 
       edges: []
@@ -220,11 +241,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      macho_2: -485173164
-      macho_1: 665950845
-      macho_4: -344015086
-      macho_0: 1168378213
-      macho_3: 1864149442
+      macho_2: 69148406
+      macho_5: -584334491
+      macho_1: -691232824
+      macho_4: -661797132
+      macho_0: 364472617
+      macho_3: 885225328
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
