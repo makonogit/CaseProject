@@ -324,7 +324,7 @@ public class CS_HandSigns : MonoBehaviour
     // 両手でTポーズをしているか条件関数
     // 引数：なし
     // 戻り値：ポーズをとっている true
-    private bool IsTPose() 
+    public bool IsTPose() 
     {
         // 両手の情報があるか,ないなら終わる
         bool isNullOfHandsInfo = !m_HandLandmark[0] || !m_HandLandmark[1];
