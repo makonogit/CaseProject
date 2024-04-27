@@ -8,6 +8,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
 
 public class CS_Cloud : MonoBehaviour
 {
@@ -53,7 +54,7 @@ public class CS_Cloud : MonoBehaviour
         bool isGrowing = isSameTheObject && isNotMaxofCloudSize;
 
         if (isGrowing) Growing();
-        if (!isNotMaxofCloudSize) SizeReset();
+        if (!isNotMaxofCloudSize) SceneManager.LoadScene("ResultScene"); // SizeReset();
         
     }
     // â_Ç™ëÂÇ´Ç≠Ç»ÇÈä÷êî

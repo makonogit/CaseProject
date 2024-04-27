@@ -11,6 +11,7 @@ public class CS_ResultController : MonoBehaviour
     [Header("0:GAMEOVER 1:CLEAR")]
     private GameObject[] m_texts;
 
+    [SerializeField, Header("Scene")]
     static private string m_sceneName;
 
     // Start is called before the first frame update
