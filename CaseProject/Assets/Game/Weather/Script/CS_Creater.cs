@@ -12,10 +12,8 @@ public class CS_Creater : MonoBehaviour
    
     [Header("風の設定")]
     [SerializeField]private GameObject m_objWind;                   // 生成物
-    [SerializeField] private float m_fCreateDelayOfWind = 0.5f;     // 生成ディレイ
-    [SerializeField] private float m_fWindMoveSpeed = 0.125f;       // 動く速さの倍率
     [SerializeField] private float m_fWindPower = 1;                // 強さの倍率
-    private float m_fCreatedWindTime = 0;                           // 生成経過時間
+    
 
 
     // Start is called before the first frame update
@@ -29,7 +27,6 @@ public class CS_Creater : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        m_fCreatedWindTime += Time.deltaTime;
     }
 
     // 風の生成する関数（購読 subscribe）
@@ -41,7 +38,7 @@ public class CS_Creater : MonoBehaviour
     //
     private void CreateWind(Vector3 position,Vector3 direction) 
     {
-
+        Debug.Log("Create Wind");
         
         Vector3 dir = direction;
         dir.y = 0;
@@ -69,7 +66,7 @@ public class CS_Creater : MonoBehaviour
     {
         Vector3 pos = this.transform.position;
         pos.z = 0;// 奥行は必要ない
-        const float offsetX = 100;
+        const float offsetX = 10;
         if (direction.x < 0) pos.x += offsetX;
         else pos.x -= offsetX;
 

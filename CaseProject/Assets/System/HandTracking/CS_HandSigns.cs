@@ -8,6 +8,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
+using static CS_HandSigns;
 
 
 public class CS_HandSigns : MonoBehaviour
@@ -28,6 +29,9 @@ public class CS_HandSigns : MonoBehaviour
     [Header("動きリスト")]
     [SerializeField] private List<Vector3> m_vec3RightMoveDistanceList = new List<Vector3>();
     [SerializeField] private List<Vector3> m_vec3LeftMoveDistanceList = new List<Vector3>();
+    [SerializeField] private List<Vector3> m_vec3RightAngularList = new List<Vector3>();
+    [SerializeField] private List<Vector3> m_vec3LeftAngularList = new List<Vector3>();
+    
     
     // リストの最大数
     [Header("リストの最大数")]
@@ -117,6 +121,7 @@ public class CS_HandSigns : MonoBehaviour
             m_HandLandmark[i] = hand;
             // リストに追加
             AddHandPointList(m_HandLandmark[i].GetLandmarkList(), i);
+            AddHandAngularList(m_HandLandmark[i].GetLandmarkList(), i);
             i++;
         }
 
@@ -126,7 +131,6 @@ public class CS_HandSigns : MonoBehaviour
     // 手のポイントリストに追加する
     // 引数：設定する手の位置情報
     // 引数：左手か右手か
-    // 引数：手のリスト
     // 戻り値：なし
     private void AddHandPointList(PointListAnnotation point,int handNum) 
     {
@@ -140,7 +144,23 @@ public class CS_HandSigns : MonoBehaviour
         // リストが多くなった分消す
         for (int i = moveVecList.Count - 1; i >= m_nListMaxNum; i--) moveVecList.RemoveAt(i);    
     }
+    // 手の角度をリストに追加
+    // 引数：設定する手の位置情報
+    // 引数：左手か右手か
+    // 戻り値：なし
+    private void AddHandAngularList(PointListAnnotation point,int handNum) 
+    {
+        List<Vector3> moveVecList = GetAngularList(handNum);
+        // 手の方向を求める
+        Vector3 handDir = point[5].transform.position;
+        handDir -= point[0].transform.position;
+        handDir.Normalize();
+        // リストに追加
+        moveVecList.Insert(0, handDir);
 
+        // リストが多くなった分消す
+        for (int i = moveVecList.Count - 1; i >= m_nListMaxNum; i--) moveVecList.RemoveAt(i);
+    }
 
     // 手のモーションを識別する関数
     // 引数：なし
@@ -156,14 +176,10 @@ public class CS_HandSigns : MonoBehaviour
             bool isListUnder = GetMoveVecList(i).Count < m_nListMaxNum;
             if (isListUnder) continue;
 
-            // 手の動いた距離
-            Vector3 vec = GetHandMovement(i);
+            // 手の回転速度
+            Vector3 vec = GetHandAngularSpeed(i);
             // 風の生成
             if (IsCreateWind(i, vec)) CreateWind(i, vec);
-            // 雷の生成
-            if (IsCreateThunder(i, vec)) CreateThunder(i, vec);
-            // 雨の生成
-            if (IsCreateRain(i, vec)) CreateRain(i,vec);
         }
         // 両手でTポーズ
         if (IsTPose()) OnTPose(Vector3.zero, Vector3.zero);
@@ -176,6 +192,17 @@ public class CS_HandSigns : MonoBehaviour
     {
         Vector3 move = new Vector3(0, 0, 0);
         List<Vector3> moveVecList = GetMoveVecList(handNum);
+        // 移動距離の合計
+        for (int i = 0; i < moveVecList.Count - 1; i++) move += moveVecList[i] - moveVecList[i + 1];
+        return move;
+    }
+    // 手の動きを取得
+    // 引数：右手か左手か
+    // 戻り値：動いた距離
+    public Vector3 GetHandAngularSpeed(int handNum)
+    {
+        Vector3 move = new Vector3(0, 0, 0);
+        List<Vector3> moveVecList = GetAngularList(handNum);
         // 移動距離の合計
         for (int i = 0; i < moveVecList.Count - 1; i++) move += moveVecList[i] - moveVecList[i + 1];
         return move;
@@ -206,25 +233,20 @@ public class CS_HandSigns : MonoBehaviour
         
         // 最低移動距離を越えたら_false
         bool isOverMoveDistance = move.magnitude > m_fMaxSpeed;
-        if (isOverMoveDistance) return false;
+        if (isOverMoveDistance) { Debug.Log("速い"); return false; }
 
         // 最大移動距離を越えなかったら_false
         bool isUnderMoveDistance = move.magnitude < m_fMinSpeed;
-        if (isUnderMoveDistance) return false;
+        if (isUnderMoveDistance) { Debug.Log("遅い"); return false; }
 
         Vector3 moveN = Vector3.Normalize(move);
         float dot = Vector3.Dot(moveN, GetHandDirection(handNum));
-
-        // 手のひらの方向と移動した方向が一緒か
-        bool isSameDirection = dot >= 0;
-        // 方向が一緒ではないなら_false
-        if (!isSameDirection) return false;
 
         // 手がパーか
         bool isPaperSign = GetHandPose(handNum)==(byte)HandPose.PaperSign;
 
         // 手がパーでないなら_false
-        if (!isPaperSign) return false;
+        if (!isPaperSign) { Debug.Log("パーではない"); return false; }
 
         // 移動距離リストのリセット
         moveVecList.Clear();
@@ -242,6 +264,7 @@ public class CS_HandSigns : MonoBehaviour
         Vector3 position = m_HandLandmark[handNum][5].transform.position;
         // 風生成イベントの発行
         OnCreateWinds(position, windVec);
+        Debug.Log("イベント発行");
     }
 
     // 雷を生成する条件の関数
@@ -432,7 +455,7 @@ public class CS_HandSigns : MonoBehaviour
     {
         Vector3 distance = wrist - finger;
         float length = distance.magnitude;
-        float MaxDist = 20;
+        float MaxDist = 1;
         // 指先と手首の距離が近いか
          return  length > MaxDist;
     }
@@ -445,7 +468,14 @@ public class CS_HandSigns : MonoBehaviour
         if (handNum == 0) return m_vec3LeftMoveDistanceList;
         else return m_vec3RightMoveDistanceList;
     }
-
+    // 手の角度リストを取得する関数
+    // 引数：右手か左手か
+    // 戻り値：移動距離のリスト
+    private List<Vector3> GetAngularList(int handNum)
+    {
+        if (handNum == 0) return m_vec3LeftAngularList;
+        else return m_vec3RightAngularList;
+    }
 
     //押し引き関数
     //引数：手の左右

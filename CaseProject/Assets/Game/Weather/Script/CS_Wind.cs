@@ -51,27 +51,29 @@ public class CS_Wind : MonoBehaviour
         float ThisScale = this.transform.localScale.x;
         float OtherScale = collision.transform.localScale.x;
 
-        // •—‚ÌScaleX‚ÅŒü‚«‚Æ‹­‚³‚ğ”»’è‚·‚é
-        float addPower = OtherScale + ThisScale;
-        float subPower = OtherScale - ThisScale;
 
 
         // “¯‚¶•ûŒü‚©”»’f
-        if (addPower * addPower < subPower * subPower) return;
+        bool isThisDirection = ThisScale < 0;
+        bool isOtherDirection = OtherScale < 0;
+        bool isSameDirection = (isThisDirection && isOtherDirection) || (!isThisDirection && !isOtherDirection);
+        if (isSameDirection) return;
 
-        // ‘Šè‚ªã‚©‚Á‚½
-        //if(ThisScale*ThisScale < OtherScale * OtherScale) { }
+        // •—‚Ì—Í‚ª“¯‚¶‚­‚ç‚¢‚©”»’f
+        float addPower = OtherScale + ThisScale;
+        const float tolerance = 1.0f;// ‹–—e”ÍˆÍ
+        bool isTolerance = addPower < tolerance && addPower > -tolerance;
+        if (!isTolerance) return;
 
-        float gosa = 1.0f;
-        bool isUnder = addPower < -gosa;
-        bool isOver = addPower > gosa;
-        // •—‚Ì—Í‚ª“¯‚¶‚­‚ç‚¢‚©‚ğScaleX‚Å”»’è
-        if (isOver && isUnder) return;
-
+        // ã•ûŒü‚Ì•—‚Ì¶¬
         Vector3 pos = m_vec3CameraPos;
         pos.z = 0;
         Quaternion rotation = Quaternion.EulerAngles(0, 0, 0);
         GameObject.Instantiate(m_objWind, pos, rotation);
+
+
+        Destroy(collision.gameObject);
+        Destroy(this.gameObject);
     }
 
 }

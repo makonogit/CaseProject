@@ -216,11 +216,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -6338546567352850726, guid: 26114bc9cccb92454a468ea4d41f400a, type: 3}
       propertyPath: _lineWidth
-      value: 0
+      value: 0.179
       objectReference: {fileID: 0}
     - target: {fileID: -6338546567352850726, guid: 26114bc9cccb92454a468ea4d41f400a, type: 3}
       propertyPath: _keypointRadius
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5535674424067552597, guid: 26114bc9cccb92454a468ea4d41f400a, type: 3}
       propertyPath: m_RootOrder
@@ -370,7 +370,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8571076842338426121, guid: 140d1d2c406167c50819d89f86d9092e, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8571076842338426122, guid: 140d1d2c406167c50819d89f86d9092e, type: 3}
       propertyPath: m_Camera
@@ -488,6 +488,10 @@ PrefabInstance:
       propertyPath: _solution
       value: 
       objectReference: {fileID: 1880389034}
+    - target: {fileID: 8571076843237194837, guid: 140d1d2c406167c50819d89f86d9092e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8571076843525237352, guid: 140d1d2c406167c50819d89f86d9092e, type: 3}
       propertyPath: m_Name
       value: Annotation Layer
@@ -720,7 +724,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1620015869145370098, guid: 8fcc7ea504479f06a9334ee2faa42b57, type: 3}
       propertyPath: _lineWidth
-      value: 0
+      value: 0.259
       objectReference: {fileID: 0}
     - target: {fileID: 1620015869145370099, guid: 8fcc7ea504479f06a9334ee2faa42b57, type: 3}
       propertyPath: m_RootOrder
@@ -792,6 +796,7 @@ GameObject:
   - component: {fileID: 1579754622}
   - component: {fileID: 1579754625}
   - component: {fileID: 1579754626}
+  - component: {fileID: 1579754627}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -912,6 +917,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_TargetObj: {fileID: 368876409}
   m_LimitPos: {fileID: 884758169}
+--- !u!114 &1579754627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1579754621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b5f5a462caf13c4ebce4cb138bd2871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_objWind: {fileID: 1735707200725290556, guid: 67519852e96c5a34ab8ba0aa24b0685e, type: 3}
+  m_fWindPower: 2
 --- !u!1 &1674816226
 GameObject:
   m_ObjectHideFlags: 0
@@ -1021,7 +1040,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1620015869145370098, guid: 8fcc7ea504479f06a9334ee2faa42b57, type: 3}
       propertyPath: _lineWidth
-      value: 0
+      value: 0.07
       objectReference: {fileID: 0}
     - target: {fileID: 1620015869145370099, guid: 8fcc7ea504479f06a9334ee2faa42b57, type: 3}
       propertyPath: m_RootOrder
@@ -1305,7 +1324,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1880389032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1390,7 +1409,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8837774153085666347, guid: 87a9be2a7620991a78342ef9a56fa62c, type: 3}
       propertyPath: _connectionWidth
-      value: 1
+      value: 0.029
       objectReference: {fileID: 0}
     - target: {fileID: -8837774153085666347, guid: 87a9be2a7620991a78342ef9a56fa62c, type: 3}
       propertyPath: _annotationPrefab
@@ -1479,9 +1498,11 @@ MonoBehaviour:
   - {fileID: 0}
   m_vec3RightMoveDistanceList: []
   m_vec3LeftMoveDistanceList: []
+  m_vec3RightAngularList: []
+  m_vec3LeftAngularList: []
   m_nListMaxNum: 8
-  m_fMinSpeed: 5
-  m_fMaxSpeed: 100
+  m_fMinSpeed: 0.5
+  m_fMaxSpeed: 10
 --- !u!1001 &793019659076483014
 PrefabInstance:
   m_ObjectHideFlags: 0
