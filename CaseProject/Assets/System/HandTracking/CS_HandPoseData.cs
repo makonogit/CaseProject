@@ -404,7 +404,7 @@ public class CS_HandPoseData : MonoBehaviour
         windobj.transform.eulerAngles = new Vector3(0.0f, 0.0f, m_windStatus.angle* Mathf.Rad2Deg);
         //Debug.Log("風の角度" + m_windStatus.angle);
         //風のスピード
-        cs_wind.Movement = m_windStatus.speed * 0.01f;
+        //cs_wind.Movement = m_windStatus.speed * 0.01f;
 
         //Debug.Log(cs_wind.Movement);
         //Debug.Log(m_sKey);

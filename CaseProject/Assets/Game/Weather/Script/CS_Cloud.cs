@@ -38,8 +38,8 @@ public class CS_Cloud : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        CS_HandSigns.OnCreateRains += EventRain;
-        CS_HandSigns.OnCreateThunders += CreateThunder;
+        //CS_HandSigns.OnCreateRains += EventRain;
+        //CS_HandSigns.OnCreateThunders += CreateThunder;
     }
 
     // Update is called once per frame

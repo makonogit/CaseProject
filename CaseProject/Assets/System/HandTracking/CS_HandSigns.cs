@@ -71,6 +71,9 @@ public class CS_HandSigns : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        OnCreateRains += NullEvent;
+        OnCreateThunders += NullEvent;
+        OnCreateRains += NullEvent;
         OnTPose += NullEvent;
     }
 
