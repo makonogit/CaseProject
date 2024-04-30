@@ -88,8 +88,8 @@ public class CS_EnemyController : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             //プレイヤーのHPを削る
-            CS_FryShip ship = collision.gameObject.transform.GetComponent<CS_FryShip>();
-            ship.HP -= m_fAtack;
+            //CS_FryShip ship = collision.gameObject.transform.GetComponent<CS_FryShip>();
+            //ship.HP -= m_fAtack;
             Destroy(this.gameObject);
             //追記：中島2024.04.03
             //ゲームオーバーフラグをtrue

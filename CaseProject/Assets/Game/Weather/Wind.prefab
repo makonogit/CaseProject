@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2872821680673510971}
   m_Layer: 0
   m_Name: Wind
-  m_TagString: Untagged
+  m_TagString: Wind
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -99,7 +99,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caaa9af36bd495c4e9e0a1ba54a540bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_objWind: {fileID: 7384023763466430252, guid: 46d7266394a9f684994fef1767af4388, type: 3}
+  m_objWind: {fileID: 1735707200725290556}
+  m_eWindDirection: 0
 --- !u!50 &915586104865877619
 Rigidbody2D:
   serializedVersion: 4
@@ -145,5 +146,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 5.51, y: 4.51}
+  m_Size: {x: 5.5, y: 10}
   m_EdgeRadius: 0

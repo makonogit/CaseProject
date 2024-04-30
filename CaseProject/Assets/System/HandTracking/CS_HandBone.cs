@@ -63,7 +63,7 @@ public class CS_HandBone : MonoBehaviour
             Vector3 rotation = m_Bones[i + startNum].position;
             rotation = pos - rotation;
             float z = Mathf.Atan2(rotation.y, rotation.x)*Mathf.Rad2Deg;
-            Debug.Log(z);
+            //Debug.Log(z);
             rotation = new Vector3(0,0,z);
             m_Bones[i + startNum + 1].position = pos;
             m_Bones[i + startNum].rotation = Quaternion.Euler(rotation);

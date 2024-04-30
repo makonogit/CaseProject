@@ -39,8 +39,8 @@ public class CS_CameraControl : MonoBehaviour
         m_tTargetTrans = m_TargetObj.transform;
         m_tThisTrans = this.transform;
 
-        Debug.Log(maincamera.ViewportToWorldPoint(Vector2.zero));
-        Debug.Log(maincamera.ViewportToWorldPoint(Vector2.one));
+        //Debug.Log(maincamera.ViewportToWorldPoint(Vector2.zero));
+        //Debug.Log(maincamera.ViewportToWorldPoint(Vector2.one));
 
     }
 

@@ -137,4 +137,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_tThisTrans: {fileID: 8375913477574500066}
+  m_rThisRigidbody: {fileID: 8808433522868624693}
   m_fMoveSpeed: 1

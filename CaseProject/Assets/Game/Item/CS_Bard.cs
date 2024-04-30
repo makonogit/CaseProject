@@ -8,4 +8,9 @@
 public class CS_Bard : CS_Obstacle
 {
 
+    private void Update()
+    {
+        
+    }
+
 }

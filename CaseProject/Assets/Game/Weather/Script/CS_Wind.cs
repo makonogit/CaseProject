@@ -4,7 +4,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static Mediapipe.CopyCalculatorOptions.Types;
+//using static Mediapipe.CopyCalculatorOptions.Types;
 
 public class CS_Wind : MonoBehaviour
 {
@@ -14,6 +14,28 @@ public class CS_Wind : MonoBehaviour
     private float m_fWindPower = 1.0f;
 
     float m_nowTime = 0.0f;
+
+
+    //風の向き
+    public enum E_WINDDIRECTION
+    {
+        NONE,   //なし
+        LEFT,   //左
+        RIGHT,  //右
+        UP      //上
+    }
+
+    [SerializeField,Header("風の向き")]
+    //風の向き変数
+    private E_WINDDIRECTION m_eWindDirection = E_WINDDIRECTION.NONE;
+
+    public E_WINDDIRECTION WindDirection
+    {
+        set
+        {
+            m_eWindDirection = value;
+        }
+    }
 
     //風のgetter,setter
     public float WindPower
@@ -44,14 +66,20 @@ public class CS_Wind : MonoBehaviour
         if (m_nowTime > deleteTime) Destroy(this.gameObject);
     }
     
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        // プレイヤーに衝突したら風の影響を与える 追加：菅
+        if (collision.transform.tag == "Player")
+        {
+            collision.transform.GetComponent<CS_Player>().WindMove(m_eWindDirection, m_fWindPower);
+            Destroy(this.gameObject);
+        }
+
         // 風かを名前で判断
         if (collision.gameObject.name != this.name)return;
         float ThisScale = this.transform.localScale.x;
         float OtherScale = collision.transform.localScale.x;
-
-
 
         // 同じ方向か判断
         bool isThisDirection = ThisScale < 0;
@@ -69,11 +97,18 @@ public class CS_Wind : MonoBehaviour
         Vector3 pos = m_vec3CameraPos;
         pos.z = 0;
         Quaternion rotation = Quaternion.EulerAngles(0, 0, 0);
+        CS_Wind cswind = m_objWind.GetComponent<CS_Wind>();
+        cswind.WindDirection = E_WINDDIRECTION.UP;   //上向きに設定　追加：菅
+        cswind.m_fWindPower = addPower;
+        cswind.enabled = true;                                  //スクリプトオフになる意味わからん
+        m_objWind.GetComponent<BoxCollider2D>().enabled = true;
         GameObject.Instantiate(m_objWind, pos, rotation);
-
-
+        
         Destroy(collision.gameObject);
         Destroy(this.gameObject);
+
     }
+
+
 
 }
