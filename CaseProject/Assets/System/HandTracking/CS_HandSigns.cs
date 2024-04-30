@@ -177,7 +177,7 @@ public class CS_HandSigns : MonoBehaviour
             if (isListUnder) continue;
 
             // 手の回転速度
-            Vector3 vec = GetHandAngularSpeed(i);
+            Vector3 vec = GetHandMovement(i);
             // 風の生成
             if (IsCreateWind(i, vec)) CreateWind(i, vec);
         }
@@ -233,20 +233,24 @@ public class CS_HandSigns : MonoBehaviour
         
         // 最低移動距離を越えたら_false
         bool isOverMoveDistance = move.magnitude > m_fMaxSpeed;
-        if (isOverMoveDistance) { Debug.Log("速い"); return false; }
+        if (isOverMoveDistance) {return false; }
 
         // 最大移動距離を越えなかったら_false
         bool isUnderMoveDistance = move.magnitude < m_fMinSpeed;
-        if (isUnderMoveDistance) { Debug.Log("遅い"); return false; }
+        if (isUnderMoveDistance) { return false; }
 
         Vector3 moveN = Vector3.Normalize(move);
         float dot = Vector3.Dot(moveN, GetHandDirection(handNum));
+        // 手のひらの方向と移動した方向が一緒か
+        bool isSameDirection = dot >= 0;
+        // 方向が一緒ではないなら_false
+        if (!isSameDirection) return false;
 
         // 手がパーか
         bool isPaperSign = GetHandPose(handNum)==(byte)HandPose.PaperSign;
 
         // 手がパーでないなら_false
-        if (!isPaperSign) { Debug.Log("パーではない"); return false; }
+        if (!isPaperSign) { return false; }
 
         // 移動距離リストのリセット
         moveVecList.Clear();
