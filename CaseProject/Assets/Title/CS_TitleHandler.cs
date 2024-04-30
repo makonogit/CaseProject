@@ -57,7 +57,8 @@ public class CS_TitleHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_handLandmark = m_handSigns.HandMark;
+        m_handLandmark[0] = m_handSigns.HandMark[0];
+        m_handLandmark[1] = m_handSigns.HandMark[1];
     }
 
     // Update is called once per frame
@@ -72,7 +73,8 @@ public class CS_TitleHandler : MonoBehaviour
         if (TitleState == TITLE_STATE.GO_GAME_SCENE) { SceneManager.LoadScene(m_nextSceneName); }
 
         //ハンドマークを取得
-        m_handLandmark = m_handSigns.HandMark;
+        m_handLandmark[0] = m_handSigns.HandMark[0];
+        m_handLandmark[1] = m_handSigns.HandMark[1];
         
         if (m_handLandmark[0] != null) 
         {

@@ -56,7 +56,8 @@ public class CS_PauseEvent : MonoBehaviour
 
         if (!isColliding) { return; }
 
-        m_handLandmark = m_handSigns.HandMark;
+        m_handLandmark[0] = m_handSigns.HandMark[0];
+        m_handLandmark[1] = m_handSigns.HandMark[1];
 
         CS_PauseController pauseController = GameObject.Find("PauseController").GetComponent<CS_PauseController>();
 

@@ -34,7 +34,8 @@ public class CS_PauseController : MonoBehaviour
 
         //手がTのポーズならPause()を呼ぶ
         //ハンドマークを取得
-        m_HandLandmark = m_handSigns.HandMark;
+        m_HandLandmark[0] = m_handSigns.HandMark[0];
+        m_HandLandmark[1] = m_handSigns.HandMark[1];
 
         //nullならreturn
         if (m_HandLandmark[0] == null) { return; }

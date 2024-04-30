@@ -58,6 +58,7 @@ public class CS_Creater : MonoBehaviour
         cs_wind.WindDirection = dir.x > 0 ? CS_Wind.E_WINDDIRECTION.LEFT : CS_Wind.E_WINDDIRECTION.RIGHT;　//風の向き設定　追加：菅眞心
         cs_wind.WindPower = direction.magnitude * m_fWindPower;
         cs_wind.SetCameraPos = this.transform.position;
+        cs_wind.DeleteFlag = true;
     }
     
     // 風の生成位置を求める関数

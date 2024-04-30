@@ -15,16 +15,16 @@ public class CS_HandSigns : MonoBehaviour
 {
     //両手のデータ
     [SerializeField]
-    private HandLandmarkListAnnotation[] m_HandLandmark = new HandLandmarkListAnnotation[2];
+    private List<HandLandmarkListAnnotation> m_HandLandmark = new List<HandLandmarkListAnnotation>();
 
-    public HandLandmarkListAnnotation[] HandMark
+    public List<HandLandmarkListAnnotation> HandMark
     {
         get
         {
             return m_HandLandmark;
         }
     }
-    
+    [SerializeField] private List<List<Vector3>> m_vec3MoveDistanceList = new List<List<Vector3>>();
     // 手の移動距離
     [Header("動きリスト")]
     [SerializeField] private List<Vector3> m_vec3RightMoveDistanceList = new List<Vector3>();
@@ -111,6 +111,7 @@ public class CS_HandSigns : MonoBehaviour
     {
         Transform parentTransform = transform;
         int i = 0;
+        m_HandLandmark.Clear();        
         foreach(Transform child in parentTransform) 
         {
             // 子オブジェから手の情報を探す
@@ -118,7 +119,9 @@ public class CS_HandSigns : MonoBehaviour
             if (!hand) continue;// 取得できなかった
 
             // 手の情報を設定する
-            m_HandLandmark[i] = hand;
+            m_HandLandmark.Add(hand);
+
+            if (m_vec3MoveDistanceList.Count <= i) m_vec3MoveDistanceList.Add(new List<Vector3>());
             // リストに追加
             AddHandPointList(m_HandLandmark[i].GetLandmarkList(), i);
             AddHandAngularList(m_HandLandmark[i].GetLandmarkList(), i);
@@ -134,7 +137,7 @@ public class CS_HandSigns : MonoBehaviour
     // 戻り値：なし
     private void AddHandPointList(PointListAnnotation point,int handNum) 
     {
-        List<Vector3> moveVecList = GetMoveVecList(handNum);
+        List<Vector3> moveVecList = m_vec3MoveDistanceList[handNum];
         // 距離を求める
         Vector3 handPos = point[5].transform.position;
 
@@ -167,13 +170,13 @@ public class CS_HandSigns : MonoBehaviour
     // 戻り値：なし
     private void HandsMotionIdentify() 
     {
-        for (int i = 0;i< m_HandLandmark.Length;i++)
+        for (int i = 0;i< m_HandLandmark.Count;i++)
         {
             // 手の情報が登録されていないなら次に進む
             if (!m_HandLandmark[i]) continue;
             
             // リストが少ないなら次に進む
-            bool isListUnder = GetMoveVecList(i).Count < m_nListMaxNum;
+            bool isListUnder = m_vec3MoveDistanceList[i].Count < m_nListMaxNum;
             if (isListUnder) continue;
 
             // 手の回転速度
@@ -191,7 +194,7 @@ public class CS_HandSigns : MonoBehaviour
     public Vector3 GetHandMovement(int handNum) 
     {
         Vector3 move = new Vector3(0, 0, 0);
-        List<Vector3> moveVecList = GetMoveVecList(handNum);
+        List<Vector3> moveVecList = m_vec3MoveDistanceList[handNum];
         // 移動距離の合計
         for (int i = 0; i < moveVecList.Count - 1; i++) move += moveVecList[i] - moveVecList[i + 1];
         return move;
@@ -229,7 +232,7 @@ public class CS_HandSigns : MonoBehaviour
     // 戻り値：生成する true しない false
     private bool IsCreateWind(int handNum,Vector3 move)
     {
-        List<Vector3> moveVecList = GetMoveVecList(handNum);
+        List<Vector3> moveVecList = m_vec3MoveDistanceList[handNum];
         
         // 最低移動距離を越えたら_false
         bool isOverMoveDistance = move.magnitude > m_fMaxSpeed;
@@ -357,7 +360,7 @@ public class CS_HandSigns : MonoBehaviour
     public bool IsTPose() 
     {
         // 両手の情報があるか,ないなら終わる
-        bool isNullOfHandsInfo = !m_HandLandmark[0] || !m_HandLandmark[1];
+        bool isNullOfHandsInfo = m_HandLandmark.Count<2;
         if (isNullOfHandsInfo) return false;
         
         // 両手がパーではないなら
