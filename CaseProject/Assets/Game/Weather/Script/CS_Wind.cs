@@ -108,7 +108,7 @@ public class CS_Wind : MonoBehaviour
         float OtherScale = collision.transform.localScale.x;
 
         float addPower = OtherScale + ThisScale;
-        const float tolerance = 1.0f;// 許容範囲
+        const float tolerance = 10.0f;// 許容範囲
         bool isTolerance = addPower < tolerance && addPower > -tolerance;
         if (!isTolerance) { Debug.Log("許容範囲"); return; }
 
@@ -117,14 +117,16 @@ public class CS_Wind : MonoBehaviour
         // 上方向の風の生成
         Vector3 pos = m_vec3CameraPos;
         pos.z = 0;
-        Quaternion rotation = Quaternion.EulerAngles(0, 0, 0);
+        Quaternion rotation = Quaternion.EulerAngles(0, 0, 90);
         GameObject createdWind = GameObject.Instantiate(m_objWind, pos, rotation);
         CS_Wind cswind = createdWind.GetComponent<CS_Wind>();
         cswind.WindDirection = E_WINDDIRECTION.UP;   //上向きに設定　追加：菅
-        cswind.m_fWindPower = addPower;
+        cswind.m_fWindPower = Mathf.Abs(ThisScale);
         cswind.enabled = true;                                  //スクリプトオフになる意味わからん
         createdWind.GetComponent<BoxCollider2D>().enabled = true;
-
+        Vector3 scale =createdWind.transform.localScale;
+        scale.x = cswind.m_fWindPower;
+        createdWind.transform.localScale = scale;
         other.m_bCreated = true;
         m_bCreated = true;
     }

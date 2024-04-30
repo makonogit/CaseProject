@@ -1612,7 +1612,7 @@ MonoBehaviour:
   m_vec3RightAngularList: []
   m_vec3LeftAngularList: []
   m_nListMaxNum: 8
-  m_fMinSpeed: 0.5
+  m_fMinSpeed: 1
   m_fMaxSpeed: 10
 --- !u!1001 &793019659076483014
 PrefabInstance:
