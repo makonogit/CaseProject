@@ -36,6 +36,10 @@ public class CS_Wind : MonoBehaviour
         {
             m_eWindDirection = value;
         }
+        get
+        {
+            return m_eWindDirection;
+        }
     }
 
     public bool DeleteFlag 
@@ -96,7 +100,6 @@ public class CS_Wind : MonoBehaviour
         if (collision.gameObject.name != this.name)return;
 
         CS_Wind other = collision.gameObject.GetComponent<CS_Wind>();
-
 
         // “¯‚¶•ûŒü‚©”»’f
         bool isSameDirection =  this.m_eWindDirection == other.m_eWindDirection;
