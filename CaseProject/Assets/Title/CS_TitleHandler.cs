@@ -13,25 +13,40 @@ public class CS_TitleHandler : MonoBehaviour
     [SerializeField, Header("ハンドサイン")]
     private CS_HandSigns m_handSigns;
 
-    private HandLandmarkListAnnotation[] m_handLandmark = new HandLandmarkListAnnotation[2];
-
-    [SerializeField, Header("GAME,ENDロゴ")]
-    [Header("0GAME")]
-    [Header("1END")]
-    private GameObject[] m_txLogos;
+    private List<HandLandmarkListAnnotation> m_handLandmark = new List<HandLandmarkListAnnotation>();
 
     [SerializeField, Header("次のシーンの名前")]
     private string m_nextSceneName;
 
+    [SerializeField, Header("両手の初期位置")]
+    [Header("0:右手の初期位置")]
+    [Header("1:左手の初期位置")]
+    private GameObject[] m_startHandsObjPosition = new GameObject[2];
+    private Vector3[] m_startHandsScreenPosition = new Vector3[2];
+
+    [SerializeField, Header("シリウスが出てくる両手の位置")]
+    [Header("0:右手の初期位置")]
+    [Header("1:左手の初期位置")]
+    private GameObject[] m_bornSeriusObjPosition = new GameObject[2];
+
+
+    [SerializeField, Header("両手の配置の認識可能範囲")]
+    private float m_recognizableDistance = 2.0f;
+
+    bool m_isUpdate = true;
+
     public enum TITLE_STATE
     {
-        CLOUD_EXCLUSION,//雲排除
-        SELECT_NEXT_SCENE,//次のシーン選択
-        GO_GAME_SCENE,
+        SET_HANDS,  //両手をを初期位置にセットできているか
+        CALL_SERIUS,//シリウスを呼ぶ
+        BORN_SERIUS,//シリウスの登場
+        WAIT1,      //待機1
+        SCROLL,     //画面スクロール中
+        STOP,
         GAME_END
     }
 
-    private TITLE_STATE m_titleState = TITLE_STATE.CLOUD_EXCLUSION;
+    private TITLE_STATE m_titleState = TITLE_STATE.SET_HANDS;
 
     public TITLE_STATE TitleState
     {
@@ -57,60 +72,76 @@ public class CS_TitleHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_handLandmark[0] = m_handSigns.HandMark[0];
-        m_handLandmark[1] = m_handSigns.HandMark[1];
+        m_handLandmark = m_handSigns.HandMark;
+
+        
+        for(int i =0; i < 2; i++)
+        {
+            Vector3 worldPos = m_startHandsObjPosition[i].transform.position;
+            m_startHandsScreenPosition[i] = worldPos;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        //雲をどける状態なら終了
-        if(TitleState == TITLE_STATE.CLOUD_EXCLUSION) { return; }
-
-        //終了状態ならアプリを閉じる
-        if(TitleState == TITLE_STATE.GAME_END) { UnityEditor.EditorApplication.isPlaying = false; }
-        //GO_GAME_SCENE状態なら次のシーンへ
-        if (TitleState == TITLE_STATE.GO_GAME_SCENE) { SceneManager.LoadScene(m_nextSceneName); }
-
+        if (!m_isUpdate) { return; }
         //ハンドマークを取得
-        m_handLandmark[0] = m_handSigns.HandMark[0];
-        m_handLandmark[1] = m_handSigns.HandMark[1];
+        //0を右手、１を左手とする
+        m_handLandmark = m_handSigns.HandMark;
+
+        if (m_handLandmark.Count < 2)
+        {
+            return;
+        }
+       
+
+        string[] hand = { "右手", "左手" };
+        PointListAnnotation point1 = m_handLandmark[0].GetLandmarkList();
+        PointListAnnotation point2 = m_handLandmark[1].GetLandmarkList();
+        //右手が左手側にあるならhandLandmarkの中身を入れ替える
+        if(point1[9].transform.position.x < point2[9].transform.position.x)
+        {
+            HandLandmarkListAnnotation mark = m_handLandmark[0];
+            m_handLandmark[0] = m_handLandmark[1];
+            m_handLandmark[1] = mark;
+
+        }
+
+        for (int i = 0; i < 2; i++)
+        {
+            PointListAnnotation point = m_handLandmark[i].GetLandmarkList();
+
+            float dis = Vector2.Distance(point[9].transform.position, m_startHandsScreenPosition[i]);
+
+            if (dis > m_recognizableDistance) { return; }
+        }
         
-        if (m_handLandmark[0] != null) 
+        switch (m_titleState)
         {
-            bool rockSign = m_handSigns.GetHandPose(0) == (byte)CS_HandSigns.HandPose.RockSign;
-            if (m_handSigns.GetHandPose(0)==(byte)CS_HandSigns.HandPose.RockSign)
-            {
-                m_isChangeSceneInpossible = true;//シーン遷移可能にする
-            }
-            else 
-            {
-                m_isChangeSceneInpossible = false; //シーン遷移不可能にする
-            }
+            case TITLE_STATE.SET_HANDS:
+                for (int i = 0; i < 2; i++)
+                {
+                    m_startHandsObjPosition[i].transform.position = m_bornSeriusObjPosition[i].transform.position;
+                    m_startHandsScreenPosition[i] = m_startHandsObjPosition[i].transform.position;
+                }
+                m_titleState = TITLE_STATE.CALL_SERIUS;
+                break;
+            case TITLE_STATE.CALL_SERIUS:
+                for (int i = 0; i < 2; i++)
+                {
+                    Destroy(m_startHandsObjPosition[i]);
+                    Destroy(m_bornSeriusObjPosition[i]);
+                }
+                m_isUpdate = false;
+                m_titleState = TITLE_STATE.BORN_SERIUS;
+                break;
         }
-        else if (m_handLandmark[1] != null)
-        {
-            //GetHandPose(handNum)==(byte)HandPose.PaperSign
-            if (m_handSigns.GetHandPose(1) == (byte)CS_HandSigns.HandPose.RockSign)
-            {
-                m_isChangeSceneInpossible = true; //シーン遷移可能にする
-            }
-            else
-            {
-                m_isChangeSceneInpossible = false;//シーン遷移不可能にする
-            }
-        }
+        
+
     }
 
-    public void LogoActiveTrue()
-    {
-        //ロゴの活動をtrue
-        m_txLogos[0].SetActive(true);
-        m_txLogos[1].SetActive(true);
-
-        TitleState = TITLE_STATE.SELECT_NEXT_SCENE;//タイトル状態を選択可能状態にする
-    }
-
+  
     //シーンのロード
     public void GoNextScene(string _nextSceneName)
     {
