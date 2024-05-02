@@ -35,6 +35,10 @@ public class CS_TitleHandler : MonoBehaviour
 
     bool m_isUpdate = true;
 
+    //状態が待機時2の待機時間
+    private float m_nowWaitTime = 0.0f;
+    private float m_waitTime = 3.0f;
+
     public enum TITLE_STATE
     {
         SET_HANDS,  //両手をを初期位置にセットできているか
@@ -42,7 +46,8 @@ public class CS_TitleHandler : MonoBehaviour
         BORN_SERIUS,//シリウスの登場
         WAIT1,      //待機1
         SCROLL,     //画面スクロール中
-        STOP,
+        STOP,       //スクロール終了
+        WAIT2,      //待機2
         GAME_END
     }
 
@@ -85,7 +90,11 @@ public class CS_TitleHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        CheckGoNextScene();//次のシーンへいくかどうかの処理
+       
+        //更新しないなら終了
         if (!m_isUpdate) { return; }
+
         //ハンドマークを取得
         //0を右手、１を左手とする
         m_handLandmark = m_handSigns.HandMark;
@@ -136,16 +145,23 @@ public class CS_TitleHandler : MonoBehaviour
                 m_isUpdate = false;
                 m_titleState = TITLE_STATE.BORN_SERIUS;
                 break;
+      
         }
-        
-
     }
 
   
     //シーンのロード
-    public void GoNextScene(string _nextSceneName)
+    void CheckGoNextScene()
     {
-        SceneManager.LoadScene(_nextSceneName);
+        //待機時間2?
+        if (TitleState != TITLE_STATE.WAIT2) { return; }
+        
+        if (m_nowWaitTime <= m_waitTime)
+        {
+            m_nowWaitTime += Time.deltaTime;//デルタタイム加算
+            return;
+        }
+        SceneManager.LoadScene("SelectScene");  
     }
 
     //ゲーム終了
