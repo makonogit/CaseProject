@@ -12,7 +12,7 @@ public class CS_PageTurning : MonoBehaviour
     [SerializeField, Header("ハンドサイン")]
     private CS_HandSigns m_handSigns;
 
-    [SerializeField, Header("ページめくりかのうな手の移動量")]
+    [SerializeField, Header("ページめくりを行う手の移動量")]
     private float m_handMovement = 5.0f;
 
     private bool isFacingRight = true;
@@ -29,6 +29,8 @@ public class CS_PageTurning : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //一度nullで初期化しておく
+        
         //ハンドマークを取得
         //1を右手、0を左手とする
         m_handLandmark = m_handSigns.HandMark;
@@ -43,12 +45,13 @@ public class CS_PageTurning : MonoBehaviour
 
         for (int i = 0; i < 2; i++)
         {
+            if(m_handLandmark[i] == null) { return; }
             if (GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("AM_PageTurning")) { return; }
             //手の移動ベクトル
             Vector3 handVec = m_handSigns.GetHandMovement(i);
             PointListAnnotation point1 = m_handLandmark[i].GetLandmarkList();　//ポイントリストを取得
             //ページのめくりのアニメーション
-            bool turning = IsPageTurning(handVec.magnitude,i);
+            bool turning = IsPageTurning(handVec,i);
             if (turning)
             {
                 //右手か左手かで本のめくる向きを変える
@@ -72,15 +75,15 @@ public class CS_PageTurning : MonoBehaviour
     }
 
 
-    private bool IsPageTurning(float _moveLength, int handNum)
+    private bool IsPageTurning(Vector3 _moveVec, int handNum)
     {   
         //移動距離が一定未満ならfalse
-        if (_moveLength < m_handMovement) { return false; }
+        if (_moveVec.magnitude < m_handMovement) { return false; }
 
         //-------------手首位置が画面の右側か左側かをとる--------------
         PointListAnnotation point1 = m_handLandmark[handNum].GetLandmarkList();　//ポイントリストを取得
         //手首のポジションをスクリーン座標にする
-        Vector3 wristPos = point1[0].transform.position;
+        Vector3 wristPos = point1[17].transform.position;
         Vector3 screenPos = Camera.main.WorldToViewportPoint(wristPos);
         //スクリーン座標の右側にあるか
         bool handScreenPosRight = screenPos.x > 0.5f;

@@ -37,7 +37,7 @@ public class CS_TitleHandler : MonoBehaviour
 
     //状態が待機時2の待機時間
     private float m_nowWaitTime = 0.0f;
-    private float m_waitTime = 3.0f;
+    private float m_waitTime = 1.0f;
 
     public enum TITLE_STATE
     {
@@ -47,6 +47,8 @@ public class CS_TitleHandler : MonoBehaviour
         WAIT1,      //待機1
         SCROLL,     //画面スクロール中
         STOP,       //スクロール終了
+        MAGNIFICATION_SERIUS,//拡大シリウス
+        REDUCTION_SERIUS,//縮小シリウス
         WAIT2,      //待機2
         GAME_END
     }
@@ -155,7 +157,7 @@ public class CS_TitleHandler : MonoBehaviour
     {
         //待機時間2?
         if (TitleState != TITLE_STATE.WAIT2) { return; }
-        
+
         if (m_nowWaitTime <= m_waitTime)
         {
             m_nowWaitTime += Time.deltaTime;//デルタタイム加算
