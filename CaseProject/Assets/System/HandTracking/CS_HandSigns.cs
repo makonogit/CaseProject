@@ -288,8 +288,8 @@ public class CS_HandSigns : MonoBehaviour
         if (!m_bIsLeftHandList[handNum])dir *= -1;
 
         float yaw = m_vec3AngularList[handNum][0].y;
-        const float Under = Mathf.Deg2Rad * 45.0f;
-        const float Top = Mathf.Deg2Rad * 135.0f;
+        const float Under = Mathf.Deg2Rad * 20.0f;
+        const float Top = Mathf.Deg2Rad * 160.0f;
         bool isPositive = yaw > Under && yaw < Top;
         bool isNegative = yaw < -Under && yaw > -Top;
         bool isWithin = isNegative || isPositive;
