@@ -284,19 +284,21 @@ public class CS_HandSigns : MonoBehaviour
         // 手のひらの方向と移動した方向が一緒か
         bool isPositiveX = move.x >= 0;
         bool isPalmDireciton = (m_bIsLeftHandList[handNum] && isPositiveX) || ((!m_bIsLeftHandList[handNum] && !isPositiveX));
-        Vector3 dir = new Vector3(1, 0, 0);
-        if (!m_bIsLeftHandList[handNum])dir *= -1;
-
+        
+        // 手のひらの向きの判定
         float yaw = m_vec3AngularList[handNum][0].y;
         const float Under = Mathf.Deg2Rad * 20.0f;
         const float Top = Mathf.Deg2Rad * 160.0f;
         bool isPositive = yaw > Under && yaw < Top;
         bool isNegative = yaw < -Under && yaw > -Top;
         bool isWithin = isNegative || isPositive;
+
         bool isHandMove = IsMoving(move) && isPalmDireciton && isWithin;
 
+        // 回転量を取得
         float Pitch = GetHandAngularSpeed(handNum).x;
-        if (!isHandMove&&!IsBeckoning(Pitch)) return false;
+        if (!isHandMove && !IsBeckoning(Pitch)) return false;
+        
         
         // 移動距離リストのリセット
         moveVecList.Clear();
@@ -319,9 +321,9 @@ public class CS_HandSigns : MonoBehaviour
     private bool IsBeckoning(float move) 
     {
         // 最低移動距離を越えたら_false
-        if (move > m_fMaxAngularSpeed) return false;
+        if (move > m_fMaxAngularSpeed * Mathf.Deg2Rad) return false;
         // 最大移動距離を越えなかったら_false
-        if (move < m_fMinAngularSpeed) return false;
+        if (move < m_fMinAngularSpeed * Mathf.Deg2Rad) return false;
         return true;
     }
 
@@ -333,9 +335,11 @@ public class CS_HandSigns : MonoBehaviour
     {
         // 風生成位置
         Vector3 position = m_HandLandmark[handNum][5].transform.position;
+        float Pitch = GetHandAngularSpeed(handNum).x;
+        Vector3 dir = new Vector3(-1, 0, 0) *Pitch;
+        if (m_bIsLeftHandList[handNum]) dir*=-1;
         // 風生成イベントの発行
-        OnCreateWinds(position, windVec);
-        Debug.Log("イベント発行");
+        OnCreateWinds(position, windVec + dir);
     }
 
     // 雷を生成する条件の関数
