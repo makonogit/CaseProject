@@ -15,16 +15,35 @@ public class CS_BookFadeIn : MonoBehaviour
     private float m_currentAlpha = 0f;
     private float m_fadeTimer = 0f;
 
+
+    [SerializeField, Header("TitleLogoのSpriteRenderer")]
+    private SpriteRenderer m_TitileRenderer;
+
+    private float m_fTitleLogoAlpha = 1.0f;
+
     // Start is called before the first frame update
     void Start()
     {
+        if (!m_TitileRenderer) { Debug.LogWarning("TitleLogoのSpriteRendererが設定されていません"); }
+
+        m_fTitleLogoAlpha = m_TitileRenderer.color.a;
+
         m_sRenderer = GetComponent<SpriteRenderer>();
+        
         m_sRenderer.color = new Color(m_sRenderer.color.r, m_sRenderer.color.g, m_sRenderer.color.b, 0f); // 最初は透明にする
     }
 
     // Update is called once per frame
     void Update()
     {
+        //タイトルロゴを消す (追加：菅)
+        if(m_TitileRenderer.color.a > 0.0f)
+        {
+            m_fTitleLogoAlpha -= m_fadeInDuration / 2 * Time.deltaTime;
+            m_TitileRenderer.color = new Color(m_TitileRenderer.color.r, m_TitileRenderer.color.g, m_TitileRenderer.color.b, m_fTitleLogoAlpha);
+            return;
+        }
+
         m_fadeTimer += Time.deltaTime;
         if (m_fadeTimer < m_fadeInDuration)
         {
@@ -35,5 +54,7 @@ public class CS_BookFadeIn : MonoBehaviour
         {
             Destroy(this);
         }
+
+
     }
 }

@@ -111,7 +111,7 @@ public class CS_Wind : MonoBehaviour
         float OtherScale = collision.transform.localScale.x;
 
         float addPower = OtherScale + ThisScale;
-        const float tolerance = 10.0f;// ‹–—e”ÍˆÍ
+        const float tolerance = 100.0f;// ‹–—e”ÍˆÍ
         bool isTolerance = addPower < tolerance && addPower > -tolerance;
         if (!isTolerance) { Debug.Log("‹–—e”ÍˆÍ"); return; }
 

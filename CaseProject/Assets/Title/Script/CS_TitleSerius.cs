@@ -5,6 +5,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class CS_TitleSerius : MonoBehaviour
 {
@@ -17,8 +18,8 @@ public class CS_TitleSerius : MonoBehaviour
     
     [SerializeField, Header("移動速度")]
     private float m_speed;
-    [SerializeField, Header("回転速度")]
-    private float m_rotateSpeed = 50.0f;
+    //[SerializeField, Header("回転速度")]
+    //private float m_rotateSpeed = 50.0f;
 
     [SerializeField, Header("待機時間")]
     private float m_waitTime = 2.0f;
@@ -39,14 +40,31 @@ public class CS_TitleSerius : MonoBehaviour
 
     private float m_nowWaitTime = 0.0f;
 
+
+    [SerializeField, Header("ライト")]
+    private Light2D m_GrobalLight;
+
+    [SerializeField, Header("明天の明るさ")]
+    private float m_fMaxIntencity = 10.0f;
+
+    [SerializeField, Header("明天スピード")]
+    private float m_fFlashSpeed = 1.0f;
+
+    [SerializeField, Header("自分のSpriteRenderer")]
+    private SpriteRenderer m_spriterender;
+
     // Start is called before the first frame update
-    
+    private void Start()
+    {
+        if (!m_GrobalLight) { Debug.LogWarning("GrobalLightが設定されていません"); }
+        if (!m_spriterender) { Debug.LogWarning("SpriteRendererが設定されていません"); }
+    }
 
     // Update is called once per frame
     void Update()
     {
         //回転させる
-        this.transform.Rotate(Vector3.forward * m_rotateSpeed * Time.deltaTime);
+        //this.transform.Rotate(Vector3.forward * m_rotateSpeed * Time.deltaTime);
         switch (m_titleHandler.TitleState)
         {
             case CS_TitleHandler.TITLE_STATE.BORN_SERIUS:
@@ -87,30 +105,52 @@ public class CS_TitleSerius : MonoBehaviour
                 }
                 break;
             case CS_TitleHandler.TITLE_STATE.MAGNIFICATION_SERIUS:
-                if(transform.localScale.x < m_maxScale)
+                //if(transform.localScale.x < m_maxScale)
+                //{
+                //    transform.localScale += new Vector3(m_scaleFactor, m_scaleFactor, 0) * m_scaleSpeed * Time.deltaTime;
+                //    if(transform.localScale.x > m_maxScale)
+                //    {
+                //        Destroy(m_titleLogo1);
+                //        Destroy(m_starParticle);
+                //        m_titleLogo2.SetActive(true);
+                //        //m_scaleSpeed *= 1.5f;
+                //        m_titleHandler.TitleState = CS_TitleHandler.TITLE_STATE.REDUCTION_SERIUS;
+                //    }
+
+                //}     
+
+
+                //  Intenctyを10まであげて明るくする
+                if(m_GrobalLight.intensity >= m_fMaxIntencity) 
                 {
-                    transform.localScale += new Vector3(m_scaleFactor, m_scaleFactor, 0) * m_scaleSpeed * Time.deltaTime;
-                    if(transform.localScale.x > m_maxScale)
-                    {
-                        Destroy(m_titleLogo1);
-                        Destroy(m_starParticle);
-                        m_titleLogo2.SetActive(true);
-                        m_scaleSpeed *= 1.5f;
-                        m_titleHandler.TitleState = CS_TitleHandler.TITLE_STATE.REDUCTION_SERIUS;
-                    }
-                   
-                }     
+                    m_titleLogo2.SetActive(true);
+                    m_titleHandler.TitleState = CS_TitleHandler.TITLE_STATE.REDUCTION_SERIUS;
+                    m_spriterender.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+                    break; 
+                }
+
+                m_GrobalLight.intensity += m_fFlashSpeed * Time.deltaTime;
+                
                 break;
             case CS_TitleHandler.TITLE_STATE.REDUCTION_SERIUS:
-                if (transform.localScale.x > 0.0f)
+                //if (transform.localScale.x > 0.0f)
+                //{
+                //    transform.localScale -= new Vector3(m_scaleFactor, m_scaleFactor, 0) * m_scaleSpeed * Time.deltaTime;
+                //    if (transform.localScale.x < 0.0f)
+                //    {
+                //        Destroy(this.gameObject);
+                //        m_titleHandler.TitleState = CS_TitleHandler.TITLE_STATE.WAIT2;
+                //    }
+                //}
+
+                //  Intenctyを戻す
+                if (m_GrobalLight.intensity <= 1.0f)
                 {
-                    transform.localScale -= new Vector3(m_scaleFactor, m_scaleFactor, 0) * m_scaleSpeed * Time.deltaTime;
-                    if (transform.localScale.x < 0.0f)
-                    {
-                        Destroy(this.gameObject);
-                        m_titleHandler.TitleState = CS_TitleHandler.TITLE_STATE.WAIT2;
-                    }
+                    m_titleHandler.TitleState = CS_TitleHandler.TITLE_STATE.WAIT2;
+                    break;
                 }
+
+                m_GrobalLight.intensity -= m_fFlashSpeed * Time.deltaTime;
                 break;
         }
     }

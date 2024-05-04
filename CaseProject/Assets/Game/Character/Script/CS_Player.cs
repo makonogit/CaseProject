@@ -57,8 +57,6 @@ public class CS_Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //m_v3DestinationPos = m_tThisTrans.position;
-
         //離陸したら離陸アニメーションの再生
         if (m_fStartHeight < m_tThisTrans.position.y && !m_IsStartFry) 
         {
@@ -66,27 +64,9 @@ public class CS_Player : MonoBehaviour
             m_aThisAnimator.SetBool("TakeOff", true); 
         }
 
+        
         //手がふわふわ動く処理
         m_tHandTrans.position = new Vector3(m_tHandTrans.position.x, m_tHandTrans.position.y + Wave, 0.0f);
-
-        
-
-        //オブジェクトの向きを求める
-        Vector3 Direction = m_v3DestinationPos - m_tThisTrans.position;
-
-        //目的地に到着するまで移動
-        if (m_v3DestinationPos != m_tThisTrans.position && m_v3DestinationPos != Vector3.zero)
-        {
-           
-            //transform.position = Vector3.MoveTowards(transform.position, m_v3DestinationPos, m_fMoveSpeed * Time.deltaTime);
-            //transform.Translate(0.0f, 0.1f, 0.0f);
-        }
-        else
-        {
-            //transform.position = Vector3.MoveTowards(transform.position, new Vector3(m_tThisTrans.position.x, 0.0f,0.0f), m_fMoveSpeed * Time.deltaTime);
-            //transform.Translate(0.0f, -0.1f, 0.0f);
-            //m_rThisRigidbody.AddForce(0.0f,m_fMoveSpeed);
-        }
 
     }
 
@@ -106,12 +86,20 @@ public class CS_Player : MonoBehaviour
     public void KnockBack(Vector3 knockbackdirection,float knockbackpower)
     {
         //ノックバックの方向と強さを考慮して目的地を設定
-        m_v3DestinationPos = m_tThisTrans.position - (knockbackdirection * knockbackpower);
+        //m_v3DestinationPos = m_tThisTrans.position - (knockbackdirection * knockbackpower);
+
+        //m_tThisTrans.position = m_v3DestinationPos;
+
+        m_rThisRigidbody.AddForce(m_tThisTrans.position - (knockbackdirection * knockbackpower));
+
+        Debug.Log("ノックバック" + (m_tThisTrans.position - knockbackdirection));
+        
     }
 
     //------------------------------------
     //風の影響設定関数
-    //引数：目的地
+    //引数：風の向き
+    //引数：風の強さ
     //------------------------------------
     public void WindMove(CS_Wind.E_WINDDIRECTION distination,float windpower)
     {
@@ -125,27 +113,21 @@ public class CS_Player : MonoBehaviour
                 Direction = Vector3.zero;
                 break;
             case CS_Wind.E_WINDDIRECTION.LEFT:
-                Direction = Vector3.right;
+                Direction = Vector3.up;
                 break;
             case CS_Wind.E_WINDDIRECTION.RIGHT:
-                Direction = Vector3.left;
+                Direction = Vector3.up;
                 break;
             case CS_Wind.E_WINDDIRECTION.UP:
                 Direction = Vector3.up;
                 break;
         }
 
-        //風の方向と強さを考慮して目的地を設定
-        //m_v3DestinationPos = m_tThisTrans.position + (Direction * windpower);
-
         m_rThisRigidbody.AddForce(Direction * windpower, ForceMode2D.Force);
 
         //離陸アニメーションを終了させて浮遊アニメーションを再生
         m_aThisAnimator.SetBool("Jump", false);
         m_aThisAnimator.SetBool("Fry", true);
-
-        Debug.Log(windpower);
-        Debug.Log(m_v3DestinationPos);
     }
 
 
