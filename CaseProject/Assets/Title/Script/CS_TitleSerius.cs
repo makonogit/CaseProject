@@ -13,14 +13,10 @@ public class CS_TitleSerius : MonoBehaviour
     private CS_TitleHandler m_titleHandler;
     [SerializeField, Header("目標地点")]
     private Transform m_target1;
-    [SerializeField, Header("スクロール終了後目標地点2")]
-    private Transform m_target2;
     
     [SerializeField, Header("移動速度")]
     private float m_speed;
-    //[SerializeField, Header("回転速度")]
-    //private float m_rotateSpeed = 50.0f;
-
+    
     [SerializeField, Header("待機時間")]
     private float m_waitTime = 2.0f;
 
@@ -31,15 +27,9 @@ public class CS_TitleSerius : MonoBehaviour
     [SerializeField, Header("スターパーティクル")]
     private GameObject m_starParticle;
 
-    [SerializeField, Header("拡大率")]
-    private float m_scaleFactor = 0.1f;
-    [SerializeField, Header("拡大スピード")]
-    private float m_scaleSpeed = 2;
-    [SerializeField, Header("最大拡大")]
-    private float m_maxScale = 10;
+   
 
     private float m_nowWaitTime = 0.0f;
-
 
     [SerializeField, Header("ライト")]
     private Light2D m_GrobalLight;
@@ -105,21 +95,6 @@ public class CS_TitleSerius : MonoBehaviour
                 }
                 break;
             case CS_TitleHandler.TITLE_STATE.MAGNIFICATION_SERIUS:
-                //if(transform.localScale.x < m_maxScale)
-                //{
-                //    transform.localScale += new Vector3(m_scaleFactor, m_scaleFactor, 0) * m_scaleSpeed * Time.deltaTime;
-                //    if(transform.localScale.x > m_maxScale)
-                //    {
-                //        Destroy(m_titleLogo1);
-                //        Destroy(m_starParticle);
-                //        m_titleLogo2.SetActive(true);
-                //        //m_scaleSpeed *= 1.5f;
-                //        m_titleHandler.TitleState = CS_TitleHandler.TITLE_STATE.REDUCTION_SERIUS;
-                //    }
-
-                //}     
-
-
                 //  Intenctyを10まであげて明るくする
                 if(m_GrobalLight.intensity >= m_fMaxIntencity) 
                 {
@@ -133,16 +108,6 @@ public class CS_TitleSerius : MonoBehaviour
                 
                 break;
             case CS_TitleHandler.TITLE_STATE.REDUCTION_SERIUS:
-                //if (transform.localScale.x > 0.0f)
-                //{
-                //    transform.localScale -= new Vector3(m_scaleFactor, m_scaleFactor, 0) * m_scaleSpeed * Time.deltaTime;
-                //    if (transform.localScale.x < 0.0f)
-                //    {
-                //        Destroy(this.gameObject);
-                //        m_titleHandler.TitleState = CS_TitleHandler.TITLE_STATE.WAIT2;
-                //    }
-                //}
-
                 //  Intenctyを戻す
                 if (m_GrobalLight.intensity <= 1.0f)
                 {

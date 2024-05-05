@@ -172,15 +172,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_titleHandler: {fileID: 661593532}
   m_target1: {fileID: 615095587}
-  m_target2: {fileID: 1984804334}
   m_speed: 30
   m_waitTime: 2
   m_titleLogo1: {fileID: 0}
   m_titleLogo2: {fileID: 0}
   m_starParticle: {fileID: 2102437466}
-  m_scaleFactor: 0.1
-  m_scaleSpeed: 40
-  m_maxScale: 15
   m_GrobalLight: {fileID: 0}
   m_fMaxIntencity: 10
   m_fFlashSpeed: 1
@@ -764,7 +760,6 @@ Transform:
   - {fileID: 2102437469}
   - {fileID: 27172613}
   - {fileID: 615095587}
-  - {fileID: 1984804334}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7417,37 +7412,6 @@ SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 8228193613670515739, guid: 227003e766ae5ea478dcac4a1c91e37f, type: 3}
   m_PrefabInstance: {fileID: 8228193613999332977}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1984804333
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1984804334}
-  m_Layer: 0
-  m_Name: target (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1984804334
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1984804333}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.02, y: -3.43, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 457987746}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2068669331
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12497,7 +12461,7 @@ PrefabInstance:
     - target: {fileID: 8228193613670515736, guid: 227003e766ae5ea478dcac4a1c91e37f, type: 3}
       propertyPath: m_target2
       value: 
-      objectReference: {fileID: 1984804334}
+      objectReference: {fileID: 0}
     - target: {fileID: 8228193613670515736, guid: 227003e766ae5ea478dcac4a1c91e37f, type: 3}
       propertyPath: m_waitTime
       value: 1
