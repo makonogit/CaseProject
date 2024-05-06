@@ -29,12 +29,13 @@ public class CS_LineController : MonoBehaviour
 
     void Update()
     {
-        bool allOpaque = true;//全て不透明
         m_fadeTimer += Time.deltaTime;
         m_currentAlpha = Mathf.Lerp(0f, 1f, m_fadeTimer / m_fadeInDuration);
 
         if (m_fadeTimer > m_fadeInDuration)
         {
+            //テキストのフェードイン状態にして消去
+            m_rController.ResultState = CS_ResultController.RESULT_STATE.TEXT_FADE_IN;
             Destroy(this);
             return;
         }
@@ -45,10 +46,7 @@ public class CS_LineController : MonoBehaviour
             SetTransparency(renderer, m_currentAlpha);
         }
 
-        if (allOpaque) 
-        { 
-            //ステートを変えて消去
-        }
+       
     }
 
     // 透明度を設定するヘルパー関数

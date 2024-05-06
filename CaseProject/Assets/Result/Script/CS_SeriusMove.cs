@@ -17,6 +17,8 @@ public class CS_SeriusMove : MonoBehaviour
     [SerializeField, Header("星の移動スピード")]
     private float m_fSpeed = 3.0f;
 
+    private GameObject m_sirius;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -49,10 +51,14 @@ public class CS_SeriusMove : MonoBehaviour
         if (!isTarget) { Debug.LogWarning("Siriusが無い"); }
         seriusStar.localScale = m_targetObj.lossyScale;
 
+       
+
         //シリウスの新たなポジション設定
         Vector3 seriusNewPos = seriusStar.position + Vector3.up * seriusStar.localScale.y;
         seriusNewPos.y += sirius.localScale.y / 2;
         sirius.position = seriusNewPos;
+
+        m_sirius = sirius.gameObject;//シリウスオブジェクト設定
     }
 
     // Update is called once per frame
@@ -62,6 +68,7 @@ public class CS_SeriusMove : MonoBehaviour
         if (Vector3.Distance(transform.position, m_targetObj.position) < 0.1f)
         {
             NextStateReady();//次の状態へ行く準備
+            Destroy(m_sirius.gameObject);
             Destroy(this);
             return;
         }
