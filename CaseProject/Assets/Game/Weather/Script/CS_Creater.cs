@@ -101,6 +101,7 @@ public class CS_Creater : MonoBehaviour
         float windpower = direction.magnitude * m_fWindPower * dir.x;
         windpower = Mathf.Abs(windpower);
         m_player.WindMove(cs_wind.WindDirection, windpower);
+
     }
     
     // •—‚Ì¶¬ˆÊ’u‚ğ‹‚ß‚éŠÖ”
