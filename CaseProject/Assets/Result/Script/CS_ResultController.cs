@@ -31,8 +31,10 @@ public class CS_ResultController : MonoBehaviour
         BORN_LINE,  //ラインの出現
         FRAME,      //枠出現
         TEXT_FADE_IN,//星座完成の文字のオブジェクトをフェードイン
+        NIGHT_FADE_IN,//第〇夜の文字の画像のオブジェクトをフェードイン
         BOOK_FADE_IN,//本のフェードイン
-        GO_SELECT_SCENE
+        GO_SELECT_SCENE,
+        NONE//特になし
     };
 
     private static STAGE_TYPE m_stageType = STAGE_TYPE.STAGE1;//ステージの種類
