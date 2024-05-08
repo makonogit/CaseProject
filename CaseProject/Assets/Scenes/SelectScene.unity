@@ -1880,13 +1880,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1131075331}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 74f0b5cb89108ad4a870d514b6a59868, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_handSigns: {fileID: 110111729}
-  m_handMovement: 4
 --- !u!95 &1131075333
 Animator:
   serializedVersion: 4
@@ -2831,7 +2830,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_handSigns: {fileID: 110111729}
-  m_handMovement: 5
 --- !u!95 &1549794771
 Animator:
   serializedVersion: 4
