@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 08c7d28ea78c818499f54c77eb27fb0f
+guid: d6462cfe21150a94c861d0f757c1e8f3
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -101,17 +101,53 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Windows Store Apps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: tvOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: page turning_0
+      name: Wind_effect2_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 1365.3333
-        width: 682.6667
-        height: 682.6667
+        y: 512
+        width: 512
+        height: 512
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -119,20 +155,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6bb90cf7202202f4b9dbc70a61d6b4c4
-      internalID: 503405117
+      spriteID: 36f7a2286dd090f46b964e7760af2ec5
+      internalID: -1448037463
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: page turning_1
+      name: Wind_effect2_1
       rect:
         serializedVersion: 2
-        x: 682
-        y: 1365.3333
-        width: 682.6667
-        height: 682.6667
+        x: 512
+        y: 512
+        width: 512
+        height: 512
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,41 +176,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 620a3c64c90c6444b8398be8ae17c97d
-      internalID: 992653351
+      spriteID: 4057b0dba9058ec4a829fea0d1556f3d
+      internalID: -751782479
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: page turning_2
-      rect:
-        serializedVersion: 2
-        x: 1364
-        y: 1365.3333
-        width: 682.6667
-        height: 682.6667
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7603fbd08d44b5543951e701ced961ee
-      internalID: 1034020328
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: page turning_3
+      name: Wind_effect2_2
       rect:
         serializedVersion: 2
         x: 0
-        y: 683.3333
-        width: 682.6667
-        height: 682.6667
+        y: 0
+        width: 512
+        height: 512
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -182,20 +197,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b259b2865ac752d4089edab7243d335b
-      internalID: -1648348840
+      spriteID: 4f71afddd674ffd44a99bdcbe96400ce
+      internalID: -1229667069
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: page turning_4
+      name: Wind_effect2_3
       rect:
         serializedVersion: 2
-        x: 682
-        y: 683.3333
-        width: 682.6667
-        height: 682.6667
+        x: 512
+        y: 0
+        width: 512
+        height: 512
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -203,50 +218,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8bf7ad17a4e325a43ade5ebe9cd3c347
-      internalID: -476946180
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: page turning_5
-      rect:
-        serializedVersion: 2
-        x: 1364
-        y: 683.3333
-        width: 682.6667
-        height: 682.6667
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 93fe86947e3a9f848b4c754be45db11d
-      internalID: 290627828
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: page turning_6
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 1.333313
-        width: 682.6667
-        height: 682.6667
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1217a9ab653d40c4e9f645474e321137
-      internalID: -757319991
+      spriteID: 66c8223f5be76184c96cc54955ac32a9
+      internalID: 719135282
       vertices: []
       indices: 
       edges: []
@@ -262,13 +235,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      page turning_0: 503405117
-      page turning_3: -1648348840
-      page turning_6: -757319991
-      page turning_5: 290627828
-      page turning_1: 992653351
-      page turning_4: -476946180
-      page turning_2: 1034020328
+      Wind_effect2_2: -1229667069
+      Wind_effect2_0: -1448037463
+      Wind_effect2_1: -751782479
+      Wind_effect2_3: 719135282
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

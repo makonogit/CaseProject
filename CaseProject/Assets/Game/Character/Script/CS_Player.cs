@@ -103,31 +103,37 @@ public class CS_Player : MonoBehaviour
     //------------------------------------
     public void WindMove(CS_Wind.E_WINDDIRECTION distination,float windpower)
     {
-
+        
         Vector3 Direction = Vector3.zero;
 
+        m_aThisAnimator.SetBool("Jump", false);
+
         //向きによって方向を設定
-        switch(distination)
+        switch (distination)
         {
             case CS_Wind.E_WINDDIRECTION.NONE:
                 Direction = Vector3.zero;
                 break;
             case CS_Wind.E_WINDDIRECTION.LEFT:
-                Direction = Vector3.up;
+                Direction = Vector3.right;
+                //左移動アニメーションを再生
+                m_aThisAnimator.SetBool("Left", true);
                 break;
             case CS_Wind.E_WINDDIRECTION.RIGHT:
-                Direction = Vector3.up;
+                Direction = Vector3.left;
+                //右移動アニメーションを再生
+                m_aThisAnimator.SetBool("Right", true);
                 break;
             case CS_Wind.E_WINDDIRECTION.UP:
                 Direction = Vector3.up;
+
+                //浮遊アニメーションを再生
+                m_aThisAnimator.SetBool("Fry", true);
                 break;
         }
 
         m_rThisRigidbody.AddForce(Direction * windpower, ForceMode2D.Force);
 
-        //離陸アニメーションを終了させて浮遊アニメーションを再生
-        m_aThisAnimator.SetBool("Jump", false);
-        m_aThisAnimator.SetBool("Fry", true);
     }
 
 
@@ -141,12 +147,22 @@ public class CS_Player : MonoBehaviour
 
 
     //-----------------------------------------------
-    // 風アニメーションの終了(Animationで呼び出し)
+    // 浮遊アニメーションの終了(Animationで呼び出し)
     //-----------------------------------------------
     private void WindAnimEnd()
     {
         m_aThisAnimator.SetBool("Jump", true);
         m_aThisAnimator.SetBool("Fry", false);
+    }
+
+    //-----------------------------------------------
+    // 右左移動アニメーションの終了(Animationで呼び出し)
+    //-----------------------------------------------
+    private void MoveAnimEnd()
+    {
+        m_aThisAnimator.SetBool("Jump", true);
+        m_aThisAnimator.SetBool("Left", false);
+        m_aThisAnimator.SetBool("Right",false);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
