@@ -19,12 +19,12 @@ public class CS_Wind : MonoBehaviour
     [SerializeField]private float m_fDeleteTime = 3.0f;
 
     private bool m_IsWindEnd = false;   //風の端かどうか
-
+    
     [SerializeField, Header("Animator")]
     private Animator m_ThisAnim;
 
    // [SerializeField, Header("Playerscript")]
-   // private CS_Player m_player;                            // プレイヤーのscript 追加：菅
+    private CS_Player m_player;                            // プレイヤーのscript 追加：菅
 
     //風の向き
     public enum E_WINDDIRECTION
@@ -82,6 +82,14 @@ public class CS_Wind : MonoBehaviour
         set { m_IsWindEnd = value; }
     }
 
+    // CS_Playerを設定する関数
+    // 引き数：CS_Player
+    // 戻り値：ない
+    public void SetCS_Player(CS_Player player) 
+    {
+        m_player = player;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -103,76 +111,134 @@ public class CS_Wind : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         m_nowTime += Time.deltaTime;
-
-
-        bool isTimeOver = m_nowTime > m_fDeleteTime;
-        if (isTimeOver && m_bDelete) Destroy(this.gameObject);
+        if (IsDestroyThisObject()) Destroy(this.gameObject);
     }
     
+    // この風を破棄するか
+    // 引き数：なし
+    // 戻り値：破棄 True
+    private bool IsDestroyThisObject() 
+    {
+        bool isTimeOver = m_nowTime > m_fDeleteTime;
+        return isTimeOver && m_bDelete;
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         // プレイヤーに衝突したら風の影響を与える 追加：菅
-        if (collision.transform.tag == "Player")
-        {
-            Debug.Log("風ーーーーーーーーーー！");
-            //collision.transform.GetComponent<CS_Player>().WindMove(m_eWindDirection, m_fWindPower);
-            //Destroy(this.gameObject);
-            const float lastTime = 0.25f;
-            m_nowTime = m_fDeleteTime - lastTime;
-        }
+        if (collision.transform.tag == "Player") InfluencePlayer(collision);
 
         // 風かを名前で判断
-        if (collision.gameObject.name != this.name)return;
+        if (collision.gameObject.name != this.name) return;
 
         CS_Wind other = collision.gameObject.GetComponent<CS_Wind>();
 
+        // 上方向の風を生成するか
+        if (!IsCreateUpperWind(other)) return;
+
+        // 上方向の風の生成
+        float addPower = this.m_fWindPower + other.m_fWindPower;
+        CreateWindUpper(addPower,other);
+    }
+
+    // 上方向の風を生成するか
+    // 引き数：当たった風
+    // 戻り値：作るなら True
+    private bool IsCreateUpperWind(CS_Wind other) 
+    {    
         // 同じ方向か判断
-        bool isSameDirection =  this.m_eWindDirection == other.m_eWindDirection;
-        bool isUp = this.m_eWindDirection == E_WINDDIRECTION.UP || other.m_eWindDirection == E_WINDDIRECTION.UP;
-        if (isSameDirection && !isUp) { Debug.Log("方向"); return; }
+        if (!IsFacingDirection(other)) { return false; }
 
         // 風の力が同じくらいか判断
-        float ThisScale = m_fWindPower;//this.transform.localScale.x;
-        float OtherScale = other.m_fWindPower;//collision.transform.localScale.x;
-
-        float addPower = OtherScale + ThisScale;
-        const float tolerance = 100.0f;// 許容範囲
-        Debug.Log(addPower);
-        bool isTolerance = addPower < tolerance && addPower > -tolerance;
-        if (!isTolerance) { Debug.Log("許容範囲"); return; }
+        if (!IsTolerance(other)) { return false; }
 
         // 生成済みか
-        if (m_bCreated || other.m_bCreated) { Debug.Log("生成済み"); return; }
-        // 上方向の風の生成
-        Vector3 pos = m_vec3CameraPos;
-        pos.y = -2.0f;
-        pos.z = 0;
-        Quaternion rotation = Quaternion.EulerAngles(0, 0, 0);
-        GameObject createdWind = GameObject.Instantiate(m_objWind, pos, rotation);
+        if (m_bCreated || other.m_bCreated) { return false; }
+        
+        return true;
+    }
+
+    // 風の方向が向き合っているか
+    // 引き数：当たった風
+    // 戻り値：向き合ているなら True
+    private bool IsFacingDirection(CS_Wind other) 
+    {
+        bool isSameDirection = this.m_eWindDirection == other.m_eWindDirection;
+        if (isSameDirection) return false;
+        // 左右方向のみか
+        if(!this.IsHorizontal())return false;
+        if(!other.IsHorizontal())return false;
+        return true;
+    }
+    // 左右方向か
+    // 引数：なし
+    // 戻り値：左右ならTrue
+    private bool IsHorizontal() 
+    {
+        if (this.m_eWindDirection == E_WINDDIRECTION.NONE) return false;
+        if (this.m_eWindDirection == E_WINDDIRECTION.UP) return false;
+        return true;
+    }
+    
+    // 風の力が同じくらいか判断
+    // 引き数：向かい風
+    // 戻り値：同じくらいならTrue
+    private bool IsTolerance(CS_Wind other) 
+    {
+        float addPower = this.m_fWindPower + other.m_fWindPower;
+        const float tolerance = 100.0f;// 許容範囲
+        bool isTolerance = addPower < tolerance && addPower > -tolerance;
+        return isTolerance;
+    }
+
+    // プレイヤーに影響を与える関数
+    // 引き数：コリジョン
+    // 戻り値：なし
+    private void InfluencePlayer(Collider2D collision) 
+    {
+        //collision.transform.GetComponent<CS_Player>().WindMove(m_eWindDirection, m_fWindPower);
+        //Destroy(this.gameObject);
+        m_player.WindMove(this.m_eWindDirection, this.m_fWindPower);
+        // 消えるのを早くする
+        const float lastTime = 0.25f;
+        m_nowTime = m_fDeleteTime - lastTime;
+    }
+
+    // 上方向の風を生成する
+    // 引き数：風の力
+    // 引き数：向かい風
+    // 戻り値：なし
+    private void CreateWindUpper(float windPower,CS_Wind other) 
+    {
+        // 位置と姿勢
+        Vector3 pos = this.transform.position;
+        pos += other.transform.position;
+        pos *= 0.5f;
+        Vector3 offset = new Vector3(0,-1,0);
+        Quaternion rotation = Quaternion.Euler(0,0,0);
+
+        // オブジェクト生成
+        GameObject createdWind = GameObject.Instantiate(m_objWind, pos + offset, rotation);
+
+        // 風の強さ倍率
+        const float magnification = 2.0f;
+        // 風の状態設定
         CS_Wind cswind = createdWind.GetComponent<CS_Wind>();
         cswind.WindDirection = E_WINDDIRECTION.UP;              //上向きに設定　追加：菅
-        cswind.m_fWindPower = Mathf.Abs(addPower * 2.0f);
-        cswind.enabled = true;                                  //スクリプトオフになる意味わからん
+        cswind.m_fWindPower = Mathf.Abs(windPower * magnification);
+        
+        const float UpperDeleteTime = 2.0f;
+        cswind.m_fDeleteTime = UpperDeleteTime;
+        cswind.SetCS_Player(m_player);
+
+        // コンポーネントが非アクティブになるのでTrueにしています
+        cswind.enabled = true;
         createdWind.GetComponent<BoxCollider2D>().enabled = true;
-
-        GameObject Player = GameObject.Find("Shirius");
-        if (Player != null)
-        {
-            Player.GetComponent<CS_Player>().WindMove(cswind.m_eWindDirection, cswind.m_fWindPower);
-        }
-
-        //Vector3 scale =createdWind.transform.localScale;
-        //scale.x = cswind.m_fWindPower;
-        //Debug.Log(m_fWindPower);
-        //createdWind.transform.localScale = scale;
-
+        
+        // 風を生成した
         other.m_bCreated = true;
         m_bCreated = true;
     }
-
-
 
 }

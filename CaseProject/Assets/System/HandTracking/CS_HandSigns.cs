@@ -42,6 +42,7 @@ public class CS_HandSigns : MonoBehaviour
     [SerializeField]private float m_fMaxSpeed = 100.0f;
     [SerializeField] private float m_fMinAngularSpeed = 20.0f;
     [SerializeField] private float m_fMaxAngularSpeed = 100.0f;
+    [SerializeField] public Vector3 angle;
 
     // 手のポーズ
     public enum HandPose 
@@ -79,8 +80,6 @@ public class CS_HandSigns : MonoBehaviour
     private void Start()
     {
         OnCreateWinds += NullEvent;
-        OnCreateThunders += NullEvent;
-        OnCreateRains += NullEvent;
         OnTPose += NullEvent;
     }
 
@@ -117,28 +116,34 @@ public class CS_HandSigns : MonoBehaviour
         m_HandLandmark.Clear();        
         m_vec3Forward.Clear(); 
         m_bIsLeftHandList.Clear();
-        foreach(Transform child in parentTransform) 
-        {
-            // 子オブジェから手の情報を探す
-            HandLandmarkListAnnotation hand = child.GetComponent<HandLandmarkListAnnotation>();
-            if (!hand) continue;// 取得できなかった
-
-            // 手の情報を設定する
-            m_HandLandmark.Add(hand);
-
-            if (m_vec3MoveDistanceList.Count <= i) m_vec3MoveDistanceList.Add(new List<Vector3>());
-            if (m_vec3AngularList.Count <= i) m_vec3AngularList.Add(new List<Vector3>());
-            bool LeftSide = false;
-            // 前方向を設定
-            m_vec3Forward.Add(GetForward(i,ref LeftSide));
-            m_bIsLeftHandList.Add(LeftSide);
-
-            // リストに追加
-            AddHandPointList(m_HandLandmark[i].GetLandmarkList(), i);
-            AddHandAngularList(m_HandLandmark[i].GetLandmarkList(), i);
-            i++;
-        }
+        foreach (Transform child in parentTransform) SetLists(child,ref i);
         return;
+    }
+
+    // 取得した値を変数に設定する関数
+    // 引き数：トランスフォーム
+    // 引き数：ループ回数
+    // 戻り値：なし
+    private void SetLists(Transform child,ref int num) 
+    {
+        // 子オブジェから手の情報を探す
+        HandLandmarkListAnnotation hand = child.GetComponent<HandLandmarkListAnnotation>();
+        if (!hand) return;// 取得できなかった
+
+        // 手の情報を設定する
+        m_HandLandmark.Add(hand);
+
+        if (m_vec3MoveDistanceList.Count <= num) m_vec3MoveDistanceList.Add(new List<Vector3>());
+        if (m_vec3AngularList.Count <= num) m_vec3AngularList.Add(new List<Vector3>());
+        bool LeftSide = false;
+        // 前方向を設定
+        m_vec3Forward.Add(GetForward(num, ref LeftSide));
+        m_bIsLeftHandList.Add(LeftSide);
+
+        // リストに追加
+        AddHandPointList(m_HandLandmark[num].GetLandmarkList(), num);
+        AddHandAngularList(m_HandLandmark[num].GetLandmarkList(), num);
+        num++;
     }
 
     // 手のポイントリストに追加する
@@ -170,10 +175,9 @@ public class CS_HandSigns : MonoBehaviour
         Vector3 handDir = point[9].transform.position;
         handDir -= point[0].transform.position;
         handDir.Normalize();
-
+        
         // リストに追加
-        moveVecList.Insert(0, Quaternion.LookRotation(m_vec3Forward[handNum], handDir).ToEulerAngles());
-
+        moveVecList.Insert(0, Quaternion.LookRotation(m_vec3Forward[handNum], handDir).eulerAngles);
         // リストが多くなった分消す
         for (int i = moveVecList.Count - 1; i >= m_nListMaxNum; i--) moveVecList.RemoveAt(i);
     }
@@ -194,6 +198,7 @@ public class CS_HandSigns : MonoBehaviour
 
             // 手の回転速度
             Vector3 vec = GetHandMovement(i);
+
             // 風の生成
             if (IsCreateWind(i, vec)) CreateWind(i, vec);
         }
@@ -237,8 +242,19 @@ public class CS_HandSigns : MonoBehaviour
     {
         Vector3 move = new Vector3(0, 0, 0);
         List<Vector3> moveVecList = m_vec3MoveDistanceList[handNum];
+        
         // 移動距離の合計
-        for (int i = 0; i < moveVecList.Count - 1; i++) move += moveVecList[i] - moveVecList[i + 1];
+        for (int i = 0; i < moveVecList.Count - 1; i++) move += LimitMovement(moveVecList[i] - moveVecList[i + 1]);
+        return move;
+    }
+
+    // 異常な移動量を判断する関数
+    // 引き数：距離
+    // 戻り値：異常ならゼロを返す
+    public Vector3 LimitMovement(Vector3 move) 
+    {
+        const float limit = 10.0f;
+        if (move.magnitude > limit) { return Vector3.zero; }
         return move;
     }
     // 手の動きを取得
@@ -281,30 +297,42 @@ public class CS_HandSigns : MonoBehaviour
         // 手がパーでないなら_false
         if (!isPaperSign) return false;
 
-        // 手のひらの方向と移動した方向が一緒か
-        bool isPositiveX = move.x >= 0;
-        bool isPalmDireciton = (m_bIsLeftHandList[handNum] && isPositiveX) || ((!m_bIsLeftHandList[handNum] && !isPositiveX));
-        
-        // 手のひらの向きの判定
-        float yaw = m_vec3AngularList[handNum][0].y;
-        const float Under = Mathf.Deg2Rad * 20.0f;
-        const float Top = Mathf.Deg2Rad * 160.0f;
-        bool isPositive = yaw > Under && yaw < Top;
-        bool isNegative = yaw < -Under && yaw > -Top;
-        bool isWithin = isNegative || isPositive;
-
-        bool isHandMove = IsMoving(move) && isPalmDireciton && isWithin;
-
         // 回転量を取得
         float Pitch = GetHandAngularSpeed(handNum).x;
-        if (!isHandMove && !IsBeckoning(Pitch)) return false;
-        
-        
+        if (!IsHandMovement(handNum,move) && !IsRotate(Pitch)) return false;
+                        
         // 移動距離リストのリセット
         moveVecList.Clear();
 
         return true;
     }
+    private bool IsHandMovement(int handNum,Vector3 move) 
+    {
+        // 手のひらの方向と移動した方向が一緒か
+        bool isPositiveX = move.x >= 0;
+        bool isPalmDirection = (m_bIsLeftHandList[handNum] && isPositiveX) || ((!m_bIsLeftHandList[handNum] && !isPositiveX));
+        if(!isPalmDirection)return false;
+
+        // 手のひらの向きの判定
+        float yaw = m_vec3AngularList[handNum][0].y;
+        if(!IsPalmFacingSideways(yaw))return false;
+        // 動いたか
+        if(!IsMoving(move))return false;
+        
+        return true;
+    }
+    // 手のひらが横を向いているか
+    // 引き数：ヨー
+    // 戻り値：向いているならTrue
+    private bool IsPalmFacingSideways(float yaw) 
+    {
+        const float Under = Mathf.Deg2Rad * 60.0f;
+        const float Top = Mathf.Deg2Rad * 120.0f;
+        bool isPositive = yaw > Under && yaw < Top;
+        bool isNegative = yaw < -Under && yaw > -Top;
+        return isNegative || isPositive;
+    }
+
     // 動いたか
     // 引き数：移動距離
     // 戻り値：動いたなら true
@@ -316,14 +344,17 @@ public class CS_HandSigns : MonoBehaviour
         if (move.magnitude < m_fMinSpeed) return false; 
         return true;
     }
-
-
-    private bool IsBeckoning(float move) 
+    
+    // 回転したか
+    // 引き数：回転量
+    // 戻り値：一定量回転したなら true
+    private bool IsRotate(float move) 
     {
         // 最低移動距離を越えたら_false
-        if (move > m_fMaxAngularSpeed * Mathf.Deg2Rad) return false;
+        if (move > m_fMaxAngularSpeed ) return false;
         // 最大移動距離を越えなかったら_false
-        if (move < m_fMinAngularSpeed * Mathf.Deg2Rad) return false;
+        if (move < m_fMinAngularSpeed ) return false;
+        
         return true;
     }
 
@@ -335,91 +366,17 @@ public class CS_HandSigns : MonoBehaviour
     {
         // 風生成位置
         Vector3 position = m_HandLandmark[handNum][5].transform.position;
-        float Pitch = GetHandAngularSpeed(handNum).x;
+
+        Vector3 offset = m_vec3Forward[handNum];
+        const float value = 1.5f;
+        offset *= value;
+        // 倍率
+        const float magnification = 0.1f;
+        float Pitch = GetHandAngularSpeed(handNum).x * magnification;
         Vector3 dir = new Vector3(-1, 0, 0) *Pitch;
         if (m_bIsLeftHandList[handNum]) dir*=-1;
         // 風生成イベントの発行
-        OnCreateWinds(position, windVec + dir);
-    }
-
-    // 雷を生成する条件の関数
-    // 引数：右手か左手か
-    // 引数：移動距離
-    // 戻り値：生成する true しない false
-    private bool IsCreateThunder(int handNum,Vector3 move)
-    {
-        List<Vector3> moveVecList = m_vec3MoveDistanceList[handNum];
-        
-        // 最低移動距離を越えたら_false
-        bool isOverMoveDistance = move.magnitude > m_fMaxSpeed;
-        if (isOverMoveDistance) return false;
-
-        // 最大移動距離を越えなかったら_false
-        bool isUnderMoveDistance = move.magnitude < m_fMinSpeed;
-        if (isUnderMoveDistance) return false;
-
-        // 動いた方向
-        Vector3 moveN = Vector3.Normalize(move);
-        bool isSwingDown = moveN.y < 0;
-        // 振り落としてないなら_false
-        if (!isSwingDown) return false;
-
-        // 手がグーか
-        bool isRockSign = GetHandPose(handNum) == (byte)HandPose.RockSign;
-
-        // 手がグーでないなら_false
-        if (!isRockSign) return false;
-
-        // 移動距離リストのリセット
-        moveVecList.Clear();
-
-        return true;
-    }
-
-    // 雷生成イベントを発行する関数
-    // 引数：右手か左手か
-    // 引数：方向
-    // 戻り値：なし
-    private void CreateThunder(int  handNum,Vector3 vec) 
-    {
-        // 手の位置
-        Vector3 pos = m_HandLandmark[handNum][9].transform.position;
-        OnCreateThunders(pos,vec);
-    }
-
-    // 雨を生成する条件関数
-    // 引数：右手か左手か
-    // 引数：動いた距離
-    // 戻り値：生成する true しない false
-    private bool IsCreateRain(int handNum, Vector3 move)
-    {
-        List<Vector3> moveVecList = m_vec3MoveDistanceList[handNum];
-        
-        // 最低移動距離を越えたら_false
-        bool isOverMoveDistance = move.magnitude < m_fMinSpeed;
-        if (!isOverMoveDistance) return false;
-
-        // 手がパーか
-        bool isPaperSign = GetHandPose(handNum) == (byte)HandPose.PaperSign;
-
-        // 手がパーでないなら_false
-        if (!isPaperSign) return false;
-
-        return true;
-    }
-    
-    // 雨生成イベントを発行する関数
-    // 引数：右手か左手か
-    // 引数：方向
-    // 戻り値：なし
-    private void CreateRain(int handNum, Vector3 vec)
-    {
-        // 手のひらで真ん中の位置
-        Vector3 pos = m_HandLandmark[handNum][9].transform.position;
-        pos += m_HandLandmark[handNum][0].transform.position;
-        pos *= 0.5f;
-
-        OnCreateRains(pos, vec);
+        OnCreateWinds(position + offset, windVec + dir);
     }
 
     // 両手でTポーズをしているか条件関数

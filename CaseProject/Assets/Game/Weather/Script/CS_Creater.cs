@@ -12,7 +12,7 @@ public class CS_Creater : MonoBehaviour
    
     [Header("風の設定")]
     [SerializeField] private GameObject m_objWind;         // 生成物
-    [SerializeField] private float m_fWindPower = 1;       // 強さの倍率
+    [SerializeField] private float m_fWindPowerMagnification = 1;       // 強さの倍率
 
     [SerializeField, Header("Playerscript")]
     private CS_Player m_player;                            // プレイヤーのscript 追加：菅
@@ -21,7 +21,7 @@ public class CS_Creater : MonoBehaviour
     private void Start()
     {
         // イベント設定
-        CS_HandSigns.OnCreateWinds += CreateWind;
+        CS_HandSigns.OnCreateWinds += CreateWinds;
 
         if (!m_player) { Debug.LogWarning("Playerのscriptが設定されていません"); }
 
@@ -30,6 +30,26 @@ public class CS_Creater : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+    }
+    
+    private void CreateWinds(Vector3 position, Vector3 direction) 
+    {
+        Vector3 pos = position;
+        pos.z = 0;
+        Vector3 dir = direction;
+        dir.y = 0;
+        dir.Normalize();
+
+        // 方向の設定
+        Quaternion rotation = Quaternion.identity;
+        // 風の生成
+        GameObject obj = GameObject.Instantiate(m_objWind, pos, rotation);
+        CS_Wind cswind = obj.GetComponent<CS_Wind>();  //風のスクリプト取得
+        cswind.WindDirection = dir.x > 0 ? CS_Wind.E_WINDDIRECTION.LEFT : CS_Wind.E_WINDDIRECTION.RIGHT; //風の向き設定　追加：菅眞心
+        cswind.WindPower = direction.magnitude * m_fWindPowerMagnification;
+        cswind.SetCameraPos = this.transform.position;
+        cswind.DeleteFlag = true;
+        cswind.SetCS_Player(m_player);
     }
 
     // 風の生成する関数（購読 subscribe）
@@ -59,7 +79,7 @@ public class CS_Creater : MonoBehaviour
         //obj.transform.localScale = scale;
 
         //風の力から風オブジェクトの数を決定
-        int nWindObjNum = (int)((direction.magnitude * m_fWindPower * dir.x) / 10) - 1;
+        int nWindObjNum = (int)((direction.magnitude * m_fWindPowerMagnification * dir.x) / 10) - 1;
         nWindObjNum = Mathf.Abs(nWindObjNum);
         float fWindX = pos.x;
 
@@ -73,7 +93,7 @@ public class CS_Creater : MonoBehaviour
             GameObject windobj = Instantiate(m_objWind, Pos, rotation);
             CS_Wind cswind = windobj.GetComponent<CS_Wind>();  //風のスクリプト取得
             cswind.WindDirection = dir.x > 0 ? CS_Wind.E_WINDDIRECTION.LEFT : CS_Wind.E_WINDDIRECTION.RIGHT; //風の向き設定　追加：菅眞心
-            cswind.WindPower = direction.magnitude * m_fWindPower * dir.x;
+            cswind.WindPower = direction.magnitude * m_fWindPowerMagnification * dir.x;
             cswind.SetCameraPos = this.transform.position;
             cswind.DeleteFlag = true;
 
@@ -93,12 +113,12 @@ public class CS_Creater : MonoBehaviour
 
         CS_Wind cs_wind = obj.GetComponent<CS_Wind>();  //風のスクリプト取得
         cs_wind.WindDirection = dir.x > 0 ? CS_Wind.E_WINDDIRECTION.LEFT : CS_Wind.E_WINDDIRECTION.RIGHT;　//風の向き設定　追加：菅眞心
-        cs_wind.WindPower = direction.magnitude * m_fWindPower * dir.x;
+        cs_wind.WindPower = direction.magnitude * m_fWindPowerMagnification * dir.x;
         cs_wind.SetCameraPos = this.transform.position;
         cs_wind.DeleteFlag = true;
 
         //プレイヤーの移動関数を直接呼び出し
-        float windpower = direction.magnitude * m_fWindPower * dir.x;
+        float windpower = direction.magnitude * m_fWindPowerMagnification * dir.x;
         windpower = Mathf.Abs(windpower);
         m_player.WindMove(cs_wind.WindDirection, windpower);
 
