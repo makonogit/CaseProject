@@ -31,9 +31,6 @@ public class CS_OpenBook : MonoBehaviour
         // 現在のAnimatorStateInfoを取得
         AnimatorStateInfo stateInfo = m_animator.GetCurrentAnimatorStateInfo(0);
 
-       
-        Debug.Log("openBook?: " + stateInfo.IsName("AC_OpenBook"));
-        Debug.Log("アニメーション進行度: " + stateInfo.normalizedTime);
         // アニメーションが終了したかどうかをチェック
         bool isAnimationFinish = stateInfo.IsName("AC_OpenBook") && stateInfo.normalizedTime >= 0.9f;
         if(!isAnimationFinish) { return; }

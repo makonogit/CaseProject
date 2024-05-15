@@ -42,7 +42,7 @@ public class CS_PageTurning : MonoBehaviour
     //ページめくりのアニメーションを発動
     private void PageTurningAnimation()
     {
-        if (GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("pageTurningAnim")) { return; }
+        //if (GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("AM_PageTurning")) { return; }
         GetComponent<Animator>().SetTrigger("pageTurningAnim");
     }
 
@@ -50,9 +50,7 @@ public class CS_PageTurning : MonoBehaviour
     void PageTurning(Vector3 _position, Vector3 _direction)
     {
         bool isFlip = (_direction.x < 0.0f && !isFacingRight) || (_direction.x > 0.0f && isFacingRight);
-
-        Debug.Log("左右方向" + _direction.x);
-
+        
         if (isFlip) { Flip(); }
         PageTurningAnimation();//アニメーション実行
     }
