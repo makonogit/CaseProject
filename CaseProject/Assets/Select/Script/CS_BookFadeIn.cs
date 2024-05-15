@@ -15,22 +15,13 @@ public class CS_BookFadeIn : MonoBehaviour
     private float m_currentAlpha = 0f;
     private float m_fadeTimer = 0f;
 
-
-
-    [SerializeField, Header("本のTransForm")]
-    private Transform m_tBockTrans;
-
-    [SerializeField, Header("本の移動速度")]
-    private float m_fMoveSpeed = 1.0f;
-    [SerializeField, Header("本の最大移動量")]
-    private float m_fMaxMove = 2.0f;
-
-    private float m_fMove = 0.0f;   //本の移動量
-
     [SerializeField, Header("TitleLogoのSpriteRenderer")]
     private SpriteRenderer m_TitileRenderer;
 
     private float m_fTitleLogoAlpha = 1.0f;
+
+    [SerializeField, Header("turning用本")]
+    private GameObject m_turningBook; //フェード後開いた状態の本
 
     // Start is called before the first frame update
     void Start()
@@ -43,8 +34,9 @@ public class CS_BookFadeIn : MonoBehaviour
         
         m_sRenderer.color = new Color(m_sRenderer.color.r, m_sRenderer.color.g, m_sRenderer.color.b, 0f); // 最初は透明にする
 
-        if (!m_tBockTrans) { Debug.LogWarning("本のTransFormが設定されていません"); }
-
+       
+        if(!m_turningBook) { Debug.LogWarning("ページめくり用の本のGameObjectが設定されていません"); }
+        m_turningBook.SetActive(false);
     }
 
     // Update is called once per frame
@@ -68,13 +60,10 @@ public class CS_BookFadeIn : MonoBehaviour
         }
         else
         {
-            //最大移動量に達するまで横移動(本を開くモーションの時にずらす)
-            if(m_fMove > m_fMaxMove) 
-            {
-                return; 
-            }
-            
-            //Destroy(this);
+            //本を開くスクリプトを追加
+            CS_OpenBook openBook = this.gameObject.AddComponent<CS_OpenBook>();
+            openBook.TurningBook = m_turningBook;
+            Destroy(this);
         }
 
 
