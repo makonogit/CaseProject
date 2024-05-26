@@ -28,8 +28,11 @@ public class CS_Player : MonoBehaviour
     [SerializeField, Header("移動速度")]
     private float m_fMoveSpeed = 1.0f;
 
+    [SerializeField, Header("Effect表示用オブジェクトTransform")]
+    private Transform m_tEffectTrans;
 
-
+    [SerializeField, Header("エフェクト表示用Animator")]
+    private Animator m_aEffectAnim;
 
     //--------------------
     //　手の動く処理用
@@ -50,6 +53,8 @@ public class CS_Player : MonoBehaviour
         if (!m_rThisRigidbody) Debug.LogWarning("シリウスのRigidBodyが設定されていません");
         if (!m_tHandTrans) Debug.LogWarning("シリウスの手のTransFormが設定されていません");
         if (!m_aThisAnimator) Debug.LogWarning("シリウスのAnimatorが設定されていません");
+        if (!m_tEffectTrans) Debug.LogWarning("EffectオブジェクトのTransformが設定されていません");
+        if (!m_aEffectAnim) Debug.LogWarning("Effect用のAnimatorが設定されていません");
 
         m_fStartHeight = m_tThisTrans.position.y;   // 開始時の高さ
     }
@@ -89,6 +94,10 @@ public class CS_Player : MonoBehaviour
         //m_v3DestinationPos = m_tThisTrans.position - (knockbackdirection * knockbackpower);
 
         //m_tThisTrans.position = m_v3DestinationPos;
+
+        //Effect発火(衝突した位置で再生)
+        m_tEffectTrans.position = new Vector3(m_tThisTrans.position.x + knockbackdirection.x, m_tThisTrans.position.y + knockbackdirection.y, 0.0f);
+        m_aEffectAnim.SetTrigger("Damage"); //ダメージAnimationを再生
 
         m_rThisRigidbody.AddForce(m_tThisTrans.position - (knockbackdirection * knockbackpower));
 
@@ -132,6 +141,7 @@ public class CS_Player : MonoBehaviour
                 break;
         }
 
+        Debug.Log("力のくわえる向き" + Direction * windpower);
         m_rThisRigidbody.AddForce(Direction * windpower, ForceMode2D.Force);
 
     }
@@ -143,6 +153,7 @@ public class CS_Player : MonoBehaviour
     private void OnGoal()
     {
         //アニメーション再生
+        m_aThisAnimator.SetTrigger("Gole");
     }
 
 

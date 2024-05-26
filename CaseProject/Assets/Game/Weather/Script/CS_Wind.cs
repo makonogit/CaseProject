@@ -18,8 +18,7 @@ public class CS_Wind : MonoBehaviour
     [SerializeField]private bool m_bDelete = true;
     [SerializeField]private float m_fDeleteTime = 3.0f;
 
-    private bool m_IsWindEnd = false;   //風の端かどうか
-    
+ 
     [SerializeField, Header("Animator")]
     private Animator m_ThisAnim;
 
@@ -77,11 +76,6 @@ public class CS_Wind : MonoBehaviour
         set { m_vec3CameraPos = value; }
     }
 
-    public bool IsWindEnd
-    {
-        set { m_IsWindEnd = value; }
-    }
-
     // CS_Playerを設定する関数
     // 引き数：CS_Player
     // 戻り値：ない
@@ -94,17 +88,17 @@ public class CS_Wind : MonoBehaviour
     void Start()
     {
         m_bCreated =false;
-
-        //終端だったらアニメーションを再生
-        if (m_IsWindEnd) { this.GetComponent<Animator>().SetBool("End", true); }
-
+        //風のアニメーション初期化
+        m_ThisAnim.SetFloat("Power", 0.0f);
         //    if (!m_player) { Debug.LogWarning("Playerのscriptが設定されていません"); }
         //    //プレイヤーの移動関数を直接呼び出し
         //    m_player.WindMove(m_eWindDirection, m_fWindPower);
 
-        Debug.Log(m_eWindDirection);
+        Debug.Log("風の強さ" + m_fWindPower);
 
         if (m_eWindDirection == E_WINDDIRECTION.UP) { m_ThisAnim.SetBool("Up", true); }
+        else { m_ThisAnim.SetFloat("Power", m_fWindPower); }
+       
 
     }
 

@@ -13,6 +13,7 @@ public class CS_SceneManager : MonoBehaviour
     public enum SCENE
     {
         TITLE,  //タイトル
+        SELECT, //セレクト
         GAME,   //ゲーム
         POSE,   //ポーズ
         RESULT  //リザルト
@@ -20,6 +21,9 @@ public class CS_SceneManager : MonoBehaviour
     
     [SerializeField,Header("NowLoadingオブジェクト")]
     private GameObject m_LoadingScreen; //NowLoading表示用
+
+    [SerializeField, Header("StageDataスクリプト")]
+    private CS_StageData m_csStagedata;    
 
     //クリア状況管理用
     private Dictionary<int, bool> StageClearData = new Dictionary<int, bool>();
@@ -31,7 +35,7 @@ public class CS_SceneManager : MonoBehaviour
    
     //シーン読み込み関数
     //引数：Scene定数
-    private IEnumerator LoadScene(SCENE _scene)
+    public IEnumerator LoadingScene(SCENE _scene)
     {
 
         if (!m_LoadingScreen)
@@ -74,15 +78,56 @@ public class CS_SceneManager : MonoBehaviour
         //読み込み完了
         if (asyncLoad.isDone)
         {
+            if(_scene == SCENE.GAME)
+            {
+                //登録されたステージオブジェクトを生成
+                GameObject StageObj = m_csStagedata.m_Worlds[StageInfo.World].Stagedata[StageInfo.Stage].m_gStagePrefab;
+                if (!StageObj) { Debug.LogWarning("ステージオブジェクトが登録されていません"); }
+                Instantiate(StageObj);
+                //m_csStagegata.
+            }
+
             Debug.Log("シーンの読み込みが完了しました。");
         }
 
     }
 
+    //-------------------------
+    //シーン読み込み関数
+    //引数：Scene定数
+    //-------------------------
+    public void LoadScene(SCENE _scene)
+    {
+        SceneManager.LoadScene((int)_scene);
+    }
+
+
+    //-------------------------------------
+    //一番最初に実行される関数
+    //ゲームシーンだった場合に処理
+    //-------------------------------------
+    private void Awake()
+    {
+        int SceneNum = SceneManager.GetActiveScene().buildIndex;
+
+        Debug.Log("World" + StageInfo.World + "Stage" + StageInfo.Stage);
+
+        //現在のシーンがゲームだったらステージを生成
+        if((SCENE)SceneNum == SCENE.GAME)
+        {
+            //登録されたステージオブジェクトを生成
+            GameObject StageObj = m_csStagedata.m_Worlds[StageInfo.World].Stagedata[StageInfo.Stage].m_gStagePrefab;
+            if (!StageObj) { Debug.LogWarning("ステージオブジェクトが登録されていません"); }
+            Instantiate(StageObj);
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        //LoadScene(SCENE.GAME);
+        //Debug.Log("よみこみ");
+
     }
 
     // Update is called once per frame

@@ -102,11 +102,6 @@ public class CS_Creater : MonoBehaviour
                 windobj.transform.localScale = new Vector3(windobj.transform.localScale.x * -1, windobj.transform.localScale.y, 1.0f);
             }
 
-            if (nWindObjNum == 1) 
-            {
-                cswind.IsWindEnd = true;
-            }
-
             nWindObjNum--;
 
         }
@@ -120,6 +115,7 @@ public class CS_Creater : MonoBehaviour
         //プレイヤーの移動関数を直接呼び出し
         float windpower = direction.magnitude * m_fWindPowerMagnification * dir.x;
         windpower = Mathf.Abs(windpower);
+
         m_player.WindMove(cs_wind.WindDirection, windpower);
 
     }

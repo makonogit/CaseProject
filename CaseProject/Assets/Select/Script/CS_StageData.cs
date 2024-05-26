@@ -5,6 +5,44 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public class CS_StageData : MonoBehaviour
+{
+    [Header("ステージデータ")]
+    public List<World> m_Worlds;
+
+    private int m_nMaxWorld = 0;    //ワールド最大数
+    private int m_nMaxStage = 0;    //ステージ最大数
+
+    private void Start()
+    {
+        //ワールド最大数の保存
+        m_nMaxWorld = m_Worlds.Count;
+        m_nMaxStage = m_Worlds[0].Stagedata.Count;
+    }
+
+    //ステージ情報Getter,Setter
+    public int WORLDMAX
+    {
+        get
+        {
+            return m_nMaxWorld;
+        }
+    }
+
+    public int STAGEMAX
+    {
+        get
+        {
+            return m_nMaxStage;
+        }
+        set
+        {
+            m_nMaxStage = value;
+        }
+    }
+}
+
 //-----------------------------------------------
 //ステージデータクラス
 //-----------------------------------------------
@@ -35,3 +73,50 @@ public class World
 }
 
 
+//-----------------------------------------------
+//ステージ情報参照用クラス(シーン間の変数やり取り)
+//-----------------------------------------------
+public static class StageInfo
+{
+    [Header("ワールド番号")]
+    public static int m_nWorldNum = 0;
+    [Header("ステージ番号")]
+    public static int m_nStageNum = 0;
+
+    //-------------------------------------
+    // ステージデータセット関数
+    // 引数：ワールド番号
+    // 引数：ステージ番号
+    //-------------------------------------
+    public static void SetStageData(int _worldnum,int _stagenum)
+    {
+        m_nWorldNum = _worldnum;
+        m_nStageNum = _stagenum;
+    }
+
+
+    //---------------------------------------
+    // ワールド番号Getter
+    //---------------------------------------
+    public static int World
+    {
+        get
+        {
+            return m_nWorldNum;
+        }
+    }
+
+
+    //---------------------------------------
+    // ステージ番号Getter
+    //---------------------------------------
+    public static int Stage
+    {
+        get
+        {
+            return m_nStageNum;
+        }
+       
+    }
+
+}

@@ -23,6 +23,16 @@ public class CS_CameraControl : MonoBehaviour
 
     private Camera maincamera;
 
+    //í«è]ëŒè€ÇïœçX
+    public GameObject TARGET
+    {
+        set
+        {
+            m_TargetObj = value;
+            m_tTargetTrans = value.transform;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -57,4 +67,6 @@ public class CS_CameraControl : MonoBehaviour
         m_tThisTrans.position = ClampPosition;
         
     }
+
+    
 }

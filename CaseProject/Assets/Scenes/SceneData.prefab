@@ -1,0 +1,95 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1229748163169395982
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7097079805158438048}
+  - component: {fileID: 1125017563361429419}
+  - component: {fileID: 7775650760880829634}
+  - component: {fileID: -6654694060985642223}
+  m_Layer: 0
+  m_Name: SceneData
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7097079805158438048
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1229748163169395982}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -10.701083, y: 31.429216, z: 85.47803}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1125017563361429419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1229748163169395982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad3a2002af62b9246aabd804d9d54d56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_LoadingScreen: {fileID: 0}
+  m_csStagedata: {fileID: 7775650760880829634}
+  m_fLoadWaitTime: 1000
+--- !u!114 &7775650760880829634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1229748163169395982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c356005849e6f8408961adfbdc1c91c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Worlds:
+  - Stagedata:
+    - m_gSelectStagePrefab: {fileID: 5349740809235748235, guid: fed2e73dd1ecbe941b957e3697f25500, type: 3}
+      m_gStagePrefab: {fileID: 5349740809235748235, guid: fc403e367e0996c429930967864c46da, type: 3}
+    - m_gSelectStagePrefab: {fileID: 5349740809235748235, guid: 82385c20ad72b5b40a4bc214f4628222, type: 3}
+      m_gStagePrefab: {fileID: 5349740809235748235, guid: cf6e3282189d0a046977057a1d4ee544, type: 3}
+    - m_gSelectStagePrefab: {fileID: 5349740809235748235, guid: 3b61587a648cd6c448172c29036cddaa, type: 3}
+      m_gStagePrefab: {fileID: 5349740809235748235, guid: 75968f7dfee2afb47b9b3a86cca7483b, type: 3}
+    - m_gSelectStagePrefab: {fileID: 5349740809235748235, guid: 264dc3d482265fb4b8d379b2ca131792, type: 3}
+      m_gStagePrefab: {fileID: 5349740809235748235, guid: 89b756a25500ebb4683b9a8ea2cddbb6, type: 3}
+    - m_gSelectStagePrefab: {fileID: 5349740809235748235, guid: 85dd84521bcf5d147b4a26bc59230955, type: 3}
+      m_gStagePrefab: {fileID: 5349740809235748235, guid: 291b310c6203cbd4d889661d77fa0b80, type: 3}
+  - Stagedata: []
+  - Stagedata: []
+  - Stagedata: []
+  - Stagedata: []
+--- !u!114 &-6654694060985642223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1229748163169395982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62f6ea0be942e3d44bd658e119b7debb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nNowWorldNum: 1
+  m_nNowStageNum: 1
+  m_csStageData: {fileID: 0}
+  m_csSceneManager: {fileID: 0}

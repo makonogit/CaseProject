@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 
+using UnityEngine.SceneManagement;  //一旦直接SceneManagerを使用
+
 public class CS_IsGoal : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -16,6 +18,15 @@ public class CS_IsGoal : MonoBehaviour
 
     [SerializeField, Header("プレイヤーのTransform")]
     private Transform m_tPlayerTrans;
+
+    [SerializeField, Header("プレイヤーのRigidbody")]
+    private Rigidbody2D m_rPlayerRigid;
+
+    [SerializeField, Header("星の子TransForm")]
+    private Transform m_tStarChild;
+
+    [SerializeField, Header("カメラ制御スクリプト")]
+    private CS_CameraControl m_csCamCtrl;
 
     [SerializeField, Header("ゴール移動速度")]
     private float m_fGoalSpeed = 0.1f;
@@ -27,6 +38,9 @@ public class CS_IsGoal : MonoBehaviour
         
         if (!m_tGoleTrans) { Debug.LogWarning("ゴールTransformが設定されていません"); }
         if (!m_tPlayerTrans) { Debug.LogWarning("プレイヤーTransaformが設定されていません"); }
+        if (!m_rPlayerRigid) { Debug.LogWarning("プレイヤーのRigidBodyが設定されていません"); }
+        if (!m_tStarChild) Debug.LogWarning("星の子Transformが設定されていません");
+        if (!m_csCamCtrl) { Debug.LogWarning("カメラ制御スクリプトが設定されていません"); }
 
     }
 
@@ -41,12 +55,17 @@ public class CS_IsGoal : MonoBehaviour
         //if (m_tPlayerTrans.localScale != m_tPlayerTrans.localScale) { return; }
 
         //ゴール座標まで移動
-        m_tPlayerTrans.position = Vector3.MoveTowards(m_tPlayerTrans.position, m_tGoleTrans.position, m_fGoalSpeed * Time.deltaTime);
+        m_tStarChild.position = Vector3.MoveTowards(m_tStarChild.position, m_tGoleTrans.position, m_fGoalSpeed * Time.deltaTime);
 
         //ゴールの星と同じようにスケール縮小
-        m_tPlayerTrans.localScale = Vector3.MoveTowards(m_tPlayerTrans.localScale, m_tGoleTrans.localScale, m_fGoalSpeed / 2 * Time.deltaTime);
+        m_tStarChild.localScale = Vector3.MoveTowards(m_tStarChild.localScale,/* m_tGoleTrans.localScale*/Vector3.zero, m_fGoalSpeed / 10 * Time.deltaTime);
 
-
+        //目的地に達したらシーン遷移
+        if (m_tPlayerTrans.position == m_tGoleTrans.position) 
+        {
+            SceneManager.LoadScene("SelectScene");
+            return; 
+        }
     }
 
     //--------------------------------------------
@@ -80,6 +99,11 @@ public class CS_IsGoal : MonoBehaviour
             //SceneManager.LoadScene("Result");
 
             Debug.Log("ゴール");
+
+            m_csCamCtrl.TARGET = m_tStarChild.gameObject;
+
+            //重力を無効
+            m_rPlayerRigid.constraints = RigidbodyConstraints2D.FreezeAll;
 
             //ゴール判定
             m_IsGoal = true;
