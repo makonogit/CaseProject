@@ -11,12 +11,11 @@ public class CS_ExplosionEffect : MonoBehaviour
     [SerializeField, Header("爆発アニメーションのトリガー名")]
     private string m_triggerName;
 
-
     private bool isExplotion = false;
     // Start is called before the first frame update
     void Start()
     {
-        
+        GetComponent<SpriteRenderer>().enabled = false;
     }
 
     // Update is called once per frame
@@ -35,14 +34,22 @@ public class CS_ExplosionEffect : MonoBehaviour
     }
      
    
-    private void OnCollisionEnter2D(Collision2D collision)
+    public void StartExplosion()
     {
-        //当たったのがプレイヤータグ？
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            Debug.Log("プレイヤーが当たった");
-            GetComponent<Animator>().SetTrigger(m_triggerName);//アニメーション再生
-            isExplotion = true;
-        }
+        GetComponent<SpriteRenderer>().enabled = true;
+        GetComponent<Animator>().SetTrigger(m_triggerName);//アニメーション再生
+        isExplotion = true;
+        Debug.Log("爆発開始");
     }
+
+    //private void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    //当たったのがプレイヤータグ？
+    //    if (collision.gameObject.CompareTag("Player"))
+    //    {
+    //        Debug.Log("プレイヤーが当たった");
+    //        GetComponent<Animator>().SetTrigger(m_triggerName);//アニメーション再生
+    //        isExplotion = true;
+    //    }
+    //}
 }

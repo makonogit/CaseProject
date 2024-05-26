@@ -44,6 +44,13 @@ public class CS_TwinsStar : MonoBehaviour
     void Start()
     {
         m_initialPosition = m_twinsObject[0].transform.localPosition;
+
+        //ëoéqÇÃOrderInLayerÇê›íË
+        SpriteRenderer spriteRenderer0 = m_twinsObject[0].GetComponent<SpriteRenderer>();
+        SpriteRenderer spriteRenderer1 = m_twinsObject[1].GetComponent<SpriteRenderer>();
+        int fingerOrder = m_srFinger.sortingOrder;
+        spriteRenderer0.sortingOrder = fingerOrder - 1;
+        spriteRenderer1.sortingOrder = fingerOrder - 2;
     }
 
     // Update is called once per frame
