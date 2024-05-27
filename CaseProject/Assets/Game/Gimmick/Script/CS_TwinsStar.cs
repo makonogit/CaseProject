@@ -22,15 +22,40 @@ public class CS_TwinsStar : MonoBehaviour
     [SerializeField, Header("スピード")]
     private float m_fSpeed = 1.0f;  //移動スピード
 
+    [SerializeField, Header("ジャンプ力の+補正値")]
+    private float m_fJumpPlusPower = 0.0f;
+    [SerializeField, Header("ジャンプ力の-補正値")]
+    private float m_fJumpMinusPower = 0.0f;
+
     private Vector3 m_initialPosition;//初期位置
     private float m_fElapsedTime = 0.0f;//経過時間
 
-   
+    private Rigidbody2D m_rb;//リジッドボディ
+    private Vector3 m_prevVelocity;
+
     private Vector3 m_prevPosition;
 
     private int m_nNowStar = 0;//現在動いている星番号
 
     bool m_isMoveingStar = true;
+
+
+
+    //ジャンプの補正値を取得
+    public float JumpPower
+    {
+        get
+        {
+            if (m_nNowStar == 0)
+            {
+                return m_fJumpPlusPower;
+            }
+            else
+            {
+                return -m_fJumpPlusPower;
+            }
+        }
+    }
 
     public bool IsMoveingStar
     {
@@ -51,11 +76,17 @@ public class CS_TwinsStar : MonoBehaviour
         int fingerOrder = m_srFinger.sortingOrder;
         spriteRenderer0.sortingOrder = fingerOrder - 1;
         spriteRenderer1.sortingOrder = fingerOrder - 2;
+
+        m_rb = GetComponent<Rigidbody2D>();
+        m_prevVelocity = m_rb.velocity;
     }
 
     // Update is called once per frame
     void Update()
     {
+        //ジャンプ補正処理
+        AddJumpPower();
+
         if (!m_isMoveingStar) { return; }
 
         // 経過時間を更新
@@ -93,6 +124,19 @@ public class CS_TwinsStar : MonoBehaviour
             m_twinsObject[m_nNowStar].transform.localPosition = m_initialPosition;
             m_isMoveingStar = false;
         }
+    }
+
+    private void AddJumpPower()
+    {
+        //前の速度より現在の速度が大きいなら力を+補正する
+        bool isAddPower = m_prevVelocity.y <= 0.0f && m_rb.velocity.y > 0.0f;
+        if (isAddPower)
+        {
+            m_rb.AddForce(Vector3.up * m_fJumpPlusPower, ForceMode2D.Impulse);
+            Debug.Log("＋補正");
+        }
+
+        m_prevVelocity = m_rb.velocity;
     }
 
     //二つの星のレイヤーを入れ替える
