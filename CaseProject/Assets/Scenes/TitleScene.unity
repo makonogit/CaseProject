@@ -206,6 +206,7 @@ MonoBehaviour:
   m_fMaxSpeed: 100
   m_fMinAngularSpeed: 20
   m_fMaxAngularSpeed: 100
+  angle: {x: 0, y: 0, z: 0}
 --- !u!114 &110111732 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: -8837774153085666347, guid: 87a9be2a7620991a78342ef9a56fa62c, type: 3}
@@ -1485,7 +1486,7 @@ Transform:
   m_GameObject: {fileID: 975604729}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
+  m_LocalScale: {x: 2.58, y: 2.58, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1316264335}
@@ -7458,7 +7459,7 @@ Transform:
   m_GameObject: {fileID: 1779492959}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
+  m_LocalScale: {x: 2.58, y: 2.58, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1316264335}

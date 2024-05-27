@@ -15,6 +15,9 @@ public class CS_PageTurning : MonoBehaviour
     [SerializeField, Header("ステージ選択スクリプト")]
     private CS_StageSelect m_csStageSelect;
 
+    [SerializeField, Header("シーンマネージャー")]
+    private CS_SceneManager m_csSceneManager;
+
     private bool isFacingRight = true;
 
     //---------------------------------------
@@ -115,5 +118,13 @@ public class CS_PageTurning : MonoBehaviour
         m_fStageAlpha += m_fStageViewSpeed * Time.deltaTime;
         m_srStageSprite.color = new Color(1.0f, 1.0f, 1.0f, m_fStageAlpha);
 
+    }
+
+    //--------------------------------
+    //　本を閉じた後の処理(シーン移動)
+    //---------------------------------
+    void CloseBook()
+    {
+        m_csSceneManager.LoadScene(CS_SceneManager.SCENE.GAME);
     }
 }

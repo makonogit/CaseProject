@@ -26,6 +26,9 @@ public class CS_StageSelect : MonoBehaviour
     [SerializeField, Header("シーンマネージャー")]
     private CS_SceneManager m_csSceneManager;
 
+    //[SerializeField, Header("タイトルロゴ")]
+    //private SpriteRenderer m_srTitleLogo;
+
     //-------------------------------------
     //　ステージを進める
     //　引数：何ステージ分更新するか(-1だったら1戻す)
@@ -59,8 +62,8 @@ public class CS_StageSelect : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //m_csSceneManager.LoadScene(CS_SceneManager.SCENE.GAME);
-
+        //ステージデータを登録
+        StageInfo.SetStageData(m_nNowWorldNum - 1, m_nNowStageNum - 1);
     }
 
     // Update is called once per frame
