@@ -31,7 +31,7 @@ public class CS_TwinsStar : MonoBehaviour
     private float m_fElapsedTime = 0.0f;//経過時間
 
     private Rigidbody2D m_rb;//リジッドボディ
-    private Vector3 m_prevVelocity;
+    private Vector3 m_prevVelocity;//前のリジッドボディの速度
 
     private Vector3 m_prevPosition;
 
