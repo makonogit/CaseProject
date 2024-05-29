@@ -42,8 +42,7 @@ public class CS_HandSigns : MonoBehaviour
     [SerializeField]private float m_fMaxSpeed = 100.0f;
     [SerializeField] private float m_fMinAngularSpeed = 20.0f;
     [SerializeField] private float m_fMaxAngularSpeed = 100.0f;
-    [SerializeField] public Vector3 angle;
-
+    
     // 手のポーズ
     public enum HandPose 
     {
@@ -308,17 +307,16 @@ public class CS_HandSigns : MonoBehaviour
     }
     private bool IsHandMovement(int handNum,Vector3 move) 
     {
+        // 手のひらの向きの判定
+        float yaw = m_vec3AngularList[handNum][0].y;
+
+        if (!IsPalmFacingSideways(yaw)) { return false; }
+        // 動いたか
+        if (!IsMoving(move)) { return false; }
         // 手のひらの方向と移動した方向が一緒か
         bool isPositiveX = move.x >= 0;
         bool isPalmDirection = (m_bIsLeftHandList[handNum] && isPositiveX) || ((!m_bIsLeftHandList[handNum] && !isPositiveX));
-        if(!isPalmDirection)return false;
-
-        // 手のひらの向きの判定
-        float yaw = m_vec3AngularList[handNum][0].y;
-        if(!IsPalmFacingSideways(yaw))return false;
-        // 動いたか
-        if(!IsMoving(move))return false;
-        
+        if (!isPalmDirection) { return false; }
         return true;
     }
     // 手のひらが横を向いているか
@@ -326,11 +324,13 @@ public class CS_HandSigns : MonoBehaviour
     // 戻り値：向いているならTrue
     private bool IsPalmFacingSideways(float yaw) 
     {
-        const float Under = Mathf.Deg2Rad * 60.0f;
-        const float Top = Mathf.Deg2Rad * 120.0f;
-        bool isPositive = yaw > Under && yaw < Top;
-        bool isNegative = yaw < -Under && yaw > -Top;
-        return isNegative || isPositive;
+        const float LeftUnder = 60.0f;
+        const float LeftTop = 120.0f;
+        const float RightUnder = 240.0f;
+        const float RightTop = 300.0f;
+        bool isRight = yaw > RightUnder && yaw < RightTop;
+        bool isLeft = yaw > LeftUnder && yaw < LeftTop;
+        return isLeft || isRight;
     }
 
     // 動いたか
