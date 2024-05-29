@@ -1,6 +1,6 @@
 //-----------------------------------------------
 //担当者：中島愛音
-//双子の処理
+//双子の処理：シリウス本体(CS_Playerがあるとこ)にアタッチ
 //-----------------------------------------------
 using System.Collections;
 using System.Collections.Generic;
@@ -8,9 +8,15 @@ using UnityEngine;
 
 public class CS_TwinsStar : MonoBehaviour
 {
-    [SerializeField, Header("双子のオブジェクト")]
+    [Header("シリウス本体(CS_Playerがあるとこ)にアタッチ")]
+
+    [Header("双子のオブジェクト")]
+    [Header("シリウスの手の子オブジェクトに双子を収める")]
+    [Header("OrderInRayerをシリウスの手>Red>Blueの順に設定")]
+    [Header("0:Red")]
+    [Header("1:Blue")]
     //星の双子オブジェクト
-    private GameObject[] m_twinsObject = new GameObject[2];
+    [SerializeField]private GameObject[] m_twinsObject = new GameObject[2];
 
     [SerializeField, Header("シリウス本体のスプライトレンダラー")]
     private SpriteRenderer m_srSubstance;
@@ -22,9 +28,11 @@ public class CS_TwinsStar : MonoBehaviour
     [SerializeField, Header("スピード")]
     private float m_fSpeed = 1.0f;  //移動スピード
 
-    [SerializeField, Header("ジャンプ力の+補正値")]
+    [SerializeField, Header("ジャンプ力の基本値")]
+    private float m_fJumpPower = 1.0f;
+    [SerializeField, Header("赤い星が動いているときのジャンプ力の+補正値")]
     private float m_fJumpPlusPower = 0.0f;
-    [SerializeField, Header("ジャンプ力の-補正値")]
+    [SerializeField, Header("青い星が動いているときのジャンプ力の-補正値")]
     private float m_fJumpMinusPower = 0.0f;
 
     private Vector3 m_initialPosition;//初期位置
@@ -42,7 +50,7 @@ public class CS_TwinsStar : MonoBehaviour
 
 
     //ジャンプの補正値を取得
-    public float JumpPower
+    public float JumpPowerCorrection
     {
         get
         {
@@ -132,8 +140,8 @@ public class CS_TwinsStar : MonoBehaviour
         bool isAddPower = m_prevVelocity.y <= 0.0f && m_rb.velocity.y > 0.0f;
         if (isAddPower)
         {
-            m_rb.AddForce(Vector3.up * m_fJumpPlusPower, ForceMode2D.Impulse);
-            Debug.Log("＋補正");
+            //基本値に補正値を足した値をRigidBodyに加算
+            m_rb.AddForce(Vector3.up *  (m_fJumpPower + JumpPowerCorrection), ForceMode2D.Impulse);
         }
 
         m_prevVelocity = m_rb.velocity;
