@@ -1967,6 +1967,90 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1093601247
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1093601248}
+  - component: {fileID: 1093601249}
+  m_Layer: 0
+  m_Name: StageInfo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1093601248
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1093601247}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.2, y: 0.4, z: 0}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1549794767}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &1093601249
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1093601247}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 3
+  m_Sprite: {fileID: 21300000, guid: 555469ebd7b09d14abeb6dbf9056af95, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 22.284407, y: 14.820001}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!114 &1172891367 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2020366215714292840, guid: 5713b959e3c77a58fb258133fc8e4aef, type: 3}
@@ -2604,7 +2688,8 @@ Transform:
   m_LocalPosition: {x: 0.31, y: 0.385, z: 0}
   m_LocalScale: {x: 2.4, y: 2.4, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1093601248}
   m_Father: {fileID: 453366336}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2677,7 +2762,7 @@ MonoBehaviour:
   m_csSceneManager: {fileID: 5041785005206771814}
   m_ABookAnimator: {fileID: 1549794771}
   m_csStageData: {fileID: 5041785005206771813}
-  m_fStageViewSpeed: 0.1
+  m_srStageInfo: {fileID: 1093601249}
 --- !u!95 &1549794771
 Animator:
   serializedVersion: 4
@@ -3289,25 +3374,85 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_Worlds.Array.data[1].Stagedata.Array.data[0].m_gStagePrefab
+      value: 
+      objectReference: {fileID: 5349740809235748235, guid: 8c1cde17299fde046b381ad4ada6b788, type: 3}
+    - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_Worlds.Array.data[1].Stagedata.Array.data[1].m_gStagePrefab
+      value: 
+      objectReference: {fileID: 5349740809235748235, guid: 460e3ab8a347b974d8dda45f9772cd09, type: 3}
+    - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_Worlds.Array.data[1].Stagedata.Array.data[2].m_gStagePrefab
+      value: 
+      objectReference: {fileID: 5349740809235748235, guid: 1917379dbb56de44dbb6a5439d10ec86, type: 3}
+    - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_Worlds.Array.data[1].Stagedata.Array.data[3].m_gStagePrefab
+      value: 
+      objectReference: {fileID: 5349740809235748235, guid: e682ed28c1b94714583859250e127ede, type: 3}
+    - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_Worlds.Array.data[1].Stagedata.Array.data[4].m_gStagePrefab
+      value: 
+      objectReference: {fileID: 5349740809235748235, guid: 3bf5e338e6a8c65418d5fe5ca9c785a8, type: 3}
+    - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
       propertyPath: m_Worlds.Array.data[0].Stagedata.Array.data[0].m_gSelectStagePrefab
       value: 
-      objectReference: {fileID: 4241871963988672458, guid: a089ebcaa05d2354c886d47264602022, type: 3}
+      objectReference: {fileID: 4241871963988672458, guid: 57eb97b43ac8ed7438e163cfc7bc618c, type: 3}
+    - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_Worlds.Array.data[0].Stagedata.Array.data[0].m_sSelectStageSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 555469ebd7b09d14abeb6dbf9056af95, type: 3}
     - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
       propertyPath: m_Worlds.Array.data[0].Stagedata.Array.data[1].m_gSelectStagePrefab
       value: 
-      objectReference: {fileID: 4241871963988672458, guid: a089ebcaa05d2354c886d47264602022, type: 3}
+      objectReference: {fileID: 4241871963988672458, guid: 439b6df7022ade8488334ee12517adf1, type: 3}
+    - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_Worlds.Array.data[0].Stagedata.Array.data[1].m_sSelectStageSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: b2dc21c89b3a5b4499b62504741d9a66, type: 3}
     - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
       propertyPath: m_Worlds.Array.data[0].Stagedata.Array.data[2].m_gSelectStagePrefab
       value: 
-      objectReference: {fileID: 4241871963988672458, guid: a089ebcaa05d2354c886d47264602022, type: 3}
+      objectReference: {fileID: 4241871963988672458, guid: cb372d0f7d0ea6a41b90566a40a737bc, type: 3}
+    - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_Worlds.Array.data[0].Stagedata.Array.data[2].m_sSelectStageSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 1ee266edd8d9e994d986e622415df8ef, type: 3}
     - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
       propertyPath: m_Worlds.Array.data[0].Stagedata.Array.data[3].m_gSelectStagePrefab
       value: 
       objectReference: {fileID: 4241871963988672458, guid: a089ebcaa05d2354c886d47264602022, type: 3}
     - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_Worlds.Array.data[0].Stagedata.Array.data[3].m_sSelectStageSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 0b2f976f29bebec48aaf34dd6aed9155, type: 3}
+    - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
       propertyPath: m_Worlds.Array.data[0].Stagedata.Array.data[4].m_gSelectStagePrefab
       value: 
-      objectReference: {fileID: 4241871963988672458, guid: a089ebcaa05d2354c886d47264602022, type: 3}
+      objectReference: {fileID: 4241871963988672458, guid: 624dd1f800b75ab40923efea9b961c66, type: 3}
+    - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_Worlds.Array.data[0].Stagedata.Array.data[4].m_sSelectStageSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 782737b822f821e4d9e3146fa545271b, type: 3}
+    - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_Worlds.Array.data[1].Stagedata.Array.data[0].m_sSelectStageSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 1008b3d2f127b1f46bf8766742966b05, type: 3}
+    - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_Worlds.Array.data[1].Stagedata.Array.data[1].m_sSelectStageSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 37bd642e69872aa4f8abe7f934cfeda2, type: 3}
+    - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_Worlds.Array.data[1].Stagedata.Array.data[2].m_sSelectStageSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 55e1e8362f362e448b95cbb96515a5ee, type: 3}
+    - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_Worlds.Array.data[1].Stagedata.Array.data[3].m_sSelectStageSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: a6d01d40984513945a17f3922b50d1a9, type: 3}
+    - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_Worlds.Array.data[1].Stagedata.Array.data[4].m_sSelectStageSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 831e91e589dd7194aa11e32dd1c1af62, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
 --- !u!114 &5041785005206771813 stripped

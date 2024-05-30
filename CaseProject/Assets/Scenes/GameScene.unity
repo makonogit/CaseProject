@@ -257,6 +257,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -6654694060985642223, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_csStageData
+      value: 
+      objectReference: {fileID: 1434887890}
+    - target: {fileID: -6654694060985642223, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_nNowStageNum
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -6654694060985642223, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_csSceneManager
+      value: 
+      objectReference: {fileID: 1434887891}
     - target: {fileID: 1229748163169395982, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
       propertyPath: m_Name
       value: SceneData
@@ -305,8 +317,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: -6654694060985642223, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+    - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_Worlds.Array.data[1].Stagedata.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
 --- !u!1001 &291914202
 PrefabInstance:
@@ -2013,6 +2028,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 23b8745f039490844a0e5de5adddf4f0, type: 3}
+--- !u!114 &1434887890 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+  m_PrefabInstance: {fileID: 232799942}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c356005849e6f8408961adfbdc1c91c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1434887891 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1125017563361429419, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+  m_PrefabInstance: {fileID: 232799942}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad3a2002af62b9246aabd804d9d54d56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1436574583 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6110009966411302800, guid: afc79b1eeeb9fac4e90c2bcd4c481584, type: 3}
@@ -2957,12 +2994,11 @@ MonoBehaviour:
   m_HandLandmark: []
   m_bIsLeftHandList: 
   m_vec3Forward: []
-  m_nListMaxNum: 8
+  m_nListMaxNum: 16
   m_fMinSpeed: 2
   m_fMaxSpeed: 100
   m_fMinAngularSpeed: 30
   m_fMaxAngularSpeed: 180
-  angle: {x: 0, y: 0, z: 0}
 --- !u!4 &2119771998 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6110009966411302800, guid: afc79b1eeeb9fac4e90c2bcd4c481584, type: 3}

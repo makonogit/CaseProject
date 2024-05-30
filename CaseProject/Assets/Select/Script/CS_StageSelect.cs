@@ -32,14 +32,15 @@ public class CS_StageSelect : MonoBehaviour
     //-------------------------------------
     //　ステージを進める
     //　引数：何ステージ分更新するか(-1だったら1戻す)
+    //　戻り値：更新できない　-1
     //-------------------------------------
-    public void StageUpdate(int _stage)
+    public int StageUpdate(int _stage)
     {
         //ワールドが最大(5-5)で値が正なら更新しない
-        if(m_nNowWorldNum == m_csStageData.WORLDMAX && m_nNowStageNum == m_csStageData.STAGEMAX && _stage > 0) { return; }
+        if(m_nNowWorldNum == m_csStageData.WORLDMAX && m_nNowStageNum == m_csStageData.STAGEMAX && _stage > 0) { return -1; }
 
         //ステージが最小(1-1)で値が負なら更新しない
-        if(m_nNowWorldNum == 1 && m_nNowStageNum == 1 && _stage < 0) { return; } 
+        if(m_nNowWorldNum == 1 && m_nNowStageNum == 1 && _stage < 0) { return -1; } 
 
         m_nNowStageNum += _stage;
 
@@ -57,13 +58,15 @@ public class CS_StageSelect : MonoBehaviour
         StageInfo.SetStageData(m_nNowWorldNum - 1, m_nNowStageNum - 1);
 
         Debug.Log("World:" + (StageInfo.World + 1) + "Stage:" + (StageInfo.Stage + 1));
+
+        return 0;
     }
 
     // Start is called before the first frame update
     void Start()
     {
         //ステージデータを登録
-        StageInfo.SetStageData(m_nNowWorldNum - 1, m_nNowStageNum - 1);
+        //StageInfo.SetStageData(m_nNowWorldNum - 1, m_nNowStageNum - 1);
     }
 
     // Update is called once per frame

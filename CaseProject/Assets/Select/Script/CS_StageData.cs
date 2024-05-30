@@ -49,12 +49,12 @@ public class CS_StageData : MonoBehaviour
 [System.Serializable]
 public class StageData
 {
-    public GameObject m_gSelectStagePrefab; //セレクト画面のステージプレハブ
+    public Sprite m_sSelectStageSprite; //セレクト画面のステージスプライト
     public GameObject m_gStagePrefab;       //ステージのプレハブ
-    public StageData(GameObject selectobj,GameObject stagepbj)
+    public StageData(Sprite selectsprite,GameObject stagepbj)
     {
         m_gStagePrefab = stagepbj;
-        m_gSelectStagePrefab = selectobj;
+        m_sSelectStageSprite = selectsprite;
     }
 }
 
