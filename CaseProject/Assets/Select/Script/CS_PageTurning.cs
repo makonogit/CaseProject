@@ -132,6 +132,7 @@ public class CS_PageTurning : MonoBehaviour
     //---------------------------------
     void CloseBook()
     {
+        CS_HandSigns.OnCreateWinds -= PageTurning;
         m_csSceneManager.LoadScene(CS_SceneManager.SCENE.GAME);
     }
 }

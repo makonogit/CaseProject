@@ -546,7 +546,7 @@ public class CS_HandSigns : MonoBehaviour
         Vector3 Leftwrist = m_HandLandmark[0][1].transform.position;
         Vector3 Rightwrist = m_HandLandmark[1][1].transform.position;
 
-        Debug.Log(Leftwrist + "Right" + Rightwrist);
+        //Debug.Log(Leftwrist + "Right" + Rightwrist);
 
         if (Leftwrist == Rightwrist) return false;
 
