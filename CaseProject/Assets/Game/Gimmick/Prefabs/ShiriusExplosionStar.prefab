@@ -1259,7 +1259,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7824787225911939120, guid: 3285ad6de0abe7044a7c3c5823f3c7cd, type: 3}
       propertyPath: m_Name
-      value: ExplosionStar
+      value: ExplosionEffect
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3285ad6de0abe7044a7c3c5823f3c7cd, type: 3}

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7824787225911939118}
   - component: {fileID: 7824787225911939119}
   m_Layer: 0
-  m_Name: ExplosionStar
+  m_Name: ExplosionEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

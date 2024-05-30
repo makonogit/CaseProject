@@ -1,6 +1,6 @@
 //-----------------------------------------------
 //担当者：中島愛音
-//爆発の処理
+//爆発の処理：爆発のエフェクトオブジェクトにアタッチ
 //-----------------------------------------------
 using System.Collections;
 using System.Collections.Generic;
@@ -8,6 +8,8 @@ using UnityEngine;
 
 public class CS_ExplosionEffect : MonoBehaviour
 {
+    [Header("爆発のエフェクトオブジェクトにアタッチ")]
+    [Header("シリウスの持っている星の子オブジェクトにExplosionEffectPrefabを持たせる")]
     [SerializeField, Header("爆発アニメーションのトリガー名")]
     private string m_triggerName;
 
@@ -42,14 +44,5 @@ public class CS_ExplosionEffect : MonoBehaviour
         Debug.Log("爆発開始");
     }
 
-    //private void OnCollisionEnter2D(Collision2D collision)
-    //{
-    //    //当たったのがプレイヤータグ？
-    //    if (collision.gameObject.CompareTag("Player"))
-    //    {
-    //        Debug.Log("プレイヤーが当たった");
-    //        GetComponent<Animator>().SetTrigger(m_triggerName);//アニメーション再生
-    //        isExplotion = true;
-    //    }
-    //}
+   
 }

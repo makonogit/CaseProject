@@ -1,6 +1,6 @@
 //-----------------------------------------------
 //担当者：中島愛音
-//上昇星
+//上昇星：シリウス本体(CS_Playerがあるとこ)にアタッチ
 //-----------------------------------------------
 using System.Collections;
 using System.Collections.Generic;
@@ -8,6 +8,8 @@ using UnityEngine;
 
 public class CS_RisingStar : MonoBehaviour
 {
+    [Header("シリウス本体(CS_Playerがあるとこ)にアタッチ")]
+
     private Rigidbody2D m_rb;//リジッドボディ
     private Vector3 m_prevVelocity;//前のリジッドボディの速度
     private Vector3 m_backUpVelocity;//保存用リジッドボディの速度
