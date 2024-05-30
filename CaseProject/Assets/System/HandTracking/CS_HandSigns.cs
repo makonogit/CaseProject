@@ -373,7 +373,7 @@ public class CS_HandSigns : MonoBehaviour
         // 倍率
         const float magnification = 0.1f;
         float Pitch = GetHandAngularSpeed(handNum).x * magnification;
-        Vector3 dir = new Vector3(-1, 0, 0) *Pitch;
+        Vector3 dir = new Vector3(-1, 0, 0) * Mathf.Abs(Pitch);
         if (m_bIsLeftHandList[handNum]) dir*=-1;
         // 風生成イベントの発行
         OnCreateWinds(position + offset, windVec + dir);
