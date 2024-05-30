@@ -295,12 +295,11 @@ MonoBehaviour:
   m_HandLandmark: []
   m_bIsLeftHandList: 
   m_vec3Forward: []
-  m_nListMaxNum: 8
+  m_nListMaxNum: 16
   m_fMinSpeed: 5
   m_fMaxSpeed: 100
   m_fMinAngularSpeed: 20
   m_fMaxAngularSpeed: 100
-  angle: {x: 0, y: 0, z: 0}
 --- !u!114 &110111732 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: -8837774153085666347, guid: 87a9be2a7620991a78342ef9a56fa62c, type: 3}
@@ -2676,6 +2675,7 @@ MonoBehaviour:
   m_handSigns: {fileID: 110111729}
   m_csStageSelect: {fileID: 5041785005206771815}
   m_csSceneManager: {fileID: 5041785005206771814}
+  m_ABookAnimator: {fileID: 1549794771}
   m_csStageData: {fileID: 5041785005206771813}
   m_fStageViewSpeed: 0.1
 --- !u!95 &1549794771

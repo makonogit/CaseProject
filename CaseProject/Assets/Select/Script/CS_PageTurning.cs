@@ -18,6 +18,10 @@ public class CS_PageTurning : MonoBehaviour
     [SerializeField, Header("シーンマネージャー")]
     private CS_SceneManager m_csSceneManager;
 
+    [SerializeField, Header("本のAnimator")]
+    private Animator m_ABookAnimator;
+
+
     private bool isFacingRight = true;
 
     //---------------------------------------
@@ -43,6 +47,9 @@ public class CS_PageTurning : MonoBehaviour
         //ステージ情報表示
         if(m_IsStageUpdate) { StageView();}
 
+        //本を閉じる
+        if (m_handSigns.IsClap() && m_ABookAnimator.GetBool("Finish") == false) { m_ABookAnimator.SetBool("Finish", true); }
+
     }
 
     private void Flip()
@@ -61,7 +68,7 @@ public class CS_PageTurning : MonoBehaviour
     private void PageTurningAnimation()
     {
         //if (GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("AM_PageTurning")) { return; }
-        GetComponent<Animator>().SetTrigger("pageTurningAnim");
+        m_ABookAnimator.SetTrigger("pageTurningAnim");
     }
 
     //本をめくる

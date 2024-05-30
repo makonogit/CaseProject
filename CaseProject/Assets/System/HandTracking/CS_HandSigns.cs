@@ -26,6 +26,7 @@ public class CS_HandSigns : MonoBehaviour
             return m_HandLandmark;
         }
     }
+
     // 手の移動距離
     [Header("動きリスト")]
     [SerializeField] private List<List<Vector3>> m_vec3MoveDistanceList = new List<List<Vector3>>();
@@ -373,7 +374,7 @@ public class CS_HandSigns : MonoBehaviour
         // 倍率
         const float magnification = 0.1f;
         float Pitch = GetHandAngularSpeed(handNum).x * magnification;
-        Vector3 dir = new Vector3(-1, 0, 0) *Pitch;
+        Vector3 dir = new Vector3(-1, 0, 0) * Mathf.Abs(Pitch);
         if (m_bIsLeftHandList[handNum]) dir*=-1;
         // 風生成イベントの発行
         OnCreateWinds(position + offset, windVec + dir);
@@ -517,6 +518,45 @@ public class CS_HandSigns : MonoBehaviour
         return -1;
     }
 
+    // 両手を合わせたかを判定する関数
+    // 引数：なし
+    // 戻り値：両手を合わせているか true
+    public bool IsClap()
+    {
+        // 両手の情報があるか,ないなら終わる
+        bool isNullOfHandsInfo = m_HandLandmark.Count < 2;
+        if (isNullOfHandsInfo) return false;
+
+        // 両手がパーではないなら
+        bool isPaperSign = GetHandPose(0) == (byte)HandPose.PaperSign;
+        if (!isPaperSign) return false;
+
+        // もう片方も
+        isPaperSign = GetHandPose(1) == (byte)HandPose.PaperSign;
+        if (!isPaperSign) return false;
+
+        // 手のひらの向きの判定
+        float Leftyaw = m_vec3AngularList[0][0].y;
+        float Rightyaw = m_vec3AngularList[1][0].y;
+        bool isLeftParmFactingSideways = IsPalmFacingSideways(Leftyaw);
+        bool isRightParmFactingSideways = IsPalmFacingSideways(Rightyaw);
+        if (!isLeftParmFactingSideways || !isRightParmFactingSideways) return false;
+
+        // 両手首の位置
+        Vector3 Leftwrist = m_HandLandmark[0][1].transform.position;
+        Vector3 Rightwrist = m_HandLandmark[1][1].transform.position;
+
+        Debug.Log(Leftwrist + "Right" + Rightwrist);
+
+        if (Leftwrist == Rightwrist) return false;
+
+        //両手首の距離を計算して一定の値より近いか
+        float Distance = Vector3.Distance(Leftwrist, Rightwrist);
+        float ClapDistance = 1.0f;
+        bool isClap = Distance < ClapDistance;
+
+        return isClap;
+    }
     private void NullEvent(Vector3 pos , Vector3 dir)
     {/*Nothing*/}
     
