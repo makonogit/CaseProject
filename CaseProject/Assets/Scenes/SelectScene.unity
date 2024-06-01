@@ -3394,6 +3394,46 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5349740809235748235, guid: 3bf5e338e6a8c65418d5fe5ca9c785a8, type: 3}
     - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_Worlds.Array.data[2].Stagedata.Array.data[0].m_gStagePrefab
+      value: 
+      objectReference: {fileID: 5349740809235748235, guid: ccc6ebb092411dc4bb977f939e3023ee, type: 3}
+    - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_Worlds.Array.data[2].Stagedata.Array.data[1].m_gStagePrefab
+      value: 
+      objectReference: {fileID: 5349740809235748235, guid: dd626bb595bef1041be08b4e2e779bba, type: 3}
+    - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_Worlds.Array.data[2].Stagedata.Array.data[2].m_gStagePrefab
+      value: 
+      objectReference: {fileID: 5349740809235748235, guid: 76a443eb5e521f744bb5b2181a662aba, type: 3}
+    - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_Worlds.Array.data[2].Stagedata.Array.data[3].m_gStagePrefab
+      value: 
+      objectReference: {fileID: 5349740809235748235, guid: a283ca1b66dd9e046804642871062fba, type: 3}
+    - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_Worlds.Array.data[2].Stagedata.Array.data[4].m_gStagePrefab
+      value: 
+      objectReference: {fileID: 5349740809235748235, guid: b6c558074547bbb439951151f3fba4f1, type: 3}
+    - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_Worlds.Array.data[3].Stagedata.Array.data[0].m_gStagePrefab
+      value: 
+      objectReference: {fileID: 5349740809235748235, guid: 5ce8d942ea5c2d749b4ad1fa053421b5, type: 3}
+    - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_Worlds.Array.data[3].Stagedata.Array.data[1].m_gStagePrefab
+      value: 
+      objectReference: {fileID: 5349740809235748235, guid: 56aa479ab3914c447a0dbbd03e57ca9e, type: 3}
+    - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_Worlds.Array.data[3].Stagedata.Array.data[2].m_gStagePrefab
+      value: 
+      objectReference: {fileID: 5349740809235748235, guid: f6087ce09b918dd4787823a604945833, type: 3}
+    - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_Worlds.Array.data[3].Stagedata.Array.data[3].m_gStagePrefab
+      value: 
+      objectReference: {fileID: 5349740809235748235, guid: 1a6bc83a0c5e02643890e9b0c07f1cf3, type: 3}
+    - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_Worlds.Array.data[3].Stagedata.Array.data[4].m_gStagePrefab
+      value: 
+      objectReference: {fileID: 5349740809235748235, guid: 39ddb804ecb557a4d996b7c452eaf5f7, type: 3}
+    - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
       propertyPath: m_Worlds.Array.data[0].Stagedata.Array.data[0].m_gSelectStagePrefab
       value: 
       objectReference: {fileID: 4241871963988672458, guid: 57eb97b43ac8ed7438e163cfc7bc618c, type: 3}
