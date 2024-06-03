@@ -11,9 +11,32 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.XR;
 using static CS_HandSigns;
+using static Mediapipe.Unity.HandLandmarkListAnnotation;
 
+[System.Serializable]
+struct HandInformation
+{
+    // 現在の情報
 
-public class CS_HandSigns : MonoBehaviour
+    // 手の各位置情報
+    public HandLandmarkListAnnotation HandLandmark;
+    // 手のひらの方向
+    public Vector3 vec3Forward;
+    // 左手か
+    public bool bIsLeftHand;
+    // ワープした回数
+    public int nWarpCount;
+
+    // 過去から現在のリスト
+
+    // 手首の回転
+    public List<Vector3> vec3AngularList;
+    // 手首の位置
+    public List<Vector3> vec3MoveDistanceList;
+
+ }
+
+    public class CS_HandSigns : MonoBehaviour
 {
     //両手のデータ
     [SerializeField]
@@ -33,6 +56,10 @@ public class CS_HandSigns : MonoBehaviour
     [SerializeField] private List<List<Vector3>> m_vec3AngularList = new List<List<Vector3>>();
     [SerializeField] private List<bool> m_bIsLeftHandList;
     [SerializeField] private List<Vector3> m_vec3Forward;
+    [SerializeField] private List<int> m_nWarpCount;
+
+    //[SerializeField] private List<HandInformation> m_handInformation;
+
 
     // リストの最大数
     [Header("リストの最大数")]
@@ -130,25 +157,99 @@ public class CS_HandSigns : MonoBehaviour
         HandLandmarkListAnnotation hand = child.GetComponent<HandLandmarkListAnnotation>();
         if (!hand) return;// 取得できなかった
 
+        // 現在の手の情報を設定する
+        SetCurrentHandInformation(hand, num);
+        
+        // リストの初期化
+        SetInitLists(num);
+
+        PointListAnnotation point = m_HandLandmark[num].GetLandmarkList();
+        
+        bool isWrap = IsWarpByDistance(point, num);
+        // ワープしてなければリストに追加
+        if (!isWrap)AddLists(point,num);
+        // リストのリセット
+        if (isWrap)ResetHandLists(num);
+
+        num++;
+    }
+
+    // 現在の手の情報を設定する
+    // 引数：現在の手
+    // 引数：手情報のリスト
+    // 戻り値：なし
+    private void SetCurrentHandInformation(HandLandmarkListAnnotation hand,int handNum)
+    {
         // 手の情報を設定する
         m_HandLandmark.Add(hand);
-
-        if (m_vec3MoveDistanceList.Count <= num) m_vec3MoveDistanceList.Add(new List<Vector3>());
-        if (m_vec3AngularList.Count <= num) m_vec3AngularList.Add(new List<Vector3>());
         bool LeftSide = false;
         // 前方向を設定
-        m_vec3Forward.Add(GetForward(num, ref LeftSide));
+        m_vec3Forward.Add(GetForward(handNum, ref LeftSide));
         m_bIsLeftHandList.Add(LeftSide);
 
+    }
+    // 手の移動距離からワープしたか
+    // 引数：現在の手の位置
+    // 引数：手情報のリスト
+    // 戻り値：ワープしたならTure
+    private bool IsWarpByDistance(PointListAnnotation point, int handNum)
+    {
+        // リストがなければfalse
+        if (m_vec3MoveDistanceList[handNum].Count <= 0) return false;
+
+        // 移動距離
+        Vector3 Distance = point[0].transform.position　- m_vec3MoveDistanceList[handNum][0];
+        // ワープした距離判定
+        float warpDis = 10;
+        // 1フレームで移動した距離がwarpDis以上ならワープ判定
+        return Distance.magnitude > warpDis;
+    }
+
+
+    // 手のリストをリセットする
+    // 引数：手情報のリスト
+    // 戻り値：なし
+    private void ResetHandLists(int handNum) 
+    {
+        // カウントを増やす
+        m_nWarpCount[handNum] ++;
+        // 3フレームカウントすると
+        int resetCount = 3;
+        // カウントを超えたらリストをリセットする
+        if (m_nWarpCount[handNum] < resetCount) return;
+        
+        // カウントをリセット
+        m_nWarpCount[handNum] = 0;
+        // リストをリセット
+        m_vec3MoveDistanceList[handNum].Clear();
+        m_vec3AngularList[handNum].Clear();
+    }
+
+    // 各リストの初期値の追加
+    // 引数：手情報のリスト
+    // 戻り値：なし
+    private void SetInitLists(int handNum) 
+    {
+        // リストを追加する
+        if (m_vec3MoveDistanceList.Count <= handNum) m_vec3MoveDistanceList.Add(new List<Vector3>());
+        if (m_vec3AngularList.Count <= handNum) m_vec3AngularList.Add(new List<Vector3>());
+        if (m_nWarpCount.Count <= handNum) m_nWarpCount.Add(0);
+    }
+
+    // 手のリストに追加する
+    // 引数：設定する手の情報
+    // 引数：手の情報のリスト番号
+    // 戻り値：なし
+    private void AddLists(PointListAnnotation point, int handNum) 
+    {
         // リストに追加
-        AddHandPointList(m_HandLandmark[num].GetLandmarkList(), num);
-        AddHandAngularList(m_HandLandmark[num].GetLandmarkList(), num);
-        num++;
+        AddHandPointList(point, handNum);
+        AddHandAngularList(point, handNum);
     }
 
     // 手のポイントリストに追加する
     // 引数：設定する手の位置情報
-    // 引数：左手か右手か
+    // 引数：手の情報のリスト番号
     // 戻り値：なし
     private void AddHandPointList(PointListAnnotation point,int handNum) 
     {
@@ -165,7 +266,7 @@ public class CS_HandSigns : MonoBehaviour
 
     // 手の角度をリストに追加
     // 引数：設定する手の位置情報
-    // 引数：左手か右手か
+    // 引数：手の情報のリスト番号
     // 戻り値：なし
     private void AddHandAngularList(PointListAnnotation point,int handNum) 
     {
@@ -236,7 +337,7 @@ public class CS_HandSigns : MonoBehaviour
     }
 
     // 手の動きを取得
-    // 引数：右手か左手か
+    // 引数：手の情報のリスト番号
     // 戻り値：動いた距離
     public Vector3 GetHandMovement(int handNum) 
     {
@@ -258,7 +359,7 @@ public class CS_HandSigns : MonoBehaviour
         return move;
     }
     // 手の動きを取得
-    // 引数：右手か左手か
+    // 引数：手の情報のリスト番号
     // 戻り値：動いた距離
     public Vector3 GetHandAngularSpeed(int handNum)
     {
@@ -270,7 +371,7 @@ public class CS_HandSigns : MonoBehaviour
     }
 
     // 手のひらの方向を取得―※出来なかったので親指の付け根の方向を取得
-    // 引数：左手か右手か
+    // 引数：手の情報のリスト番号
     // 戻り値：手のひらの方向ベクトル
     public Vector3 GetHandDirection(int handNum) 
     {
@@ -285,7 +386,7 @@ public class CS_HandSigns : MonoBehaviour
     }
     
     // 風を生成する条件の関数
-    // 引数：右手か左手か
+    // 引数：手の情報のリスト番号
     // 引数：移動距離
     // 戻り値：生成する true しない false
     private bool IsCreateWind(int handNum,Vector3 move)
@@ -360,7 +461,7 @@ public class CS_HandSigns : MonoBehaviour
     }
 
     // 風の生成イベントの発行関数
-    // 引数：右手か左手か
+    // 引数：手の情報のリスト番号
     // 引数：風の向きと速度
     // 戻り値：なし
     private void CreateWind(int handNum, Vector3 windVec)
@@ -441,7 +542,7 @@ public class CS_HandSigns : MonoBehaviour
     }
 
     // 手のポーズの取得
-    // 引数：右手か左手か
+    // 引数：手の情報のリスト番号
     // 戻り値：一ビットずつ指が立っているとtrue
     public byte GetHandPose(int handNum) 
     {
