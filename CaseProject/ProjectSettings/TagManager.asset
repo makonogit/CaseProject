@@ -8,6 +8,8 @@ TagManager:
   - Global Resource
   - Rain
   - Event
+  - Wind
+  - StarPiece
   layers:
   - Default
   - TransparentFX
