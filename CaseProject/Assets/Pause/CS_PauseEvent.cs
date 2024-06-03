@@ -56,14 +56,14 @@ public class CS_PauseEvent : MonoBehaviour
 
         if (!isColliding) { return; }
 
-        m_handLandmark[0] = m_handSigns.HandMark[0];
-        m_handLandmark[1] = m_handSigns.HandMark[1];
+        m_handLandmark[0] = m_handSigns.HandInfo[0].HandLandmark;
+        m_handLandmark[1] = m_handSigns.HandInfo[1].HandLandmark;
 
         CS_PauseController pauseController = GameObject.Find("PauseController").GetComponent<CS_PauseController>();
 
         if(m_handLandmark[0] != null)
         {
-            if (m_handSigns.GetHandPose(0) == (byte)CS_HandSigns.HandPose.RockSign)
+            if (m_handSigns.GetHandPose(m_handSigns.HandInfo[0].HandLandmark) == (byte)CS_HandSigns.HandPose.RockSign)
             {
                 if(m_nextSceneName == "None") 
                 {
@@ -75,7 +75,7 @@ public class CS_PauseEvent : MonoBehaviour
         }
         if (m_handLandmark[1] != null)
         {
-            if (m_handSigns.GetHandPose(1) == (byte)CS_HandSigns.HandPose.RockSign)
+            if (m_handSigns.GetHandPose(m_handSigns.HandInfo[1].HandLandmark) == (byte)CS_HandSigns.HandPose.RockSign)
             {
                 if (m_nextSceneName == "None")
                 {

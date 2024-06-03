@@ -106,11 +106,11 @@ public class CS_TitleHandler : MonoBehaviour
         for (int i = 0; i < 2; i++) 
         {
             //—¼Žè‚ªƒp[‚¶‚á‚È‚©‚Á‚½‚çI—¹
-            bool is_handpose = m_handSigns.GetHandPose(i) == (byte)CS_HandSigns.HandPose.PaperSign;
+            bool is_handpose = m_handSigns.GetHandPose(m_handSigns.HandInfo[i].HandLandmark) == (byte)CS_HandSigns.HandPose.PaperSign;
             if (!is_handpose) { return; }
 
-            m_v3HandDir[i] = m_handSigns.GetHandDirection(i);
-            m_v3HandMove[i] = m_handSigns.GetHandMovement(i);
+            m_v3HandDir[i] = m_handSigns.GetHandDirection(m_handSigns.HandInfo[i].HandLandmark.GetLandmarkList());
+            m_v3HandMove[i] = m_handSigns.GetHandMovement(m_handSigns.HandInfo[i].vec3MoveDistanceList);
 
         }
 
