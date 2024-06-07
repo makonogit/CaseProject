@@ -13,11 +13,14 @@ public class CS_TimeLimit : MonoBehaviour
     [Header("タイムリミット")]
     [SerializeField] private float  m_fTimeLimit;
     [SerializeField] private float  m_fNowTime;
+    [SerializeField] private AnimationCurve m_acurveSpeed;
     [SerializeField] private Gradient m_graGaugeColor;
     private Image m_imgGauge;
     [SerializeField] private Image m_imgLeftSideGauge;
     [SerializeField] private Image m_imgRightSideGauge;
-
+    [SerializeField] private Image m_imgLeftMark;
+    [SerializeField] private Image m_imgRightMark;
+    private float m_fAlpha = 1.0f;
     // イベント
     public delegate void EventTimeLimit();
     public static event EventTimeLimit OnTimeOver;
@@ -27,7 +30,7 @@ public class CS_TimeLimit : MonoBehaviour
     {
         // イベントの登録
         CS_TimeLimit.OnTimeOver += SetTimeScaleZero;
-        InitParameter();
+        //InitParameter();
         m_imgGauge = GetComponent<Image>();
         if (m_imgGauge == null) Debug.LogError("nullComponent:Imageのコンポーネントを取得できませんでした。");
     }
@@ -56,6 +59,7 @@ public class CS_TimeLimit : MonoBehaviour
     private void InitParameter() 
     {
         m_fNowTime = 0.0f;
+        m_fAlpha = 1.0f;
     }
 
     // ゲージの長さを更新する
@@ -65,21 +69,57 @@ public class CS_TimeLimit : MonoBehaviour
     {
         if(value >1.0f)value = 1.0f;
         if(value <0.0f)value = 0.0f;
+        
         // ゲージのサイズ更新
         Vector2 size = m_imgGauge.rectTransform.localScale;
-        size.x = 1.0f - value;
+        size.x = m_acurveSpeed.Evaluate(value);
         m_imgGauge.rectTransform.localScale = size;
         // 色更新
-        m_imgGauge.color = m_graGaugeColor.Evaluate(value);
-        m_imgLeftSideGauge.color = m_graGaugeColor.Evaluate(value);
-        m_imgRightSideGauge.color = m_graGaugeColor.Evaluate(value);
-
+        ChangeUiColor(value);
         // 位置更新
         Vector3 pos = size * m_imgGauge.rectTransform.sizeDelta * 0.5f;
         pos.y = m_imgGauge.rectTransform.localPosition.y;
         m_imgRightSideGauge.rectTransform.localPosition = pos;
         pos.x *=-1.0f;// 反転
         m_imgLeftSideGauge.rectTransform.localPosition = pos;
+    }
+
+    // ゲージの色を更新する
+    // 引き数：色 0～1
+    // 戻り値：なし
+    private void ChangeUiColor(float value) 
+    {
+        Color color = m_graGaugeColor.Evaluate(value);
+        m_imgGauge.color = color;
+        m_imgLeftSideGauge.color = color;
+        m_imgRightSideGauge.color = color;
+        m_imgLeftMark.color = color;
+        m_imgRightMark.color = color;
+
+        // 値が0以下なら透明化
+        if (IsGaugeMini(m_acurveSpeed.Evaluate(value))) GraduallyTransparent(color);
+    }
+
+    // ゲージが真ん中か
+    // 引き数：ゲージの値
+    // 戻り値：なし
+    private bool IsGaugeMini(float value) 
+    {
+        return value <= 0.0f;
+    }
+
+    // 徐々に透明になる関数
+    // 引き数：色
+    // 戻り値：なし
+    private void GraduallyTransparent(Color color)
+    {
+        float speed = 1.0f;
+        m_fAlpha -= speed * Time.deltaTime;
+        //透明にする
+        color.a = m_fAlpha;
+        m_imgGauge.color = color;
+        m_imgLeftSideGauge.color = color;
+        m_imgRightSideGauge.color = color;
     }
 
     // タイムスケ―ルをゼロにする関数
