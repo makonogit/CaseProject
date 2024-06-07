@@ -4,6 +4,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 
 public class CS_StageData : MonoBehaviour
@@ -136,4 +137,8 @@ public static class ObjectData
 
     [Header("カメラ制御スクリプト")]
     public static CS_CameraControl m_csCamCtrl;
+
+    [Header("グローバルライト")]
+    public static Light2D m_lGlobalLight;
+
 }

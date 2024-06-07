@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Rendering.Universal;
 
 public class CS_SceneManager : MonoBehaviour
 {
@@ -23,7 +24,12 @@ public class CS_SceneManager : MonoBehaviour
     private GameObject m_LoadingScreen; //NowLoading表示用
 
     [SerializeField, Header("StageDataスクリプト")]
-    private CS_StageData m_csStagedata;    
+    private CS_StageData m_csStagedata;
+
+    [SerializeField, Header("globallight(明転用)")]
+    private Light2D m_lGlobalLight;
+
+    private bool m_IsLightChange = false;   //明転フラグ
 
     //クリア状況管理用
     private Dictionary<int, bool> StageClearData = new Dictionary<int, bool>();
@@ -112,6 +118,9 @@ public class CS_SceneManager : MonoBehaviour
 
         Debug.Log("World" + StageInfo.World + "Stage" + StageInfo.Stage);
 
+        //シーン内ライトの読み込み
+        ObjectData.m_lGlobalLight = m_lGlobalLight;
+
         //現在のシーンがゲームだったらステージを生成
         if((SCENE)SceneNum == SCENE.GAME)
         {
@@ -134,6 +143,27 @@ public class CS_SceneManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void LightChange(float ChangeSpeed,float Maxintensity)
+    {
+        
+        if(m_lGlobalLight.intensity < Maxintensity)
+        {
+            m_lGlobalLight.intensity += ChangeSpeed * Time.deltaTime;
+        }
+        else
+        {
+            //明転フラグをオン
+            m_IsLightChange = true;
+        }
+        
+        //明るさをもとに戻す
+        if(m_IsLightChange)
+        {
+            m_lGlobalLight.intensity -= ChangeSpeed * Time.deltaTime;
+        }
+
     }
 
 

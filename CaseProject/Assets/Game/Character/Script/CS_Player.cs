@@ -4,6 +4,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 //------------------------------------
 //プレイヤークラス
@@ -43,8 +44,11 @@ public class CS_Player : MonoBehaviour
     [SerializeField, Header("Effect表示用オブジェクトTransform")]
     private Transform m_tEffectTrans;
 
-    [SerializeField, Header("エフェクト表示用Animator")]
+    [SerializeField, Header("エフェクト表示用Animator")] 
     private Animator m_aEffectAnim;
+
+    [SerializeField, Header("ステージのGlobalLight")]
+    private Light2D m_lGlobalLight;
 
 
     private bool m_isUpTrigger = false;                //上昇中か
@@ -73,12 +77,14 @@ public class CS_Player : MonoBehaviour
         if (!m_tEffectTrans) Debug.LogWarning("EffectオブジェクトのTransformが設定されていません");
         if (!m_aEffectAnim) Debug.LogWarning("Effect用のAnimatorが設定されていません");
         if (!m_tStarChildTrans) Debug.LogWarning("星の子TransFormが設定されていません");
+        if (!m_lGlobalLight) Debug.LogWarning("GlobalLightが設定されていません");
 
         m_fStartHeight = m_tThisTrans.position.y;   // 開始時の高さ
 
         //管理クラスにデータ保存
         ObjectData.m_tPlayerTrans = m_tThisTrans;
         ObjectData.m_tStarChildTrans = m_tStarChildTrans;
+        ObjectData.m_lGlobalLight = m_lGlobalLight;
     }
 
     // Update is called once per frame
