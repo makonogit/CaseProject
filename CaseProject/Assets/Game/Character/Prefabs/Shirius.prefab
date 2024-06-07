@@ -210,6 +210,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_tThisTrans: {fileID: 8375913477574500066}
   m_rThisRigidbody: {fileID: 8808433522868624693}
+  m_tStarChildTrans: {fileID: 8119268741689225023}
   m_aThisAnimator: {fileID: 1015195596133434703}
   m_fMoveSpeed: 3
   m_tEffectTrans: {fileID: 710311445844780047}

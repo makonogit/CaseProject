@@ -22,17 +22,34 @@ public class CS_Player : MonoBehaviour
     [SerializeField, Header("自分のRigidbody")]
     private Rigidbody2D m_rThisRigidbody;
 
+    [SerializeField, Header("星の子TransForm")]
+    private Transform m_tStarChildTrans;
+
     [SerializeField, Header("シリウスのアニメーター")]
     private Animator m_aThisAnimator;
 
-    [SerializeField, Header("移動速度")]
-    private float m_fMoveSpeed = 1.0f;
+    [SerializeField, Header("最大上昇速度")]
+    private float m_fMaxUpSpeed = 10.0f;
+
+    [SerializeField, Header("上昇倍率")]
+    private float m_fUpPower = 5.0f;
+
+    [SerializeField, Header("減速倍率")]
+    private float m_fSpeedDown = 30.0f;
+
+    [SerializeField, Header("左右の移動速度")]
+    private float m_fleftright = 3.0f;
 
     [SerializeField, Header("Effect表示用オブジェクトTransform")]
     private Transform m_tEffectTrans;
 
     [SerializeField, Header("エフェクト表示用Animator")]
     private Animator m_aEffectAnim;
+
+
+    private bool m_isUpTrigger = false;                //上昇中か
+    private bool m_isSpeedDownTrigger = false;         //減速中か
+    private Vector3 m_v3NowUpPower = Vector3.zero;     //現在の上昇率
 
     //--------------------
     //　手の動く処理用
@@ -55,8 +72,13 @@ public class CS_Player : MonoBehaviour
         if (!m_aThisAnimator) Debug.LogWarning("シリウスのAnimatorが設定されていません");
         if (!m_tEffectTrans) Debug.LogWarning("EffectオブジェクトのTransformが設定されていません");
         if (!m_aEffectAnim) Debug.LogWarning("Effect用のAnimatorが設定されていません");
+        if (!m_tStarChildTrans) Debug.LogWarning("星の子TransFormが設定されていません");
 
         m_fStartHeight = m_tThisTrans.position.y;   // 開始時の高さ
+
+        //管理クラスにデータ保存
+        ObjectData.m_tPlayerTrans = m_tThisTrans;
+        ObjectData.m_tStarChildTrans = m_tStarChildTrans;
     }
 
     // Update is called once per frame
@@ -68,10 +90,47 @@ public class CS_Player : MonoBehaviour
             m_IsStartFry = true;
             m_aThisAnimator.SetBool("TakeOff", true); 
         }
-
         
         //手がふわふわ動く処理
         m_tHandTrans.position = new Vector3(m_tHandTrans.position.x, m_tHandTrans.position.y + Wave, 0.0f);
+    }
+
+    private void FixedUpdate()
+    {
+        if (!m_isUpTrigger) { return; }
+
+        ////時間まで上昇し続ける
+        //m_fTimeMeasure += Time.deltaTime;
+
+        //if(m_fTimeMeasure < m_fUpTime) 
+        //{
+        //    //上昇終了したらパラメータを初期化
+        //    m_fTimeMeasure = 0.0f;
+        //    m_isUpTrigger = false;
+        //    return; 
+        //}
+
+        //最大速度まで上昇したら減速する
+        if(m_rThisRigidbody.velocity.magnitude > m_fMaxUpSpeed) { m_isSpeedDownTrigger = true; }
+
+        //減速処理
+        if (m_isSpeedDownTrigger)
+        {
+            m_v3NowUpPower.y -= m_fSpeedDown * Time.deltaTime;
+
+            Debug.Log(m_v3NowUpPower.y);
+
+            //減速しきったら終了
+           if(m_v3NowUpPower.y < 0.0f)
+           {
+               m_isSpeedDownTrigger = false;
+               m_isUpTrigger = false;
+                return;
+           }
+            
+        }
+
+        m_rThisRigidbody.AddForce(m_v3NowUpPower, ForceMode2D.Force);
 
     }
 
@@ -100,8 +159,9 @@ public class CS_Player : MonoBehaviour
         m_aEffectAnim.SetTrigger("Damage"); //ダメージAnimationを再生
 
         m_rThisRigidbody.AddForce(m_tThisTrans.position - (knockbackdirection * knockbackpower));
+        //m_rThisRigidbody.velocity = m_tThisTrans.position - (knockbackdirection * knockbackpower);
 
-        Debug.Log("ノックバック" + (m_tThisTrans.position - knockbackdirection));
+        Debug.Log("ノックバック" + (m_tThisTrans.position - knockbackdirection * knockbackpower));
         
     }
 
@@ -115,6 +175,8 @@ public class CS_Player : MonoBehaviour
         
         Vector3 Direction = Vector3.zero;
 
+        float power = windpower;
+
         m_aThisAnimator.SetBool("Jump", false);
 
         //向きによって方向を設定
@@ -125,24 +187,35 @@ public class CS_Player : MonoBehaviour
                 break;
             case CS_Wind.E_WINDDIRECTION.LEFT:
                 Direction = Vector3.right;
+                power *= m_fleftright;      //風に倍率をかけて威力を上げる
                 //左移動アニメーションを再生
                 m_aThisAnimator.SetBool("Left", true);
                 break;
             case CS_Wind.E_WINDDIRECTION.RIGHT:
                 Direction = Vector3.left;
+                power *= m_fleftright;      //風に倍率をかけて威力を上げる
                 //右移動アニメーションを再生
                 m_aThisAnimator.SetBool("Right", true);
                 break;
             case CS_Wind.E_WINDDIRECTION.UP:
                 Direction = Vector3.up;
 
+                power *= m_fUpPower;                //風に倍率をかけて威力を上げる
+                m_v3NowUpPower = Direction * power; //力を保存
+                m_isUpTrigger = true;               //上昇中に設定
+
                 //浮遊アニメーションを再生
                 m_aThisAnimator.SetBool("Fry", true);
+                return;
                 break;
         }
 
-        Debug.Log("力のくわえる向き" + Direction * windpower);
-        m_rThisRigidbody.AddForce(Direction * windpower, ForceMode2D.Force);
+
+        //m_rThisRigidbody.velocity = m_v3NowUpPower;
+
+        //Debug.Log("力のくわえる向き" + Direction * windpower);
+        m_rThisRigidbody.AddForce(Direction * power, ForceMode2D.Force);
+        //m_rThisRigidbody.velocity = Direction * power;
 
     }
 

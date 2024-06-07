@@ -36,6 +36,9 @@ public class CS_CameraControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //管理クラスにデータ保存
+        ObjectData.m_csCamCtrl = this;
+
         //カメラのサイズ取得
         maincamera = Camera.main;
 
@@ -62,7 +65,7 @@ public class CS_CameraControl : MonoBehaviour
         Vector3 ClampPosition = new Vector3(m_tTargetTrans.position.x, m_tTargetTrans.position.y, m_tThisTrans.position.z);
         //移動制限
         ClampPosition.x = Mathf.Clamp(ClampPosition.x, m_v2MinLimit.x, m_v2MaxLimit.x);
-        ClampPosition.y = Mathf.Clamp(ClampPosition.y, m_v2MinLimit.y, m_v2MaxLimit.y);
+        ClampPosition.y = Mathf.Clamp(ClampPosition.y + 2.5f, m_v2MinLimit.y, m_v2MaxLimit.y);
 
         m_tThisTrans.position = ClampPosition;
         

@@ -50,7 +50,7 @@ public class CS_StageData : MonoBehaviour
 public class StageData
 {
     public Sprite m_sSelectStageSprite; //セレクト画面のステージスプライト
-    public GameObject m_gStagePrefab;       //ステージのプレハブ
+    public GameObject m_gStagePrefab;   //ステージのプレハブ
     public StageData(Sprite selectsprite,GameObject stagepbj)
     {
         m_gStagePrefab = stagepbj;
@@ -119,4 +119,21 @@ public static class StageInfo
        
     }
 
+}
+
+//-------------------------------------------
+// ステージオブジェクト情報管理
+// 違う方法で管理したいきもち,まこのきもち
+//-------------------------------------------
+public static class ObjectData
+{
+
+    [Header("星の子Transform")]
+    public static Transform m_tStarChildTrans;
+
+    [Header("PlayerTransform")]
+    public static Transform m_tPlayerTrans;
+
+    [Header("カメラ制御スクリプト")]
+    public static CS_CameraControl m_csCamCtrl;
 }

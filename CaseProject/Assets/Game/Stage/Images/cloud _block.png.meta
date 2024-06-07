@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a6bd64ff9bedb2444a533d18eeac74d7
+guid: a1e5a604b7579dd409383787a080e676
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -141,13 +141,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: stardust_0
+      name: cloud _block_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 682.6666
-        width: 341.33334
-        height: 341.33334
+        x: 79
+        y: 761
+        width: 299
+        height: 259
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -155,20 +155,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 64192fa2d3ee55d42889fa50d91f8fd3
-      internalID: 1772943628
+      spriteID: 7c0f56530f11a034795ec15fd165d1b8
+      internalID: -243087611
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stardust_1
+      name: cloud _block_1
       rect:
         serializedVersion: 2
-        x: 341
-        y: 682.6666
-        width: 341.33334
-        height: 341.33334
+        x: 586
+        y: 776
+        width: 300
+        height: 133
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -176,20 +176,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f457535227d970940b275dd3d606502f
-      internalID: -978009788
+      spriteID: 66c496cf79e9b2f4f8a4aac6d7cec5f5
+      internalID: -1542074337
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stardust_2
+      name: cloud _block_2
       rect:
         serializedVersion: 2
-        x: 682
-        y: 682.6666
-        width: 341.33334
-        height: 341.33334
+        x: 1093
+        y: 786
+        width: 300
+        height: 132
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -197,20 +197,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6c7af06d3d70ef94b874a832b9c75e4e
-      internalID: -1450478319
+      spriteID: 3007b5adcf7d0564696256a5e2ca87de
+      internalID: -1003621797
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stardust_3
+      name: cloud _block_3
       rect:
         serializedVersion: 2
-        x: 0
-        y: 341.66666
-        width: 341.33334
-        height: 341.33334
+        x: 1537
+        y: 765
+        width: 297
+        height: 260
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -218,20 +218,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c4e0deeb2a7ac80458e33460036a7850
-      internalID: 1985145655
+      spriteID: 4bb417384b663424e99412f388228aa1
+      internalID: 444465150
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stardust_4
+      name: cloud _block_4
       rect:
         serializedVersion: 2
-        x: 341
-        y: 341.66666
-        width: 341.33334
-        height: 341.33334
+        x: 583
+        y: 389
+        width: 300
+        height: 300
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -239,20 +239,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c94f34dbd3ea39f458c12811d34fcb1b
-      internalID: -654800251
+      spriteID: 335cab4ba7a9e09458d3ef3aeac5b292
+      internalID: 1556835250
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stardust_5
+      name: cloud _block_5
       rect:
         serializedVersion: 2
-        x: 682
-        y: 341.66666
-        width: 341.33334
-        height: 341.33334
+        x: 1103
+        y: 389
+        width: 302
+        height: 302
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -260,20 +260,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b67cb20fab4c76e41996987b9a822960
-      internalID: -458263
+      spriteID: b904d2cc390094c409b7b003bc31e4be
+      internalID: 2078061719
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stardust_6
+      name: cloud _block_6
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0.6666565
-        width: 341.33334
-        height: 341.33334
+        x: 102
+        y: 59
+        width: 297
+        height: 260
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -281,8 +281,71 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0283e4fef139061439343ee3ee74eb0f
-      internalID: -1417635122
+      spriteID: 23cbd28a46f6ccc4ab3ddd828b041fab
+      internalID: -2011294204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cloud _block_7
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 178
+        width: 300
+        height: 132
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1adab0254503c2e4a8fb687eab965f81
+      internalID: 1362661337
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cloud _block_8
+      rect:
+        serializedVersion: 2
+        x: 1097
+        y: 167
+        width: 300
+        height: 132
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ddd21320966b47f4cbbcd134fca7644f
+      internalID: -1743631629
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cloud _block_9
+      rect:
+        serializedVersion: 2
+        x: 1520
+        y: 38
+        width: 299
+        height: 260
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 796817f51be0c3f4586cad007b44328d
+      internalID: 459680860
       vertices: []
       indices: 
       edges: []
@@ -298,13 +361,16 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      stardust_3: 1985145655
-      stardust_5: -458263
-      stardust_0: 1772943628
-      stardust_2: -1450478319
-      stardust_4: -654800251
-      stardust_1: -978009788
-      stardust_6: -1417635122
+      cloud _block_4: 1556835250
+      cloud _block_6: -2011294204
+      cloud _block_1: -1542074337
+      cloud _block_8: -1743631629
+      cloud _block_3: 444465150
+      cloud _block_7: 1362661337
+      cloud _block_2: -1003621797
+      cloud _block_0: -243087611
+      cloud _block_9: 459680860
+      cloud _block_5: 2078061719
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
