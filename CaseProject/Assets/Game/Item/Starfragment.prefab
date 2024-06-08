@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1781481256296857506}
   - component: {fileID: 8427203056389286060}
-  - component: {fileID: 4335048198991269416}
+  - component: {fileID: 4241440720582408765}
+  - component: {fileID: 4030958098024001229}
   m_Layer: 0
   m_Name: Starfragment
   m_TagString: Untagged
@@ -74,7 +75,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: f9b4401f140d1fb49b5bf21f622eb4c4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2e5cd5e0efccdb440b93e042b5d9591d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -85,8 +86,8 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &4335048198991269416
-BoxCollider2D:
+--- !u!70 &4241440720582408765
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -99,15 +100,20 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 7.68, y: 7.68}
-    newSize: {x: 7.68, y: 7.68}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 7.68, y: 7.68}
-  m_EdgeRadius: 0
+  m_Size: {x: 2.59, y: 4.18}
+  m_Direction: 0
+--- !u!114 &4030958098024001229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7551477454262806624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6474eb6f173f3848bb0a142570da944, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_gPredictionLine: {fileID: 0}
+  m_fPredictionViewTime: 3
+  m_fPredictionalpha: 0.5
