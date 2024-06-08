@@ -141,7 +141,7 @@ public class CS_TwinsStar : MonoBehaviour
         if (isAddPower)
         {
             //基本値に補正値を足した値をRigidBodyに加算
-            m_rb.AddForce(Vector3.up *  (m_fJumpPower + JumpPowerCorrection), ForceMode2D.Impulse);
+           // m_rb.AddForce(Vector3.up *  (m_fJumpPower + JumpPowerCorrection), ForceMode2D.Impulse);
         }
 
         m_prevVelocity = m_rb.velocity;

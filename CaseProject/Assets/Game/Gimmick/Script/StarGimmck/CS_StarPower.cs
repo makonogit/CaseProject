@@ -19,7 +19,7 @@ public class CS_StarPower : MonoBehaviour
 
     [SerializeField] private List<Sprite> m_starSprites = new List<Sprite>();
 
-    public int nowSprite = 0;
+    private int nowSprite = 0;
 
     [SerializeField, Header("星のキャラクター")]
     private GameObject m_starChild;

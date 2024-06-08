@@ -1073,7 +1073,7 @@ Transform:
   m_GameObject: {fileID: 7125254873414015690}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -1.18, z: 0}
-  m_LocalScale: {x: 1.3, y: 1.3, z: 1}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2168736062886951692}
@@ -1147,7 +1147,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 0.15
-  m_LinearDrag: 1
+  m_LinearDrag: 5
   m_AngularDrag: 0
   m_GravityScale: 0.2
   m_Material: {fileID: 0}
@@ -1169,10 +1169,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_tThisTrans: {fileID: 815885100331941233}
   m_rThisRigidbody: {fileID: 383496863557861030}
+  m_tStarChildTrans: {fileID: 1135694511087553708}
   m_aThisAnimator: {fileID: 9182738223654550324}
-  m_fMoveSpeed: 3
+  m_fMaxUpSpeed: 10
+  m_fUpPower: 5
+  m_fSpeedDown: 30
+  m_fleftright: 8
+  m_fWallReflect: 10
   m_tEffectTrans: {fileID: 8553509678797375388}
   m_aEffectAnim: {fileID: 2820913374408946789}
+  m_lGlobalLight: {fileID: 2692868873271339849}
   m_tHandTrans: {fileID: 189788061795829933}
   m_fHandFryLength: 0.001
   m_fHandFrySpeed: 2
@@ -1230,7 +1236,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 67e3324e16841e249a93f7003998142c, type: 3}
   - {fileID: 21300000, guid: b04a1445258ed0840a971449bcc201a8, type: 3}
   - {fileID: 21300000, guid: 1e74243fc8313e94baf412e8e131b077, type: 3}
-  nowSprite: 0
   m_starChild: {fileID: 8176382815385888390}
   m_sPieceTag: StarPiece
 --- !u!1 &8176382815385888390

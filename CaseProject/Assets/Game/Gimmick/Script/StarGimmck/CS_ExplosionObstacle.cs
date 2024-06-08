@@ -38,6 +38,18 @@ public class CS_ExplosionObstacle : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        //プレイヤーと衝突したらノックバックさせる
+        if (collision.transform.tag == "Player")
+        {
+            //方向を求めて方向と力を設定
+            Vector3 Direction = transform.position - collision.transform.position;
+            collision.transform.GetComponent<CS_Player>().KnockBack(Direction, m_fKnockBackForce);
+            ExplotionStar(collision.gameObject);
+        }
+    }
+
     //CS_ExplosionEffectを持っているオブジェクトを探し、爆発を開始させる
     private void ExplotionStar(GameObject _shirius)
     {
@@ -48,6 +60,8 @@ public class CS_ExplosionObstacle : MonoBehaviour
         if (explosionEffect != null)
         {
             explosionEffect.StartExplosion();
+            //Destroy(this.gameObject);
+            return;
         }
         else
         {
