@@ -52,10 +52,12 @@ public class StageData
 {
     public Sprite m_sSelectStageSprite; //セレクト画面のステージスプライト
     public GameObject m_gStagePrefab;   //ステージのプレハブ
-    public StageData(Sprite selectsprite,GameObject stagepbj)
+    public int m_nStageLength = 0;      //ステージの長さ(背景の枚数)
+    public StageData(Sprite selectsprite,GameObject stagepbj,int stagelength)
     {
         m_gStagePrefab = stagepbj;
         m_sSelectStageSprite = selectsprite;
+        m_nStageLength = stagelength;
     }
 }
 

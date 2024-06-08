@@ -14,6 +14,9 @@ public class CS_CameraControl : MonoBehaviour
     [SerializeField,Header("カメラ移動制限")]
     private EdgeCollider2D m_LimitPos;
 
+    [SerializeField, Header("ステージデータ")]
+    private CS_StageData m_csStagedata;
+
     //カメラの移動制限
     private Vector2 m_v2MaxLimit;
     private Vector2 m_v2MinLimit;
@@ -33,6 +36,16 @@ public class CS_CameraControl : MonoBehaviour
         }
     }
 
+    
+    //ステージによって変わるのでSceneManagerで読み込み時に変更
+    public float MAXHEIGHT
+    {
+        set
+        {
+            m_v2MaxLimit.y = value;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -46,7 +59,18 @@ public class CS_CameraControl : MonoBehaviour
         m_v2MinLimit.x = m_LimitPos.points[0].x + maincamera.orthographicSize * maincamera.aspect;
         m_v2MinLimit.y = m_LimitPos.points[1].y + maincamera.orthographicSize;
         m_v2MaxLimit.x = m_LimitPos.points[2].x - maincamera.orthographicSize * maincamera.aspect;
-        m_v2MaxLimit.y = m_LimitPos.points[3].y - maincamera.orthographicSize;
+        //m_v2MaxLimit.y = m_LimitPos.points[3].y - maincamera.orthographicSize;
+
+        //ステージの長さを取得してカメラの上限を設定
+        int length = m_csStagedata.m_Worlds[StageInfo.World].Stagedata[StageInfo.Stage].m_nStageLength;
+        m_v2MaxLimit.y = ((length * 10) - 5) - maincamera.orthographicSize;
+
+        //EdgeColliderを設定
+        Vector2[] points = m_LimitPos.points;
+        points[0].y = ((length * 10) - 5);
+        points[3].y = ((length * 10) - 5);
+        m_LimitPos.points = points;
+        
 
         //座標の設定
         m_tTargetTrans = m_TargetObj.transform;
