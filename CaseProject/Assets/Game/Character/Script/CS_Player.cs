@@ -266,6 +266,7 @@ public class CS_Player : MonoBehaviour
         {
             Debug.Log("•Ç");
             Vector3 dir = m_tThisTrans.position - collision.transform.position;
+            dir.y = 0.0f;
             KnockBack(dir, m_fWallReflect);
         }
     }
