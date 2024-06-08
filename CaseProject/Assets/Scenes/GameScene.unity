@@ -3794,6 +3794,10 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5613585780724641991, guid: 8670bdc30e1b8a743beec8c8374b2fc9, type: 3}
+      propertyPath: m_fWallReflect
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5613585780724641991, guid: 8670bdc30e1b8a743beec8c8374b2fc9, type: 3}
       propertyPath: m_aThisAnimator
       value: 
       objectReference: {fileID: 368876415}
@@ -6319,6 +6323,10 @@ PrefabInstance:
     - target: {fileID: 6181146400538218572, guid: e7431ad13bebe4e41bf6f47bf15a64a5, type: 3}
       propertyPath: m_Name
       value: CameraLimit
+      objectReference: {fileID: 0}
+    - target: {fileID: 6181146400538218572, guid: e7431ad13bebe4e41bf6f47bf15a64a5, type: 3}
+      propertyPath: m_TagString
+      value: Stage
       objectReference: {fileID: 0}
     - target: {fileID: 6181146400538218573, guid: e7431ad13bebe4e41bf6f47bf15a64a5, type: 3}
       propertyPath: m_IsTrigger

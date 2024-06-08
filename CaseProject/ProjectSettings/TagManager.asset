@@ -10,6 +10,7 @@ TagManager:
   - Event
   - Wind
   - StarPiece
+  - Stage
   layers:
   - Default
   - TransparentFX

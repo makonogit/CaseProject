@@ -41,6 +41,10 @@ public class CS_Player : MonoBehaviour
     [SerializeField, Header("左右の移動速度")]
     private float m_fleftright = 3.0f;
 
+    [SerializeField, Header("壁に当たった時の跳ね返り")]
+    private float m_fWallReflect = 2.0f; 
+
+
     [SerializeField, Header("Effect表示用オブジェクトTransform")]
     private Transform m_tEffectTrans;
 
@@ -253,6 +257,17 @@ public class CS_Player : MonoBehaviour
         m_aThisAnimator.SetBool("Jump", true);
         m_aThisAnimator.SetBool("Left", false);
         m_aThisAnimator.SetBool("Right",false);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        //壁に当たったらノックバック
+        if (collision.transform.tag == "Stage")
+        {
+            Debug.Log("壁");
+            Vector3 dir = m_tThisTrans.position - collision.transform.position;
+            KnockBack(dir, m_fWallReflect);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
