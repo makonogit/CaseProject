@@ -14,6 +14,9 @@ public class CS_CameraControl : MonoBehaviour
     [SerializeField,Header("カメラ移動制限")]
     private EdgeCollider2D m_LimitPos;
 
+    [SerializeField, Header("ステージの上限")]
+    private EdgeCollider2D m_MaxHeight;
+
     [SerializeField, Header("ステージデータ")]
     private CS_StageData m_csStagedata;
 
@@ -70,7 +73,9 @@ public class CS_CameraControl : MonoBehaviour
         points[0].y = ((length * 10) - 5);
         points[3].y = ((length * 10) - 5);
         m_LimitPos.points = points;
-        
+
+        m_MaxHeight.offset = new Vector2(0.0f, (length * 10) - 5);
+
 
         //座標の設定
         m_tTargetTrans = m_TargetObj.transform;
