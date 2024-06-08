@@ -10,6 +10,9 @@ public class CS_RisingStar : MonoBehaviour
 {
     [Header("シリウス本体(CS_Playerがあるとこ)にアタッチ")]
 
+    [SerializeField, Header("ジャンプ力")]
+    private float m_fJumpPower = 2.0f;
+
     private Rigidbody2D m_rb;//リジッドボディ
     private Vector3 m_prevVelocity;//前のリジッドボディの速度
     private Vector3 m_backUpVelocity;//保存用リジッドボディの速度
@@ -43,6 +46,7 @@ public class CS_RisingStar : MonoBehaviour
         }
         m_prevVelocity = m_rb.velocity;
 
+        //溜め中じゃないなら終了
         if (!m_isAccumulate) { return; }
 
 
@@ -62,7 +66,8 @@ public class CS_RisingStar : MonoBehaviour
         //溜めカウントが一定以上？
         if (m_nAccumulateCount >= (int)m_fDescentCount)
         {
-            m_rb.AddForce(Vector2.up * (1 + (magnification /10f)), ForceMode2D.Impulse);//力を加える
+            m_rb.AddForce(Vector2.up * (m_fJumpPower + (magnification)), ForceMode2D.Impulse);//力を加える
+            //m_rb.AddForce(Vector2.up * m_fJumpPower * magnification, ForceMode2D.Impulse);//力を加える
             //カウント初期化
             m_nAccumulateCount = 0;
             m_fDescentCount = 0;

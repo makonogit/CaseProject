@@ -13,6 +13,12 @@ public class CS_ExplosionEffect : MonoBehaviour
     [SerializeField, Header("爆発アニメーションのトリガー名")]
     private string m_triggerName;
 
+    [SerializeField, Header("爆発したときの減速度(0.0～1.0)")]
+    private float m_fDeceleration = 1.0f;
+
+    [SerializeField, Header("シリウス本体のRigidBody2D")]
+    private Rigidbody2D m_rb;
+
     private bool isExplotion = false;
     // Start is called before the first frame update
     void Start()
@@ -31,7 +37,7 @@ public class CS_ExplosionEffect : MonoBehaviour
         //アニメーションが終了した？
         if (stateInfo.normalizedTime >= 0.9f)
         {
-            Destroy(this.gameObject);
+            GetComponent<SpriteRenderer>().enabled = false;
         }
     }
      
@@ -41,6 +47,10 @@ public class CS_ExplosionEffect : MonoBehaviour
         GetComponent<SpriteRenderer>().enabled = true;
         GetComponent<Animator>().SetTrigger(m_triggerName);//アニメーション再生
         isExplotion = true;
+        //減速させる
+        Vector3 playerVel = m_rb.velocity;
+        playerVel *= m_fDeceleration;
+        m_rb.velocity = playerVel;
         Debug.Log("爆発開始");
     }
 
