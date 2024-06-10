@@ -90,8 +90,11 @@ public class HandInformation
 
     // Tポーズイベント
     public static event EHHandSigns OnTPose;
-    
-  
+
+    public delegate void EventHandSigns(List<HandInformation> handInfoList);
+    // 拍手イベント
+    public static event EventHandSigns OnClap;
+
     //--------------------------
 
     // Start is called before the first frame update
@@ -108,6 +111,11 @@ public class HandInformation
         if(isGetHand)TakeHandsStates();
         // モーションの判定
         HandsMotionIdentify();
+    }
+    private void OnDestroy()
+    {
+        OnCreateWinds -= NullEvent;
+        OnTPose -= NullEvent;
     }
 
     // 手の情報を取得するか
@@ -285,6 +293,8 @@ public class HandInformation
         }
         // 両手でTポーズ
         if (IsTPose()) OnTPose(Vector3.zero, Vector3.zero);
+        // 拍手
+        if (IsClap()) OnClap(m_handInformation);
     }
 
     // 手のひらの方向を取得する

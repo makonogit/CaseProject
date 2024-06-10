@@ -16,11 +16,17 @@ public class CS_TimeLimit : MonoBehaviour
     [SerializeField] private AnimationCurve m_acurveSpeed;
     [SerializeField] private Gradient m_graGaugeColor;
     private Image m_imgGauge;
+    [Header("イメージ")]
     [SerializeField] private Image m_imgLeftSideGauge;
     [SerializeField] private Image m_imgRightSideGauge;
     [SerializeField] private Image m_imgLeftMark;
     [SerializeField] private Image m_imgRightMark;
     private float m_fAlpha = 1.0f;
+    [Header("両端のマーク")]
+    [SerializeField] private float m_fMarkLimit;
+    [SerializeField] private float m_fMarkRaito;
+    private float m_fMarkPosx;
+    [SerializeField] private AnimationCurve m_curMarkSpeed;
     // イベント
     public delegate void EventTimeLimit();
     public static event EventTimeLimit OnTimeOver;
@@ -30,7 +36,7 @@ public class CS_TimeLimit : MonoBehaviour
     {
         // イベントの登録
         CS_TimeLimit.OnTimeOver += SetTimeScaleZero;
-        //InitParameter();
+        InitParameter();
         m_imgGauge = GetComponent<Image>();
         if (m_imgGauge == null) Debug.LogError("nullComponent:Imageのコンポーネントを取得できませんでした。");
     }
@@ -43,7 +49,7 @@ public class CS_TimeLimit : MonoBehaviour
         // ゲージのサイズ更新
         ChangeGaugeLength(GetTimeLimitRatio);
         // イベントの発行
-        if(IsTimeOver)OnTimeOver();
+        if (IsTimeOver) OnTimeOver();
     }
     
     // OnDestroy is called before this script is Destroyed
@@ -60,6 +66,7 @@ public class CS_TimeLimit : MonoBehaviour
     {
         m_fNowTime = 0.0f;
         m_fAlpha = 1.0f;
+        m_fMarkPosx = m_imgLeftMark.rectTransform.localPosition.x;
     }
 
     // ゲージの長さを更新する
@@ -77,11 +84,20 @@ public class CS_TimeLimit : MonoBehaviour
         // 色更新
         ChangeUiColor(value);
         // 位置更新
-        Vector3 pos = size * m_imgGauge.rectTransform.sizeDelta * 0.5f;
+        MarkUpdate(value, size);
+    }
+    // ゲージの両端の位置を更新
+    // 引き数：割合
+    // 引き数：ゲージサイズ
+    // 戻り値：なし
+    private void MarkUpdate(float value,Vector3 gaugeSize) 
+    {
+        Vector3 pos = gaugeSize * m_imgGauge.rectTransform.sizeDelta * 0.5f;
         pos.y = m_imgGauge.rectTransform.localPosition.y;
         m_imgRightSideGauge.rectTransform.localPosition = pos;
-        pos.x *=-1.0f;// 反転
+        pos.x *= -1.0f;// 反転
         m_imgLeftSideGauge.rectTransform.localPosition = pos;
+        if (IsGaugeMax(value)) MarkMove();
     }
 
     // ゲージの色を更新する
@@ -97,15 +113,15 @@ public class CS_TimeLimit : MonoBehaviour
         m_imgRightMark.color = color;
 
         // 値が0以下なら透明化
-        if (IsGaugeMini(m_acurveSpeed.Evaluate(value))) GraduallyTransparent(color);
+        if (IsGaugeMax(value)) GraduallyTransparent(color);
     }
 
     // ゲージが真ん中か
     // 引き数：ゲージの値
     // 戻り値：なし
-    private bool IsGaugeMini(float value) 
-    {
-        return value <= 0.0f;
+    private bool IsGaugeMax(float value)
+    { 
+        return value >= 1.0f;
     }
 
     // 徐々に透明になる関数
@@ -122,6 +138,31 @@ public class CS_TimeLimit : MonoBehaviour
         m_imgRightSideGauge.color = color;
     }
 
+    // 両端のマークを中央に持ってくる
+    // 引き数：なし
+    // 戻り値：なし
+    private void MarkMove() 
+    {
+        m_fMarkRaito += Time.deltaTime;
+        // 中心なら抜ける
+        if(m_imgLeftMark.rectTransform.localPosition.x >= 0.0f)return;
+        // 位置更新
+        Vector3 pos = m_imgRightMark.rectTransform.localPosition;
+        pos.x = m_fMarkPosx * m_curMarkSpeed.Evaluate(GetMarkRatio);
+        m_imgRightMark.rectTransform.localPosition = pos;
+        m_imgLeftMark.rectTransform.localPosition = pos;
+    }
+    // 両端のマークの移動割合
+    private float GetMarkRatio 
+    {
+        get 
+        {
+            float ratio = m_fMarkRaito / m_fMarkLimit;
+            // 1より大きくなったら
+            if (ratio > 1.0f) ratio = 1.0f;
+            return ratio;
+        }
+    }
     // タイムスケ―ルをゼロにする関数
     // 引き数：なし
     // 戻り値：なし
@@ -136,7 +177,8 @@ public class CS_TimeLimit : MonoBehaviour
     {
         get 
         {
-            return m_fNowTime > m_fTimeLimit;
+            float timeRatio =  GetMarkRatio;
+            return timeRatio >= 1.0f;
         }
     }
 
@@ -152,4 +194,6 @@ public class CS_TimeLimit : MonoBehaviour
             return ratio;
         }
     }
+
+    
 }
