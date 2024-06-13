@@ -143,4 +143,13 @@ public static class ObjectData
     [Header("グローバルライト")]
     public static Light2D m_lGlobalLight;
 
+    [Header("サウンドデータ")]
+    public static CS_SoundData m_csSoundData;
+
+    [Header("制限時間管理スクリプト")]
+    public static CS_TimeLimit m_csTimeLimit;
+
+    [Header("タイトルからセレクトに遷移する際のBGM時間保存")]
+    public static float m_fBGMTime;
+
 }

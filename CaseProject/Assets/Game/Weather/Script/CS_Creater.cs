@@ -30,10 +30,21 @@ public class CS_Creater : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+
     }
-    
+
+    public void DeleteEvent()
+    {
+        //ゲームオーバー時に呼ぶ　追加：菅
+        CS_HandSigns.OnCreateWinds -= CreateWinds; 
+    }
+
+
     private void CreateWinds(Vector3 position, Vector3 direction) 
     {
+        //風のSEを再生
+        ObjectData.m_csSoundData.PlaySE("Wind");
+
         Vector3 pos = position;
         pos.z = 0;
         Vector3 dir = direction;
@@ -60,6 +71,12 @@ public class CS_Creater : MonoBehaviour
         Vector3 scale = obj.transform.localScale;
         scale.x *= -1;
         return scale;
+    }
+
+    private void OnDestroy()
+    {
+        // イベント設定
+        CS_HandSigns.OnCreateWinds -= CreateWinds;
     }
 
     

@@ -19,7 +19,6 @@ public class CS_IsGoal : MonoBehaviour
     [SerializeField, Header("ゴール移動速度")]
     private float m_fGoalSpeed = 0.1f;
 
-
     [SerializeField, Header("ゴール用の星座背景")]
     private SpriteRenderer m_srSign;
 
@@ -29,12 +28,16 @@ public class CS_IsGoal : MonoBehaviour
     [SerializeField, Header("ゴール表示速度")]
     private float m_fGoalSignViewSpeed = 2.0f;
 
+    private float m_fTimeMesure = 0.0f; //時間計測用
+
     private float m_fGoalSignAlpha = 0.0f;  //ゴール用背景の透明度
 
     private bool m_IsGoalView = false;      //ゴール時の表示フラグ(なんかきもいからなおしたい
     private bool m_IsLightChange = false;   //明転フラグ
 
     private bool m_IsGoal = false;
+
+    private bool m_IsStarSpot = false;
 
     void Start()
     {
@@ -60,16 +63,7 @@ public class CS_IsGoal : MonoBehaviour
         //目的地に達したらゴール用オブジェクト表示開始
         if (ObjectData.m_tStarChildTrans.position == m_tGoleTrans.position) 
         {
-            //環境光を徐々に明るく
-            if(!m_IsLightChange && ObjectData.m_lGlobalLight.intensity < 5.0f) { ObjectData.m_lGlobalLight.intensity += 5.0f * Time.deltaTime; } 
-            else { m_IsLightChange = true; }
-
-            if (m_IsLightChange) 
-            {
-                if(ObjectData.m_lGlobalLight.intensity > 1.0f) { ObjectData.m_lGlobalLight.intensity -= 5.0f * Time.deltaTime;  }
-                else { m_IsGoalView = true; }
-            }
-            
+            m_IsStarSpot = true;
         }
         else
         {
@@ -77,23 +71,59 @@ public class CS_IsGoal : MonoBehaviour
             ObjectData.m_tStarChildTrans.position = Vector3.MoveTowards(ObjectData.m_tStarChildTrans.position, m_tGoleTrans.position, m_fGoalSpeed * Time.deltaTime);
 
             //ゴールの星と同じようにスケール縮小
-            ObjectData.m_tStarChildTrans.localScale = Vector3.MoveTowards(ObjectData.m_tStarChildTrans.localScale,/* m_tGoleTrans.localScale*/Vector3.zero, m_fGoalSpeed / 10 * Time.deltaTime);
+           // ObjectData.m_tStarChildTrans.localScale = Vector3.MoveTowards(ObjectData.m_tStarChildTrans.localScale,/* m_tGoleTrans.localScale*/Vector3.zero, m_fGoalSpeed / 10 * Time.deltaTime);
         }
 
+        if(m_IsStarSpot)
+        {
+
+            //星がはまった時の音を再生
+            ObjectData.m_csSoundData.PlaySE("StarFit");
+            //環境光を徐々に明るく
+            if (!m_IsLightChange && ObjectData.m_lGlobalLight.intensity < 5.0f) { ObjectData.m_lGlobalLight.intensity += 2.0f * Time.deltaTime; }
+            else { m_IsLightChange = true; }
+
+            if (m_IsLightChange)
+            {
+                if (ObjectData.m_lGlobalLight.intensity > 1.0f) { ObjectData.m_lGlobalLight.intensity -= 2.0f * Time.deltaTime; }
+                else
+                {
+                    //星の子を消してスプライトの差し替え
+                    ObjectData.m_tStarChildTrans.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+                    GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+
+                    m_IsGoalView = true;
+                }
+            }
+
+        }
 
         if (m_IsGoalView)
         {
-            Debug.Log("HAIKEI");
-            //ゴール用の背景を徐々に表示
-            m_fGoalSignAlpha += m_fGoalSignViewSpeed * Time.deltaTime;
+            //完成SE再生
+            ObjectData.m_csSoundData.PlaySE("SignComplete");
 
-            m_srSign.color = new Color(1.0f, 1.0f, 1.0f, m_fGoalSignAlpha);
-            m_srSignComplete.color = new Color(1.0f, 1.0f, 1.0f, m_fGoalSignAlpha);
+            //時間計測がはじまってなかったら
+            if (m_fTimeMesure == 0.0f)
+            {
+                //ゴール用の背景を徐々に表示
+                m_fGoalSignAlpha += m_fGoalSignViewSpeed * Time.deltaTime;
 
-            //表示しきったらシーン遷移
+                m_srSign.color = new Color(1.0f, 1.0f, 1.0f, m_fGoalSignAlpha);
+                m_srSignComplete.color = new Color(1.0f, 1.0f, 1.0f, m_fGoalSignAlpha);
+            }
+
+            //表示しきったら少し待機
             if (m_fGoalSignAlpha > 1.0f)
             {
-                SceneManager.LoadScene("ScelectScene");
+                m_fTimeMesure += Time.deltaTime;
+               
+            }
+
+            //待機終了したらシーン移動
+            if (m_fTimeMesure > 2.5f)
+            {
+                SceneManager.LoadScene("SelectScene");
             }
         }
 
@@ -124,10 +154,18 @@ public class CS_IsGoal : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
+
+            //制限時間UI表示
+            ObjectData.m_csTimeLimit.transform.parent.gameObject.SetActive(false);
+
             //追記：中島2024.04.03
             //ゲームオーバーフラグをfalseに設定
             //CS_ResultController.GameOverFlag = false;
             //SceneManager.LoadScene("Result");
+
+            //星が移動するSE再生
+            ObjectData.m_csSoundData.StopBGM();
+            ObjectData.m_csSoundData.PlaySE("StarMove");
 
             Debug.Log("ゴール");
 

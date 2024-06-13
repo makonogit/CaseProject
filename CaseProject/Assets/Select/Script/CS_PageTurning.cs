@@ -40,6 +40,10 @@ public class CS_PageTurning : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //BGMの再生
+        ObjectData.m_csSoundData.PlayBGM("StartBGM", ObjectData.m_fBGMTime);
+
+        // イベント登録
         CS_HandSigns.OnCreateWinds += PageTurning;
     }
 
@@ -76,6 +80,8 @@ public class CS_PageTurning : MonoBehaviour
     //本をめくる
     void PageTurning(Vector3 _position, Vector3 _direction)
     {
+        //SE再生
+        ObjectData.m_csSoundData.PlaySE("Book");
 
         bool isFlip = (_direction.x < 0.0f && !isFacingRight) || (_direction.x > 0.0f && isFacingRight);
 
@@ -129,6 +135,8 @@ public class CS_PageTurning : MonoBehaviour
     //---------------------------------
     void CloseBook()
     {
+        //SE再生
+        ObjectData.m_csSoundData.PlaySE("BookClose");
         CS_HandSigns.OnCreateWinds -= PageTurning;
         m_csSceneManager.LoadScene(CS_SceneManager.SCENE.GAME);
     }

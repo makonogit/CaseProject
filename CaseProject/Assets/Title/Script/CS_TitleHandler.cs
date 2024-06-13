@@ -136,12 +136,15 @@ public class CS_TitleHandler : MonoBehaviour
             m_nowWaitTime += Time.deltaTime;//デルタタイム加算
             return;
         }
+
+        //時間の保存
+        ObjectData.m_fBGMTime = ObjectData.m_csSoundData.BGMTIME;
         SceneManager.LoadScene("SelectScene");  
     }
 
     //ゲーム終了
     public void GameEnd()
     {
-        UnityEditor.EditorApplication.isPlaying = false;
+        //UnityEditor.EditorApplication.isPlaying = false;
     }
 }

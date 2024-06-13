@@ -73,6 +73,9 @@ public class CS_Coin : MonoBehaviour
         //プレイヤーが衝突したらアイテムの機能を無効化
         if(collision.transform.tag == "Player")
         {
+            //SE再生
+            ObjectData.m_csSoundData.PlaySE("Coin");
+
             this.GetComponent<CapsuleCollider2D>().enabled = false;
             this.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
 

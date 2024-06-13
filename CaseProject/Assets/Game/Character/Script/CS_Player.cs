@@ -16,7 +16,7 @@ public class CS_Player : MonoBehaviour
 
     private float m_fStartHeight;           //開始時の高さ
     private bool m_IsStartFry = false;      //浮遊開始したか
-    
+
     [SerializeField, Header("自分のTransForm")]
     private Transform m_tThisTrans;
 
@@ -100,13 +100,30 @@ public class CS_Player : MonoBehaviour
             m_IsStartFry = true;
             m_aThisAnimator.SetBool("TakeOff", true); 
         }
-        
-        //手がふわふわ動く処理
-        m_tHandTrans.position = new Vector3(m_tHandTrans.position.x, m_tHandTrans.position.y + Wave, 0.0f);
+
+
+        //すり抜け防止(簡易実装)
+        if(m_tThisTrans.position.x > 8.8f)
+        {
+            Vector3 position = m_tThisTrans.position;
+            position.x = 7.8f;
+            m_tThisTrans.position = position;
+        }
+        if (m_tThisTrans.position.x < -8.8f)
+        {
+            Vector3 position = m_tThisTrans.position;
+            position.x = -7.8f;
+            m_tThisTrans.position = position;
+        }
+
+
     }
 
     private void FixedUpdate()
     {
+        //手がふわふわ動く処理
+        m_tHandTrans.position = new Vector3(m_tHandTrans.position.x, m_tHandTrans.position.y + Wave, 0.0f);
+
         if (!m_isUpTrigger) { return; }
 
         ////時間まで上昇し続ける
@@ -159,6 +176,10 @@ public class CS_Player : MonoBehaviour
     //------------------------------------
     public void KnockBack(Vector3 knockbackdirection,float knockbackpower)
     {
+
+        //SE再生
+        ObjectData.m_csSoundData.PlaySE("KnockBack");
+
         //ノックバックの方向と強さを考慮して目的地を設定
         //m_v3DestinationPos = m_tThisTrans.position - (knockbackdirection * knockbackpower);
 
@@ -168,7 +189,10 @@ public class CS_Player : MonoBehaviour
         m_tEffectTrans.position = new Vector3(m_tThisTrans.position.x + knockbackdirection.x, m_tThisTrans.position.y + knockbackdirection.y, 0.0f);
         m_aEffectAnim.SetTrigger("Damage"); //ダメージAnimationを再生
 
-        m_rThisRigidbody.AddForce(m_tThisTrans.position - (knockbackdirection * knockbackpower));
+        Vector3 dir = m_tThisTrans.position - (knockbackdirection * knockbackpower);
+        dir.y *= -5.0f;
+
+        m_rThisRigidbody.AddForce(dir);
         //m_rThisRigidbody.velocity = m_tThisTrans.position - (knockbackdirection * knockbackpower);
 
         Debug.Log("ノックバック" + (m_tThisTrans.position - knockbackdirection * knockbackpower));
@@ -220,7 +244,6 @@ public class CS_Player : MonoBehaviour
                 break;
         }
 
-
         //m_rThisRigidbody.velocity = m_v3NowUpPower;
 
         //Debug.Log("力のくわえる向き" + Direction * windpower);
@@ -264,10 +287,14 @@ public class CS_Player : MonoBehaviour
         //壁に当たったらノックバック
         if (collision.transform.tag == "Stage")
         {
-            Debug.Log("壁");
+            //Debug.Log("壁");
             Vector3 dir = m_tThisTrans.position - collision.transform.position;
             dir.y = 0.0f;
-            KnockBack(dir, m_fWallReflect);
+
+            Vector3 force = m_tThisTrans.position - (dir * m_fWallReflect);
+
+            m_rThisRigidbody.AddForce(force);
+            //KnockBack(dir, m_fWallReflect);
         }
     }
 
