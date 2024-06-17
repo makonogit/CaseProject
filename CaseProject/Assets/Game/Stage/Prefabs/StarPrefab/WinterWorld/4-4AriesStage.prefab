@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 256596840128181826}
   - component: {fileID: 3463173905938768995}
   m_Layer: 0
-  m_Name: hituji_za
+  m_Name: ohituzi_za
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: c51f28f6009402b40a9c6c092f7b073d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 12cae44bde2c51c48a1b6ff81c85a6fe, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
