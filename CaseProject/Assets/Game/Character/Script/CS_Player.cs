@@ -161,6 +161,15 @@ public class CS_Player : MonoBehaviour
 
     }
 
+    //ã¸‘¬“x•ÏX
+    public float UPPOWER
+    {
+        set
+        {
+            m_v3NowUpPower.y += value;
+        }
+    }
+
     //‚Ó‚í‚Ó‚í“®‚­‚æ‚¤‚ÉSin”g‚Å’l‚ğ•Ô‚·
     private float Wave
     {

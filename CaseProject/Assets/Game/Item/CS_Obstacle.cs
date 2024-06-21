@@ -14,24 +14,34 @@ public class CS_Obstacle : MonoBehaviour
     [SerializeField, Header("ノックバックの強さ")]
     private float m_fKnockBackForce = 1.0f;
 
+    [SerializeField, Header("減速率")]
+    private float m_fSpeedDownRate = 1.0f;
+
     [SerializeField, Header("攻撃力")]
     private float m_fAttackPower = 0.0f;
 
     [SerializeField, Header("自身のTarnsform")]
     private Transform m_tThisTrans;
 
-    //[SerializeField,Header("s")]
-    
     // Start is called before the first frame update
     void Start()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
-        
+
+    }
+
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        //プレイヤーと衝突したら減速させる
+        if (collision.transform.tag == "Player")
+        {
+            collision.transform.GetComponent<CS_Player>().UPPOWER = -m_fSpeedDownRate;
+        }
     }
 
     //当たり判定
