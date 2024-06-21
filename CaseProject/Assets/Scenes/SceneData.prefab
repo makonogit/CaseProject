@@ -48,6 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_LoadingScreen: {fileID: 0}
   m_csStagedata: {fileID: 7775650760880829634}
+  m_lGlobalLight: {fileID: 0}
   m_fLoadWaitTime: 1000
 --- !u!114 &7775650760880829634
 MonoBehaviour:
@@ -65,58 +66,51 @@ MonoBehaviour:
   - Stagedata:
     - m_sSelectStageSprite: {fileID: 21300000, guid: 555469ebd7b09d14abeb6dbf9056af95, type: 3}
       m_gStagePrefab: {fileID: 5349740809235748235, guid: fc403e367e0996c429930967864c46da, type: 3}
+      m_nStageLength: 0
     - m_sSelectStageSprite: {fileID: 21300000, guid: b2dc21c89b3a5b4499b62504741d9a66, type: 3}
       m_gStagePrefab: {fileID: 5349740809235748235, guid: cf6e3282189d0a046977057a1d4ee544, type: 3}
+      m_nStageLength: 0
     - m_sSelectStageSprite: {fileID: 21300000, guid: 1ee266edd8d9e994d986e622415df8ef, type: 3}
       m_gStagePrefab: {fileID: 5349740809235748235, guid: 75968f7dfee2afb47b9b3a86cca7483b, type: 3}
+      m_nStageLength: 0
     - m_sSelectStageSprite: {fileID: 21300000, guid: 0b2f976f29bebec48aaf34dd6aed9155, type: 3}
       m_gStagePrefab: {fileID: 5349740809235748235, guid: 89b756a25500ebb4683b9a8ea2cddbb6, type: 3}
+      m_nStageLength: 0
     - m_sSelectStageSprite: {fileID: 21300000, guid: 782737b822f821e4d9e3146fa545271b, type: 3}
       m_gStagePrefab: {fileID: 5349740809235748235, guid: 291b310c6203cbd4d889661d77fa0b80, type: 3}
+      m_nStageLength: 0
   - Stagedata:
     - m_sSelectStageSprite: {fileID: 21300000, guid: 1008b3d2f127b1f46bf8766742966b05, type: 3}
       m_gStagePrefab: {fileID: 5349740809235748235, guid: 8c1cde17299fde046b381ad4ada6b788, type: 3}
+      m_nStageLength: 13
     - m_sSelectStageSprite: {fileID: 21300000, guid: 37bd642e69872aa4f8abe7f934cfeda2, type: 3}
       m_gStagePrefab: {fileID: 5349740809235748235, guid: 460e3ab8a347b974d8dda45f9772cd09, type: 3}
+      m_nStageLength: 13
     - m_sSelectStageSprite: {fileID: 21300000, guid: 55e1e8362f362e448b95cbb96515a5ee, type: 3}
       m_gStagePrefab: {fileID: 5349740809235748235, guid: 1917379dbb56de44dbb6a5439d10ec86, type: 3}
+      m_nStageLength: 13
     - m_sSelectStageSprite: {fileID: 21300000, guid: a6d01d40984513945a17f3922b50d1a9, type: 3}
       m_gStagePrefab: {fileID: 5349740809235748235, guid: e682ed28c1b94714583859250e127ede, type: 3}
+      m_nStageLength: 13
     - m_sSelectStageSprite: {fileID: 21300000, guid: 831e91e589dd7194aa11e32dd1c1af62, type: 3}
       m_gStagePrefab: {fileID: 5349740809235748235, guid: 3bf5e338e6a8c65418d5fe5ca9c785a8, type: 3}
+      m_nStageLength: 13
   - Stagedata:
-    - m_sSelectStageSprite: {fileID: 0}
-      m_gStagePrefab: {fileID: 0}
-    - m_sSelectStageSprite: {fileID: 0}
-      m_gStagePrefab: {fileID: 0}
-    - m_sSelectStageSprite: {fileID: 0}
-      m_gStagePrefab: {fileID: 0}
-    - m_sSelectStageSprite: {fileID: 0}
-      m_gStagePrefab: {fileID: 0}
-    - m_sSelectStageSprite: {fileID: 0}
-      m_gStagePrefab: {fileID: 0}
-  - Stagedata:
-    - m_sSelectStageSprite: {fileID: 0}
-      m_gStagePrefab: {fileID: 0}
-    - m_sSelectStageSprite: {fileID: 0}
-      m_gStagePrefab: {fileID: 0}
-    - m_sSelectStageSprite: {fileID: 0}
-      m_gStagePrefab: {fileID: 0}
-    - m_sSelectStageSprite: {fileID: 0}
-      m_gStagePrefab: {fileID: 0}
-    - m_sSelectStageSprite: {fileID: 0}
-      m_gStagePrefab: {fileID: 0}
-  - Stagedata:
-    - m_sSelectStageSprite: {fileID: 0}
-      m_gStagePrefab: {fileID: 0}
-    - m_sSelectStageSprite: {fileID: 0}
-      m_gStagePrefab: {fileID: 0}
-    - m_sSelectStageSprite: {fileID: 0}
-      m_gStagePrefab: {fileID: 0}
-    - m_sSelectStageSprite: {fileID: 0}
-      m_gStagePrefab: {fileID: 0}
-    - m_sSelectStageSprite: {fileID: 0}
-      m_gStagePrefab: {fileID: 0}
+    - m_sSelectStageSprite: {fileID: 21300000, guid: f7df67d9d2c005e418c684899e574430, type: 3}
+      m_gStagePrefab: {fileID: 5349740809235748235, guid: ccc6ebb092411dc4bb977f939e3023ee, type: 3}
+      m_nStageLength: 13
+    - m_sSelectStageSprite: {fileID: 21300000, guid: e1dbc4ac6cfca47498b365b4d327a3cf, type: 3}
+      m_gStagePrefab: {fileID: 5349740809235748235, guid: dd626bb595bef1041be08b4e2e779bba, type: 3}
+      m_nStageLength: 13
+    - m_sSelectStageSprite: {fileID: 21300000, guid: 93e7879db636c4a4a8aec8684c4cae16, type: 3}
+      m_gStagePrefab: {fileID: 5349740809235748235, guid: 76a443eb5e521f744bb5b2181a662aba, type: 3}
+      m_nStageLength: 13
+    - m_sSelectStageSprite: {fileID: 21300000, guid: cba87aed244905e40841b8f6cdb96469, type: 3}
+      m_gStagePrefab: {fileID: 5349740809235748235, guid: a283ca1b66dd9e046804642871062fba, type: 3}
+      m_nStageLength: 13
+    - m_sSelectStageSprite: {fileID: 21300000, guid: 566a708419b7a904da47ff4a5a81dcc4, type: 3}
+      m_gStagePrefab: {fileID: 5349740809235748235, guid: b6c558074547bbb439951151f3fba4f1, type: 3}
+      m_nStageLength: 13
 --- !u!114 &-6654694060985642223
 MonoBehaviour:
   m_ObjectHideFlags: 0
