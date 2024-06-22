@@ -11,17 +11,18 @@ TagManager:
   - Wind
   - StarPiece
   - Stage
+  - Obstacle
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Stage
   - Water
   - UI
   - rain
   - Fire
   - CloudEffect
-  - 
+  - Obstacle
   - 
   - 
   - 

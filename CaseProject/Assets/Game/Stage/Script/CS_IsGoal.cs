@@ -156,7 +156,7 @@ public class CS_IsGoal : MonoBehaviour
         {
 
             //制限時間UI表示
-            ObjectData.m_csTimeLimit.transform.parent.gameObject.SetActive(false);
+           //SObjectData.m_csTimeLimit.transform.parent.gameObject.SetActive(false);
 
             //追記：中島2024.04.03
             //ゲームオーバーフラグをfalseに設定

@@ -387,7 +387,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27edd8ea68e9b974a80d5d46f0034ba6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_fKnockBackForce: 100
+  m_fKnockBackForce: 0
   m_fAttackPower: 0
   m_tThisTrans: {fileID: 7315410995900889708}
 --- !u!95 &3597241248668651850
