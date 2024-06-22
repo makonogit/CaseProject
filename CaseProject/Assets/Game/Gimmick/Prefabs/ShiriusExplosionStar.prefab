@@ -1040,6 +1040,7 @@ GameObject:
   - component: {fileID: 4278915846971223584}
   - component: {fileID: 2771061415599187289}
   - component: {fileID: 8540713632449257961}
+  - component: {fileID: 2577992206718134369}
   m_Layer: 0
   m_Name: ShiriusExplosionStar
   m_TagString: Player
@@ -1201,6 +1202,20 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &2577992206718134369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7712673302226921406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8749ed50903a7074a974639176d543e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_fKnockBackForce: 1
+  m_fAttackPower: 0
 --- !u!1 &8687811840602168306
 GameObject:
   m_ObjectHideFlags: 0

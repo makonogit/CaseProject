@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CS_ExplosionObstacle : MonoBehaviour
 {
+    [Header("シリウス本体にアタッチ")]
     [SerializeField, Header("ノックバックの強さ")]
     private float m_fKnockBackForce = 1.0f;
 
@@ -16,40 +17,29 @@ public class CS_ExplosionObstacle : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+       
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 
     //当たり判定
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        //プレイヤーと衝突したらノックバックさせる
-        if (collision.transform.tag == "Player")
+       
+        if (collision.gameObject.name.Contains("obstacle"))
         {
-            //方向を求めて方向と力を設定
-            Vector3 Direction = transform.position - collision.transform.position;
-            collision.transform.GetComponent<CS_Player>().KnockBack(Direction, m_fKnockBackForce);
-            ExplotionStar(collision.gameObject);
+            Debug.Log("ぶつかった");
+            Vector3 Direction = collision.transform.position - transform.position;
+            GetComponent<CS_Player>().KnockBack(Direction, m_fKnockBackForce);
+            ExplotionStar(this.gameObject);
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        //プレイヤーと衝突したらノックバックさせる
-        if (collision.transform.tag == "Player")
-        {
-            //方向を求めて方向と力を設定
-            Vector3 Direction = transform.position - collision.transform.position;
-            collision.transform.GetComponent<CS_Player>().KnockBack(Direction, m_fKnockBackForce);
-            ExplotionStar(collision.gameObject);
-        }
-    }
-
+   
     //CS_ExplosionEffectを持っているオブジェクトを探し、爆発を開始させる
     private void ExplotionStar(GameObject _shirius)
     {
