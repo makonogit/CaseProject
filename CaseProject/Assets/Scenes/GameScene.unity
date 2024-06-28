@@ -654,6 +654,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
       propertyPath: m_Worlds.Array.data[1].Stagedata.Array.size
       value: 5
       objectReference: {fileID: 0}
@@ -667,23 +671,23 @@ PrefabInstance:
       objectReference: {fileID: 5349740809235748235, guid: fc403e367e0996c429930967864c46da, type: 3}
     - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
       propertyPath: m_Worlds.Array.data[0].Stagedata.Array.data[0].m_nStageLength
-      value: 13
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
       propertyPath: m_Worlds.Array.data[0].Stagedata.Array.data[1].m_nStageLength
-      value: 13
+      value: 31
       objectReference: {fileID: 0}
     - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
       propertyPath: m_Worlds.Array.data[0].Stagedata.Array.data[2].m_nStageLength
-      value: 13
+      value: 31
       objectReference: {fileID: 0}
     - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
       propertyPath: m_Worlds.Array.data[0].Stagedata.Array.data[3].m_nStageLength
-      value: 13
+      value: 31
       objectReference: {fileID: 0}
     - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
       propertyPath: m_Worlds.Array.data[0].Stagedata.Array.data[4].m_nStageLength
-      value: 13
+      value: 31
       objectReference: {fileID: 0}
     - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
       propertyPath: m_Worlds.Array.data[2].Stagedata.Array.data[0].m_gStagePrefab
@@ -1971,6 +1975,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 815674538832301879, guid: 22509285f105fd447811ccce3b350072, type: 3}
+      propertyPath: Loop
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 22509285f105fd447811ccce3b350072, type: 3}
 --- !u!4 &961525392 stripped
@@ -2067,7 +2075,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78c3f43774809ec43ba4d053a448d5a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_fTimeLimit: 10
+  m_fTimeLimit: 240
   m_fNowTime: 0
   m_acurveSpeed:
     serializedVersion: 2
@@ -3954,9 +3962,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_handInformation: []
   m_nListMaxNum: 16
-  m_fMinSpeed: 2
-  m_fMaxSpeed: 100
-  m_fMinAngularSpeed: 10
+  m_fMinSpeed: 10
+  m_fMaxSpeed: 200
+  m_fMinAngularSpeed: 20
   m_fMaxAngularSpeed: 180
 --- !u!1 &2076549559
 GameObject:
@@ -4193,7 +4201,7 @@ PrefabInstance:
       objectReference: {fileID: 838458955}
     - target: {fileID: 5613585780724641991, guid: 8670bdc30e1b8a743beec8c8374b2fc9, type: 3}
       propertyPath: m_fMaxUpSpeed
-      value: 10
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5613585780724641991, guid: 8670bdc30e1b8a743beec8c8374b2fc9, type: 3}
       propertyPath: m_fWallReflect
@@ -6581,7 +6589,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8375913477574500066, guid: 8670bdc30e1b8a743beec8c8374b2fc9, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.18
+      value: -2.04
       objectReference: {fileID: 0}
     - target: {fileID: 8375913477574500066, guid: 8670bdc30e1b8a743beec8c8374b2fc9, type: 3}
       propertyPath: m_LocalPosition.z
@@ -6726,6 +6734,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2290194202511419402, guid: e7431ad13bebe4e41bf6f47bf15a64a5, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5112250261755963364, guid: e7431ad13bebe4e41bf6f47bf15a64a5, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -6745,6 +6757,10 @@ PrefabInstance:
     - target: {fileID: 6181146400538218572, guid: e7431ad13bebe4e41bf6f47bf15a64a5, type: 3}
       propertyPath: m_Name
       value: CameraLimit
+      objectReference: {fileID: 0}
+    - target: {fileID: 6181146400538218572, guid: e7431ad13bebe4e41bf6f47bf15a64a5, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6181146400538218572, guid: e7431ad13bebe4e41bf6f47bf15a64a5, type: 3}
       propertyPath: m_TagString
