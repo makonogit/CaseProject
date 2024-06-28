@@ -20,6 +20,8 @@ public class CS_Obstacle : MonoBehaviour
     [SerializeField, Header("攻撃力")]
     private float m_fAttackPower = 0.0f;
 
+    private float m_fNowUpPower = 0.0f;
+
     [SerializeField, Header("自身のTarnsform")]
     private Transform m_tThisTrans;
 
@@ -40,7 +42,20 @@ public class CS_Obstacle : MonoBehaviour
         //プレイヤーと衝突したら減速させる
         if (collision.transform.tag == "Player")
         {
+            m_fNowUpPower = collision.transform.GetComponent<CS_Player>().UPPOWER;
             collision.transform.GetComponent<CS_Player>().UPPOWER = -m_fSpeedDownRate;
+           
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        //プレイヤーと衝突したら減速させる
+        if (collision.transform.tag == "Player")
+        {
+
+            collision.transform.GetComponent<CS_Player>().UPPOWER = -collision.transform.GetComponent<CS_Player>().UPPOWER;
+            collision.transform.GetComponent<CS_Player>().UPPOWER = m_fNowUpPower;
         }
     }
 

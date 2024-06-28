@@ -27,4 +27,13 @@ public class CS_Bard : CS_Obstacle
 
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.tag == "Stage")
+        {
+            m_v3Directon.x *= -1;
+            transform.localScale = new Vector3(m_v3Directon.x, transform.localScale.y, 1.0f);
+        }
+    }
+
 }

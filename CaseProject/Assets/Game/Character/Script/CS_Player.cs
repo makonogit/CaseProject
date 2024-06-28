@@ -138,7 +138,10 @@ public class CS_Player : MonoBehaviour
         //}
 
         //ç≈ëÂë¨ìxÇ‹Ç≈è„è∏ÇµÇΩÇÁå∏ë¨Ç∑ÇÈ
-        if(m_rThisRigidbody.velocity.magnitude > m_fMaxUpSpeed) { m_isSpeedDownTrigger = true; }
+        if(m_rThisRigidbody.velocity.magnitude > m_fMaxUpSpeed) 
+        {
+            m_rThisRigidbody.velocity = new Vector2(0.0f, m_fMaxUpSpeed);            
+            m_isSpeedDownTrigger = true; }
 
         //å∏ë¨èàóù
         if (m_isSpeedDownTrigger)
@@ -167,6 +170,10 @@ public class CS_Player : MonoBehaviour
         set
         {
             m_v3NowUpPower.y += value;
+        }
+        get
+        {
+            return m_v3NowUpPower.y;
         }
     }
 
