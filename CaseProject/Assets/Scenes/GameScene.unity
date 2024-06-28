@@ -668,10 +668,10 @@ PrefabInstance:
     - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
       propertyPath: m_Worlds.Array.data[0].Stagedata.Array.data[0].m_gStagePrefab
       value: 
-      objectReference: {fileID: 5349740809235748235, guid: fc403e367e0996c429930967864c46da, type: 3}
+      objectReference: {fileID: 5349740809235748235, guid: 3bf5e338e6a8c65418d5fe5ca9c785a8, type: 3}
     - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
       propertyPath: m_Worlds.Array.data[0].Stagedata.Array.data[0].m_nStageLength
-      value: 21
+      value: 26
       objectReference: {fileID: 0}
     - target: {fileID: 7775650760880829634, guid: 1cad381f170683d41b2383639605a1c6, type: 3}
       propertyPath: m_Worlds.Array.data[0].Stagedata.Array.data[1].m_nStageLength
@@ -4185,11 +4185,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5613585780724641991, guid: 8670bdc30e1b8a743beec8c8374b2fc9, type: 3}
       propertyPath: m_fUpPower
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5613585780724641991, guid: 8670bdc30e1b8a743beec8c8374b2fc9, type: 3}
       propertyPath: m_fMoveSpeed
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5613585780724641991, guid: 8670bdc30e1b8a743beec8c8374b2fc9, type: 3}
+      propertyPath: m_fSpeedDown
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5613585780724641991, guid: 8670bdc30e1b8a743beec8c8374b2fc9, type: 3}
       propertyPath: m_fleftright
@@ -4201,7 +4205,7 @@ PrefabInstance:
       objectReference: {fileID: 838458955}
     - target: {fileID: 5613585780724641991, guid: 8670bdc30e1b8a743beec8c8374b2fc9, type: 3}
       propertyPath: m_fMaxUpSpeed
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5613585780724641991, guid: 8670bdc30e1b8a743beec8c8374b2fc9, type: 3}
       propertyPath: m_fWallReflect
