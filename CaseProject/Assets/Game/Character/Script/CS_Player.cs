@@ -140,7 +140,7 @@ public class CS_Player : MonoBehaviour
         //ç≈ëÂë¨ìxÇ‹Ç≈è„è∏ÇµÇΩÇÁå∏ë¨Ç∑ÇÈ
         if(m_rThisRigidbody.velocity.magnitude > m_fMaxUpSpeed) 
         {
-            m_rThisRigidbody.velocity = new Vector2(0.0f, m_fMaxUpSpeed);            
+            m_rThisRigidbody.velocity = new Vector2(m_rThisRigidbody.velocity.x, m_fMaxUpSpeed);            
             m_isSpeedDownTrigger = true; }
 
         //å∏ë¨èàóù
